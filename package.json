@@ -1,0 +1,54 @@
+{
+  "name": "eofol3",
+  "version": "0.3.0",
+  "description": "Create a reactive app from template with zero configuration!",
+  "scripts": {
+    "start": "node ./bin/eofol-scripts.js start",
+    "build": "node ./bin/eofol-scripts.js build",
+    "clean": "node ./bin/eofol-scripts.js clean",
+    "serve": "node ./bin/eofol-scripts.js serve"
+  },
+  "dependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/plugin-transform-class-properties": "^7.24.6",
+    "@babel/plugin-transform-object-rest-spread": "^7.24.6",
+    "@babel/preset-env": "^7.24.6",
+    "@babel/preset-typescript": "^7.24.6",
+    "@eofol/eofol-dev-utils": "file:../eofol/packages/eofol-dev-utils",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "dotenv": "^16.4.5",
+    "html-minifier-terser": "^7.2.0",
+    "html-validator": "^6.0.1",
+    "http-server": "^14.1.1",
+    "mini-css-extract-plugin": "^2.9.0",
+    "node-html-parser": "^6.1.13",
+    "progress-bar-webpack-plugin": "^2.1.0",
+    "terser-webpack-plugin": "^5.3.10",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.91.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5"
+  },
+  "files": [
+    "public",
+    "src",
+    ".babelrc",
+    ".env",
+    "eofol-app.d.ts",
+    "README.md",
+    "tsconfig.json"
+  ],
+  "author": "wurducius@gmail.com",
+  "license": "MIT",
+  "bugs": "https://github.com/wurducius/eofol/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wurducius/eofol.git",
+    "directory": "packages/eofol-app"
+  }
+}
