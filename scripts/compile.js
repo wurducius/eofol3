@@ -7,43 +7,70 @@ const { HTMLToJSON, JSONToHTML } = require("html-to-json-parser");
 const { minify } = require("html-minifier-terser");
 const validator = require("html-validator");
 
-const { prettyTime } = require("@eofol/eofol-dev-utils");
+const {
+  prettyTime,
+  primary,
+  success,
+  error,
+} = require("@eofol/eofol-dev-utils");
 
 // -------------------------------------------
 
-const ARG_MINIFY_HTML = false;
-const ARG_MINIFY_VDOM = false;
+const argsConfig = {
+  minifyHTML: false,
+  minifyRegistryJSON: false,
+  verbose: false,
+};
+const defaultConfig = {
+  production: false,
+  minifyHTML: false,
+  minifyRegistryJSON: false,
+  verbose: false,
+};
+const config = { ...defaultConfig, ...argsConfig };
+if (argsConfig.production) {
+  config.minifyHTML = true;
+  config.minifyRegistryJSON = true;
+}
+const isVerbose = config.verbose;
 
 // -------------------------------------------
 
 const minifyOptions = {
   continueOnParseError: true,
   removeRedundantAttributes: true,
-  removeComments: ARG_MINIFY_HTML,
-  collapseWhitespace: ARG_MINIFY_HTML,
-  minifyCSS: ARG_MINIFY_HTML,
-  minifyJS: ARG_MINIFY_HTML,
+  removeComments: config.minifyHTML,
+  collapseWhitespace: config.minifyHTML,
+  minifyCSS: config.minifyHTML,
+  minifyJS: config.minifyHTML,
 };
 
-const HTML_DOCTYPE_TAG = `<!DOCTYPE html>${ARG_MINIFY_HTML ? "" : "\n"}`;
+const HTML_DOCTYPE_TAG = `<!DOCTYPE html>${config.minifyHTML ? "" : "\n"}`;
 
 const FILENAME_PUBLIC = "public";
 const FILENAME_DERIVED = "derived";
+const FILENAME_EOFOL_INTERNAL = "eofol";
+const FILENAME_SUFFIX_VDOM = "vdom";
+const FILENAME_SUFFIX_INSTANCES = "instances";
 
 const PATH_CWD = fs.realpathSync(process.cwd());
 const PATH_DERIVED = path.resolve(PATH_CWD, FILENAME_DERIVED);
 const PATH_PUBLIC = path.resolve(PATH_CWD, FILENAME_PUBLIC);
 
-const MSG_EOFOL = "Eofol3";
+// const MSG_EOFOL = "Eofol3";
+const MSG_EOFOL = "";
 const MSG_HTML_PARSER = "HTML Parser";
 const MSG_HTML_MINIFIER = "HTML Minifier";
 const MSG_HTML_VALIDATOR = "HTML Validator";
 
-const MSG_STEP_SUFFIX = ": ";
-const msgStep = (msgSource) => (msg) =>
-  console.log(`${msgSource}${MSG_STEP_SUFFIX}${msg}`);
+// const MSG_STEP_SUFFIX = ": ";
+const MSG_STEP_SUFFIX = "";
+const msgStep = (msgSource, method) => (msg) =>
+  console.log((method ?? primary)(`${msgSource}${MSG_STEP_SUFFIX}${msg}`));
 
 const msgStepEofol = msgStep(MSG_EOFOL);
+const msgStepEofolError = msgStep(MSG_EOFOL, error);
+const msgStepEofolSuccess = msgStep(MSG_EOFOL, success);
 const msgStepParser = msgStep(MSG_HTML_PARSER);
 const msgStepMinifier = msgStep(MSG_HTML_MINIFIER);
 const msgStepValidator = msgStep(MSG_HTML_VALIDATOR);
@@ -118,7 +145,7 @@ const renderEofolCustomElement = (element, instances) => {
 // -------------------------------------------
 
 const die = (msg, ex) => {
-  msgStepEofol(`Finished with error: ${msg}${ex ? `: ${ex.stack}` : ""}`);
+  msgStepEofolError(`Finished with error: ${msg}${ex ? `: ${ex.stack}` : ""}`);
   process.exit(1);
 };
 
@@ -167,10 +194,12 @@ const transverseTree = (tree, vdom, instances) => {
     tree.content.forEach((child, index) => {
       if (isEofolCustomElement(child)) {
         validateEofolCustomElement(child);
+        const rendered = renderEofolCustomElement(child, instances);
         delta.push({
           index,
-          element: renderEofolCustomElement(child, instances),
+          element: rendered,
         });
+        vdom[vdom.length - 1].id = rendered.attributes.id;
       } else {
         return transverseTree(child, vdom[vdom.length - 1].children, instances);
       }
@@ -184,8 +213,10 @@ const transverseTree = (tree, vdom, instances) => {
 
 // -------------------------------------------
 
-msgStepEofol("Compile");
-msgStepEofol(`Minify = ${ARG_MINIFY_HTML}`);
+msgStepEofol("Starting Eofol3 static compilation...");
+if (isVerbose) {
+  msgStepEofol(`Config = ${JSON.stringify(config, null, 2)}`);
+}
 
 const timeStart = new Date();
 
@@ -207,7 +238,11 @@ const sources = fs
   .readdirSync(PATH_PUBLIC, { recursive: true })
   .filter((sourceFilename) => sourceFilename.endsWith(".html"));
 
+let i = 0;
+
 const resultPromise = sources.map((source) => {
+  const timeStartSource = new Date();
+
   const eofolInstances = [];
   const vdom = [];
 
@@ -224,7 +259,9 @@ const resultPromise = sources.map((source) => {
 
   return HTMLToJSON(sourceHTML.toString(), false)
     .then((res) => {
-      msgStepParser("Parse successful");
+      if (isVerbose) {
+        msgStepParser("Parse successful");
+      }
       return res;
     })
     .catch((ex) => {
@@ -244,7 +281,9 @@ const resultPromise = sources.map((source) => {
       die("Minify error", ex);
     })
     .then((res) => {
-      msgStepMinifier("Minified successfully");
+      if (isVerbose) {
+        msgStepMinifier("Minified successfully");
+      }
       return res;
     })
     .then((res) => {
@@ -256,7 +295,9 @@ const resultPromise = sources.map((source) => {
 
       try {
         validator(options);
-        msgStepValidator("Valid HTML");
+        if (isVerbose) {
+          msgStepValidator("Valid HTML");
+        }
       } catch (ex) {
         die("Invalid HTML", ex);
       }
@@ -269,21 +310,43 @@ const resultPromise = sources.map((source) => {
     .then((res) => {
       const targetPath = path.resolve(PATH_DERIVED, source);
       checkExistsCreate(PATH_DERIVED);
-      checkExistsCreate(removeFilePart(targetPath));
+      const targetDir = removeFilePart(targetPath);
+      checkExistsCreate(targetDir);
       fs.writeFileSync(targetPath, res);
-      const vdomPath = path.resolve(PATH_DERIVED, "vdom");
-      checkExistsCreate(vdomPath);
-      const targetVDOMFilename = `${path.parse(source).name}.json`;
-      const targetVDOMPath = path.resolve(vdomPath, targetVDOMFilename);
+      const internalDirPath = path.resolve(targetDir, FILENAME_EOFOL_INTERNAL);
+      checkExistsCreate(internalDirPath);
+      const targetVDOMFilename = `${
+        path.parse(source).name
+      }-${FILENAME_SUFFIX_VDOM}.json`;
+      const targetVDOMPath = path.resolve(internalDirPath, targetVDOMFilename);
       fs.writeFileSync(
         targetVDOMPath,
-        JSON.stringify(vdom[0], null, ARG_MINIFY_VDOM ? 0 : 2)
+        JSON.stringify(vdom[0], null, config.minifyRegistryJSON ? 0 : 2)
       );
-      msgStepEofol(`Compiled ${source}`);
+      const targetInstancesFilename = `${
+        path.parse(source).name
+      }-${FILENAME_SUFFIX_INSTANCES}.json`;
+      const targetInstancesPath = path.resolve(
+        internalDirPath,
+        targetInstancesFilename
+      );
+      fs.writeFileSync(
+        targetInstancesPath,
+        JSON.stringify(eofolInstances, null, config.minifyRegistryJSON ? 0 : 2)
+      );
+      msgStepEofol(
+        `[${i + 1}/${sources.length}] Compiled ${source} in ${prettyTime(
+          new Date() - timeStart
+        )}`
+      );
+      i += 1;
     });
 });
 
 Promise.all(resultPromise).then(() => {
-  msgStepEofol("Compilation success!");
-  msgStepEofol(`Took ${prettyTime(new Date() - timeStart)}.`);
+  msgStepEofolSuccess(
+    `Compiled successfully at ${PATH_DERIVED} in ${prettyTime(
+      new Date() - timeStart
+    )}.`
+  );
 });
