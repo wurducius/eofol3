@@ -11,20 +11,21 @@ const { prettyTime } = require("@eofol/eofol-dev-utils");
 
 // -------------------------------------------
 
-const ARG_MINIFY = false;
+const ARG_MINIFY_HTML = false;
+const ARG_MINIFY_VDOM = false;
 
 // -------------------------------------------
 
 const minifyOptions = {
   continueOnParseError: true,
   removeRedundantAttributes: true,
-  removeComments: ARG_MINIFY,
-  collapseWhitespace: ARG_MINIFY,
-  minifyCSS: ARG_MINIFY,
-  minifyJS: ARG_MINIFY,
+  removeComments: ARG_MINIFY_HTML,
+  collapseWhitespace: ARG_MINIFY_HTML,
+  minifyCSS: ARG_MINIFY_HTML,
+  minifyJS: ARG_MINIFY_HTML,
 };
 
-const HTML_DOCTYPE_TAG = `<!DOCTYPE html>${ARG_MINIFY ? "" : "\n"}`;
+const HTML_DOCTYPE_TAG = `<!DOCTYPE html>${ARG_MINIFY_HTML ? "" : "\n"}`;
 
 const FILENAME_PUBLIC = "public";
 const FILENAME_DERIVED = "derived";
@@ -76,7 +77,7 @@ const validateEofolCustomElement = (element) => {
   }
 };
 
-const renderEofolCustomElement = (element) => {
+const renderEofolCustomElement = (element, instances) => {
   const name = getEofolComponentType(element);
   const def = findEofolComponentDef(name);
 
@@ -97,7 +98,7 @@ const renderEofolCustomElement = (element) => {
 
   const as = element?.attributes?.as ?? "div";
 
-  eofolInstances.push({
+  instances.push({
     name,
     id,
     state: def.initialState ? { ...def.initialState } : undefined,
@@ -113,23 +114,6 @@ const renderEofolCustomElement = (element) => {
     },
   };
 };
-/*
-const eofolDefs = [
-  {
-    name: "component1",
-    render: () => "COMPONENT 1",
-    initialState: { data: 1 },
-  },
-  {
-    name: "component2",
-    render: () => "COMPONENT 2",
-    initialState: { data: 2 },
-  },
-  { name: "component3", render: () => "COMPONENT 3" },
-];
-*/
-
-const eofolInstances = [];
 
 // -------------------------------------------
 
@@ -148,18 +132,47 @@ const checkExistsCreate = (pathToCheck) => {
 
 const removeFilePart = (dirname) => path.parse(dirname).dir;
 
-const transverseTree = (tree) => {
-  if (tree && tree.content && Array.isArray(tree.content)) {
+const transverseTree = (tree, vdom, instances) => {
+  const isContentNode = tree.type === undefined;
+  if (isContentNode) {
+    return;
+  }
+
+  const hasChildren =
+    tree &&
+    tree.content &&
+    Array.isArray(tree.content) &&
+    tree.content.filter((x) => x.type !== undefined).length > 0;
+  const nextChildren = hasChildren ? [] : undefined;
+
+  let nextVdom;
+  if (tree.type === "eofol") {
+    nextVdom = {
+      type: "custom",
+      name: getEofolComponentType(tree),
+      children: nextChildren,
+    };
+  } else {
+    nextVdom = {
+      type: "tag",
+      name: tree.type,
+      children: nextChildren,
+    };
+  }
+
+  vdom.push(nextVdom);
+
+  if (hasChildren) {
     let delta = [];
     tree.content.forEach((child, index) => {
       if (isEofolCustomElement(child)) {
         validateEofolCustomElement(child);
         delta.push({
           index,
-          element: renderEofolCustomElement(child),
+          element: renderEofolCustomElement(child, instances),
         });
       } else {
-        return transverseTree(child);
+        return transverseTree(child, vdom[vdom.length - 1].children, instances);
       }
     });
     delta.forEach((deltaElement) => {
@@ -172,7 +185,7 @@ const transverseTree = (tree) => {
 // -------------------------------------------
 
 msgStepEofol("Compile");
-msgStepEofol(`Minify = ${ARG_MINIFY}`);
+msgStepEofol(`Minify = ${ARG_MINIFY_HTML}`);
 
 const timeStart = new Date();
 
@@ -195,6 +208,9 @@ const sources = fs
   .filter((sourceFilename) => sourceFilename.endsWith(".html"));
 
 const resultPromise = sources.map((source) => {
+  const eofolInstances = [];
+  const vdom = [];
+
   let sourceHTML;
   try {
     const sourcePath = path.resolve(PATH_PUBLIC, source);
@@ -215,7 +231,7 @@ const resultPromise = sources.map((source) => {
       die("Parse error", ex);
     })
     .then((res) => {
-      transverseTree(res);
+      transverseTree(res, vdom, eofolInstances);
       return res;
     })
     .then((res) => {
@@ -255,6 +271,14 @@ const resultPromise = sources.map((source) => {
       checkExistsCreate(PATH_DERIVED);
       checkExistsCreate(removeFilePart(targetPath));
       fs.writeFileSync(targetPath, res);
+      const vdomPath = path.resolve(PATH_DERIVED, "vdom");
+      checkExistsCreate(vdomPath);
+      const targetVDOMFilename = `${path.parse(source).name}.json`;
+      const targetVDOMPath = path.resolve(vdomPath, targetVDOMFilename);
+      fs.writeFileSync(
+        targetVDOMPath,
+        JSON.stringify(vdom[0], null, ARG_MINIFY_VDOM ? 0 : 2)
+      );
       msgStepEofol(`Compiled ${source}`);
     });
 });
