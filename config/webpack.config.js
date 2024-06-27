@@ -34,6 +34,7 @@ const {
   ASSETS_IMG_PATH,
   ASSETS_FONT_PATH,
   ENTRYPOINT_ROOT_PATH,
+  PUBLIC_PATH,
 } = require("./paths");
 const { collectViews } = require("@eofol/eofol-dev-utils");
 
@@ -119,6 +120,7 @@ const config = () => {
       ],
     },
     devServer: {
+      static: PUBLIC_PATH,
       compress: true,
       hot: true,
       port: PORT,

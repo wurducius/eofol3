@@ -11,7 +11,7 @@ module.exports = {
   SERVICEWORKER_ENABLED: true,
   BUILD_PATH: "build",
   VIEWS_PATH: "views",
-  PUBLIC_PATH: "public",
+  PUBLIC_PATH: "derived",
   SRC_PATH: "src",
   ASSETS_PATH: "assets",
   ASSETS_JS_PATH: "js",
