@@ -33,8 +33,6 @@ const PATH_CWD = fs.realpathSync(process.cwd());
 const PATH_DERIVED = path.resolve(PATH_CWD, FILENAME_DERIVED);
 const PATH_PUBLIC = path.resolve(PATH_CWD, FILENAME_PUBLIC);
 
-const EOFOL_CUSTOM_COMPONENT_TAGNAME = "eofol";
-
 const MSG_EOFOL = "Eofol3";
 const MSG_HTML_PARSER = "HTML Parser";
 const MSG_HTML_MINIFIER = "HTML Minifier";
@@ -49,39 +47,93 @@ const msgStepParser = msgStep(MSG_HTML_PARSER);
 const msgStepMinifier = msgStep(MSG_HTML_MINIFIER);
 const msgStepValidator = msgStep(MSG_HTML_VALIDATOR);
 
-const EOFOL_VDOM_ROOT = "root";
-const EOFOL_VDOM_TAG = "tag";
-const EOFOL_VDOM_CUSTOM = "custom";
+// -------------------------------------------
 
-const EOFOL_INITIALVDOM = { type: EOFOL_VDOM_ROOT, children: [{}] };
+const EOFOL_CUSTOM_COMPONENT_TAGNAME = "eofol";
+const EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE = "name";
 
 // -------------------------------------------
+
+const getEofolComponentType = (element) =>
+  element && element.attributes[EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE];
+
+const findEofolComponentDef = (name) =>
+  eofolDefs.find(
+    (componentDef) =>
+      componentDef[EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE] === name
+  );
 
 const isEofolCustomElement = (element) =>
   element && element.type === EOFOL_CUSTOM_COMPONENT_TAGNAME;
 
 const validateEofolCustomElement = (element) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
-    console.log("ERROR: CUSTOM EOFOL COMPONENT HAS CHILDREN");
-    die();
+    die(
+      `Eofol validation error: Custom eofol component cannot have children: Component ${getEofolComponentType(
+        element
+      )}`
+    );
   }
 };
 
 const renderEofolCustomElement = (element) => {
-  const name = element.attributes.name;
+  const name = getEofolComponentType(element);
+  const def = findEofolComponentDef(name);
+
+  if (!def) {
+    msgStepEofol(
+      'Cannot render custom eofol element: definition not found for component type: "' +
+        name +
+        '"'
+    );
+  }
+
+  let id;
+  if (element.attributes.id) {
+    id = element.attributes.id;
+  } else {
+    id = generateId();
+  }
+
+  const as = element?.attributes?.as ?? "div";
+
+  eofolInstances.push({
+    name,
+    id,
+    state: def.initialState ? { ...def.initialState } : undefined,
+    props: undefined,
+    as,
+  });
+
   return {
-    type: "div",
-    content: [`EOFOL3 CUSTOM COMPONENT - TYPE ${name}`],
+    type: as,
+    content: [def.render()],
     attributes: {
-      id: generateId(),
+      id,
     },
   };
 };
 
+const eofolDefs = [
+  {
+    name: "component1",
+    render: () => "COMPONENT 1",
+    initialState: { data: 1 },
+  },
+  {
+    name: "component2",
+    render: () => "COMPONENT 2",
+    initialState: { data: 2 },
+  },
+  { name: "component3", render: () => "COMPONENT 3" },
+];
+
+const eofolInstances = [];
+
 // -------------------------------------------
 
-const die = () => {
-  msgStepEofol("Finished with error.");
+const die = (msg, ex) => {
+  msgStepEofol(`Finished with error: ${msg}${ex ? `: ${ex.stack}` : ""}`);
   process.exit(1);
 };
 
@@ -96,7 +148,6 @@ const checkExistsCreate = (pathToCheck) => {
 const removeFilePart = (dirname) => path.parse(dirname).dir;
 
 const transverseTree = (tree) => {
-  // console.log(tree);
   if (tree && tree.content && Array.isArray(tree.content)) {
     let delta = [];
     tree.content.forEach((child, index) => {
@@ -130,8 +181,7 @@ try {
     fs.rmSync(path.resolve(PATH_DERIVED, prevContent), { recursive: true });
   });
 } catch (ex) {
-  msgStepEofol("Clean error");
-  die();
+  die("Clean error", ex);
 }
 
 const sources = fs
@@ -143,13 +193,11 @@ const resultPromise = sources.map((source) => {
   try {
     const sourcePath = path.resolve(PATH_PUBLIC, source);
     if (!fs.existsSync(sourcePath)) {
-      msgStepParser(`Source file doesn't exist: ${sourcePath}`);
-      die();
+      die(`Source file doesn't exist: ${sourcePath}`);
     }
     sourceHTML = fs.readFileSync(sourcePath);
   } catch (ex) {
-    msgStepParser(`Cannot open source file: ${sourcePath}`);
-    die();
+    die(`Cannot open source file: ${sourcePath}`, ex);
   }
 
   return HTMLToJSON(sourceHTML.toString(), false)
@@ -157,9 +205,8 @@ const resultPromise = sources.map((source) => {
       msgStepParser("Parse successful");
       return res;
     })
-    .catch((res) => {
-      msgStepParser("Parse error");
-      die();
+    .catch((ex) => {
+      die("Parse error", ex);
     })
     .then((res) => {
       transverseTree(res);
@@ -171,9 +218,8 @@ const resultPromise = sources.map((source) => {
     .then((res) => {
       return minify(res, minifyOptions);
     })
-    .catch((res) => {
-      msgStepMinifier("Minify error");
-      die();
+    .catch((ex) => {
+      die("Minify error", ex);
     })
     .then((res) => {
       msgStepMinifier("Minified successfully");
@@ -190,8 +236,7 @@ const resultPromise = sources.map((source) => {
         validator(options);
         msgStepValidator("Valid HTML");
       } catch (ex) {
-        msgStepValidator("Invalid HTML");
-        die();
+        die("Invalid HTML", ex);
       }
 
       return res;
