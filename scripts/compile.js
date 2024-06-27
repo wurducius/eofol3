@@ -113,7 +113,7 @@ const renderEofolCustomElement = (element) => {
     },
   };
 };
-
+/*
 const eofolDefs = [
   {
     name: "component1",
@@ -127,6 +127,7 @@ const eofolDefs = [
   },
   { name: "component3", render: () => "COMPONENT 3" },
 ];
+*/
 
 const eofolInstances = [];
 
@@ -183,6 +184,11 @@ try {
 } catch (ex) {
   die("Clean error", ex);
 }
+
+const eofolDefsJS = require(path.resolve(PATH_CWD, "dist", "index.js"));
+const eofolDefs = Object.keys(eofolDefsJS).map(
+  (eofolDefJS) => eofolDefsJS[eofolDefJS]
+);
 
 const sources = fs
   .readdirSync(PATH_PUBLIC, { recursive: true })
