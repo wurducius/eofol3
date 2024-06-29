@@ -14,9 +14,9 @@
     "compile-after-build": "node ./scripts/after-build.js",
     "precompile": "npm run compile-ts && npm run compile-after-ts && npm run compile-static",
     "postcompile": "npm run compile-build && npm run compile-after-build",
-    "estart": "cls && npm run precompile && npm run start",
-    "eserve": "cls && npm run precompile && npm run postcompile && npm run serve",
-    "emid": "cls && npm run precompile && npm run postcompile"
+    "estart": "npm run precompile && npm run start",
+    "eserve": "npm run precompile && npm run postcompile && npm run serve",
+    "emid": "npm run precompile && npm run postcompile"
   },
   "type": "commonjs",
   "dependencies": {
@@ -25,7 +25,7 @@
     "@babel/plugin-transform-object-rest-spread": "^7.24.6",
     "@babel/preset-env": "^7.24.6",
     "@babel/preset-typescript": "^7.24.6",
-    "@eofol/eofol-dev-utils": "file:../eofol/packages/eofol-dev-utils",
+    "@eofol/eofol-dev-utils": "^0.2.26",
     "babel-loader": "^9.1.3",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
