@@ -33,12 +33,10 @@ sourceViews.forEach((view) => {
             .replaceAll('"', "")
             .replaceAll(")", "")
             .trim();
-          const scriptPath = path.resolve(source, "..", scriptPathRaw + ".js");
-
-          const script = fs.readFileSync(scriptPath);
-          const injected = script.toString();
-          console.log(injected);
-          return acc + injected;
+          const script = fs.readFileSync(
+            path.resolve(source, "..", scriptPathRaw + ".js")
+          );
+          return acc + script.toString();
         }
       }, "");
       return res;
