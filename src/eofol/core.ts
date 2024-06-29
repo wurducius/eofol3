@@ -21,6 +21,12 @@ interface Def {
   children?: VDOM[];
 }
 
+let vdom: any = undefined;
+let instances: any = undefined;
+let customDefs: any = [];
+let flatDefs: any = [];
+let staticDefs: any = [];
+
 const isBrowser =
   typeof window !== "undefined" && typeof window.document !== "undefined";
 
@@ -32,24 +38,28 @@ const reduceHTMLProps = (props: any, prefix?: string, suffix?: string) =>
       }, "")
     : "";
 
-const findCustomDef = (tagname: string) =>
-  customDefs.find((def: any) => def.name === tagname);
-const findFlatDef = (tagname: string) =>
-  flatDefs.find((def: any) => def.name === tagname);
-const findDef = (tagname: string) =>
-  findCustomDef(tagname) || findFlatDef(tagname);
+const findGeneralDef = (generalDefs: any) => (tagname: string) =>
+  generalDefs.find((def: any) => def.name === tagname);
+const findCustomDef = findGeneralDef(customDefs);
+const findFlatDef = findGeneralDef(flatDefs);
+const findStaticDef = findGeneralDef(staticDefs);
 
-const getContentHTML = (content: any) => {
+const findDef = (tagname: string) =>
+  findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname);
+
+const resolveContent = (content: any): any => {
   if (!content) {
     return "";
   } else if (Array.isArray(content)) {
-    return content.reduce((acc, next) => acc + next, "");
+    return content.reduce((acc, next) => acc + resolveContent(next), "");
   } else if (typeof content === "string") {
     return content;
   } else {
     return content;
   }
 };
+
+const getContentHTML = (content: any) => resolveContent(content);
 
 function createElement(
   tagname: string,
@@ -70,11 +80,6 @@ function createElement(
   }
 }
 
-let vdom: any = undefined;
-let instances: any = undefined;
-let customDefs: any = [];
-let flatDefs: any = [];
-
 const defineCustomComponent = (componentDef: any) => {
   customDefs.push(componentDef);
   return componentDef;
@@ -82,6 +87,11 @@ const defineCustomComponent = (componentDef: any) => {
 
 const defineFlatComponent = (componentDef: any) => {
   flatDefs.push(componentDef);
+  return componentDef;
+};
+
+const defineStaticComponent = (componentDef: any) => {
+  staticDefs.push(componentDef);
   return componentDef;
 };
 
@@ -128,6 +138,7 @@ const randomString = () => (Math.random() + 1).toString(36).substring(7);
 export default {
   defineCustomComponent,
   defineFlatComponent,
+  defineStaticComponent,
   isBrowser,
   forceRerender,
   createElement,
@@ -136,4 +147,5 @@ export default {
   instances,
   customDefs,
   flatDefs,
+  staticDefs,
 };

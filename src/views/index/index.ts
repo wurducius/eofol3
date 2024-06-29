@@ -6,6 +6,7 @@ const {
   forceRerender,
   defineCustomComponent,
   defineFlatComponent,
+  defineStaticComponent,
   randomString,
   createElement,
 } = Core;
@@ -24,7 +25,7 @@ export const component1 = defineCustomComponent({
   render: () => {
     const button = createElement(
       "button",
-      "Force rerender",
+      "Component 1 - Force rerender",
       undefined,
       undefined,
       {
@@ -43,7 +44,10 @@ export const component2 = defineCustomComponent({
 export const component3 = defineCustomComponent({
   name: "component3",
   render: function () {
-    const rendered = createElement("div", createElement("flat"));
+    const rendered = createElement("div", [
+      createElement("flat"),
+      "Component 3",
+    ]);
     return rendered;
   },
 });
@@ -53,10 +57,30 @@ export const flatComponent = defineFlatComponent({
   render: function () {
     const rendered = createElement("div", [
       createElement("button", "FLAT HELLO WORLD!!!"),
-      createElement("span", "OH YEAH"),
+      createElement("p", "OH YEAH"),
+      createElement("static"),
+      "Flat component",
     ]);
     return rendered;
   },
-  as: "h1",
 });
-export default { component1, component2, component3, flatComponent };
+
+export const staticComponent = defineStaticComponent({
+  name: "static",
+  render: function () {
+    const rendered = [
+      createElement("p", "STATIC HELLO WORLD!!!"),
+      createElement("p", "OH YEAH"),
+      "Static component",
+    ];
+    return rendered;
+  },
+});
+
+export default {
+  component1,
+  component2,
+  component3,
+  flatComponent,
+  staticComponent,
+};

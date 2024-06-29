@@ -79,6 +79,7 @@ const msgStepValidator = msgStep(MSG_HTML_VALIDATOR);
 
 const EOFOL_CUSTOM_COMPONENT_TAGNAME = "custom";
 const EOFOL_FLAT_COMPONENT_TAGNAME = "flat";
+const EOFOL_STATIC_COMPONENT_TAGNAME = "static";
 
 const EOFOL_COMPONENT_ATTRIBUTE_TYPE = "name";
 const EOFOL_COMPONENT_PROP_CUSTOM_PREFIX = "e-";
@@ -98,6 +99,9 @@ const isEofolCustomElement = (element) =>
 
 const isEofolFlatElement = (element) =>
   element && element.type === EOFOL_FLAT_COMPONENT_TAGNAME;
+
+const isEofolStaticElement = (element) =>
+  element && element.type === EOFOL_STATIC_COMPONENT_TAGNAME;
 
 const validateEofolCustomElement = (element) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
@@ -160,12 +164,39 @@ const renderEofolFlatElement = (element) => {
   }
 
   // @TODO
-  const as = element?.attributes?.as ?? "div";
+  const as = element?.attributes?.as ?? "h5";
 
   return {
     type: as,
     content: [def.render()],
     attributes: {},
+  };
+};
+
+const renderEofolStaticElement = (element) => {
+  const name = getEofolComponentType(element);
+  const def = findEofolComponentDef(name);
+
+  if (!def) {
+    msgStepEofol(
+      'Cannot render custom eofol element: definition not found for component type: "' +
+        name +
+        '"'
+    );
+  }
+
+  // @TODO
+  // const as = element?.attributes?.as ?? "h5";
+
+  const rendered = def.render();
+  const reduced = Array.isArray(rendered) ? rendered.join("") : rendered;
+
+  return {
+    // @TODO
+    //  type: "static",
+    type: "div",
+    content: [reduced],
+    // attributes: {},
   };
 };
 
@@ -185,6 +216,13 @@ const checkExistsCreate = (pathToCheck) => {
 };
 
 const removeFilePart = (dirname) => path.parse(dirname).dir;
+
+const pushElement = (delta) => (rendered, index) => {
+  delta.push({
+    index,
+    element: rendered,
+  });
+};
 
 const transverseTree = (tree, vdom, instances) => {
   const isContentNode = tree.type === undefined;
@@ -218,32 +256,51 @@ const transverseTree = (tree, vdom, instances) => {
 
   if (hasChildren) {
     let delta = [];
+    const pushElementImpl = pushElement(delta);
     tree.content.forEach((child, index) => {
       if (isEofolCustomElement(child)) {
         validateEofolCustomElement(child);
         const rendered = renderEofolCustomElement(child, instances);
-        delta.push({
-          index,
-          element: rendered,
-        });
+        pushElementImpl(rendered, index);
         vdom[vdom.length - 1].id = rendered.attributes.id;
       } else if (isEofolFlatElement(child)) {
         const rendered = renderEofolFlatElement(child);
-        delta.push({
-          index,
-          element: rendered,
-        });
+        pushElementImpl(rendered, index);
+        //  vdom[vdom.length - 1].id = rendered.attributes.id;
+      } else if (isEofolStaticElement(child)) {
+        const rendered = renderEofolStaticElement(child);
+        pushElementImpl(rendered, index);
         //  vdom[vdom.length - 1].id = rendered.attributes.id;
       } else {
         return transverseTree(child, vdom[vdom.length - 1].children, instances);
       }
     });
     delta.forEach((deltaElement) => {
-      tree.content[deltaElement.index] = deltaElement.element;
+      const resultContent = Array.isArray(deltaElement.element)
+        ? deltaElement.element.reduce((acc, next) => acc + next, "")
+        : deltaElement.element;
+      tree.content[deltaElement.index] = resultContent;
     });
   }
   return tree;
 };
+
+/*
+const resolveStaticComponents = (tree) => {
+  const isContentNode = tree.type === undefined;
+  if (isContentNode) {
+    return;
+  }
+
+  if (tree.type === "static") {
+    return;
+  } else {
+    tree.content.forEach((child) => {
+      return resolveStaticComponents(child);
+    });
+  }
+};
+*/
 
 // -------------------------------------------
 
