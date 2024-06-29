@@ -65,7 +65,7 @@ const initEofol = () => {
   const htmlPageRaw = isBrowser
     ? window.location.pathname.split("/").pop()
     : "";
-  const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw;
+  const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw?.split(".")[0];
 
   return isBrowser
     ? Promise.all([
