@@ -32,30 +32,56 @@ const reduceHTMLProps = (props: any, prefix?: string, suffix?: string) =>
       }, "")
     : "";
 
+const findCustomDef = (tagname: string) =>
+  customDefs.find((def: any) => def.name === tagname);
+const findFlatDef = (tagname: string) =>
+  flatDefs.find((def: any) => def.name === tagname);
+const findDef = (tagname: string) =>
+  findCustomDef(tagname) || findFlatDef(tagname);
+
+const getContentHTML = (content: any) => {
+  if (!content) {
+    return "";
+  } else if (Array.isArray(content)) {
+    return content.reduce((acc, next) => acc + next, "");
+  } else if (typeof content === "string") {
+    return content;
+  } else {
+    return content;
+  }
+};
+
 function createElement(
   tagname: string,
-  content: any,
+  content?: any,
   classname?: string,
   attributes?: any,
   properties?: any
 ) {
-  const def = defs.find((def: any) => def.name === tagname);
+  const def = findDef(tagname);
   if (def) {
     return def.render();
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : "";
     const attributesHTML = reduceHTMLProps(attributes);
     const propertiesHTML = reduceHTMLProps(properties, "(", ")()");
-    return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${content}</${tagname}>`;
+    const contentHTML = getContentHTML(content);
+    return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${contentHTML}</${tagname}>`;
   }
 }
 
 let vdom: any = undefined;
 let instances: any = undefined;
-let defs: any = [];
+let customDefs: any = [];
+let flatDefs: any = [];
 
-const defineComponent = (componentDef: any) => {
-  defs.push(componentDef);
+const defineCustomComponent = (componentDef: any) => {
+  customDefs.push(componentDef);
+  return componentDef;
+};
+
+const defineFlatComponent = (componentDef: any) => {
+  flatDefs.push(componentDef);
   return componentDef;
 };
 
@@ -87,18 +113,9 @@ const forceRerender = () => {
     const name = child.name;
     const target = isBrowser ? document.getElementById(id) : null;
     if (target) {
-      const def = defs.find((componentDef: any) => componentDef.name === name);
+      const def = findDef(name);
       if (def) {
-        const rendered = def.render();
-        if (typeof rendered === "string") {
-          // target.textContent = rendered;
-          target.innerHTML = rendered;
-        } else {
-          //  target.textContent = target.innerHTML = "";
-          //  target.appendChild(rendered);
-          //target.textContent = rendered;
-          target.innerHTML = rendered;
-        }
+        target.innerHTML = def.render();
       }
     }
   });
@@ -109,12 +126,14 @@ initEofol();
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
 
 export default {
-  defineComponent,
+  defineCustomComponent,
+  defineFlatComponent,
   isBrowser,
   forceRerender,
   createElement,
   randomString,
   vdom,
   instances,
-  defs,
+  customDefs,
+  flatDefs,
 };

@@ -77,22 +77,27 @@ const msgStepValidator = msgStep(MSG_HTML_VALIDATOR);
 
 // -------------------------------------------
 
-const EOFOL_CUSTOM_COMPONENT_TAGNAME = "eofol";
-const EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE = "name";
+const EOFOL_CUSTOM_COMPONENT_TAGNAME = "custom";
+const EOFOL_FLAT_COMPONENT_TAGNAME = "flat";
+
+const EOFOL_COMPONENT_ATTRIBUTE_TYPE = "name";
+const EOFOL_COMPONENT_PROP_CUSTOM_PREFIX = "e-";
 
 // -------------------------------------------
 
 const getEofolComponentType = (element) =>
-  element && element.attributes[EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE];
+  element && element.attributes[EOFOL_COMPONENT_ATTRIBUTE_TYPE];
 
 const findEofolComponentDef = (name) =>
   eofolDefs.find(
-    (componentDef) =>
-      componentDef[EOFOL_CUSTOM_COMPONENT_ATTRIBUTE_TYPE] === name
+    (componentDef) => componentDef[EOFOL_COMPONENT_ATTRIBUTE_TYPE] === name
   );
 
 const isEofolCustomElement = (element) =>
   element && element.type === EOFOL_CUSTOM_COMPONENT_TAGNAME;
+
+const isEofolFlatElement = (element) =>
+  element && element.type === EOFOL_FLAT_COMPONENT_TAGNAME;
 
 const validateEofolCustomElement = (element) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
@@ -139,6 +144,28 @@ const renderEofolCustomElement = (element, instances) => {
     attributes: {
       id,
     },
+  };
+};
+
+const renderEofolFlatElement = (element) => {
+  const name = getEofolComponentType(element);
+  const def = findEofolComponentDef(name);
+
+  if (!def) {
+    msgStepEofol(
+      'Cannot render custom eofol element: definition not found for component type: "' +
+        name +
+        '"'
+    );
+  }
+
+  // @TODO
+  const as = element?.attributes?.as ?? "div";
+
+  return {
+    type: as,
+    content: [def.render()],
+    attributes: {},
   };
 };
 
@@ -200,6 +227,13 @@ const transverseTree = (tree, vdom, instances) => {
           element: rendered,
         });
         vdom[vdom.length - 1].id = rendered.attributes.id;
+      } else if (isEofolFlatElement(child)) {
+        const rendered = renderEofolFlatElement(child);
+        delta.push({
+          index,
+          element: rendered,
+        });
+        //  vdom[vdom.length - 1].id = rendered.attributes.id;
       } else {
         return transverseTree(child, vdom[vdom.length - 1].children, instances);
       }

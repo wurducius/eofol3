@@ -2,7 +2,13 @@
 
 // @IMPORT-START
 import Core from "../../eofol/core";
-const { forceRerender, defineComponent, randomString, createElement } = Core;
+const {
+  forceRerender,
+  defineCustomComponent,
+  defineFlatComponent,
+  randomString,
+  createElement,
+} = Core;
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
@@ -13,7 +19,7 @@ const onclick = () => {
 
 const onclickSerialized = onclick.toString();
 
-export const component1 = defineComponent({
+export const component1 = defineCustomComponent({
   name: "component1",
   render: () => {
     const button = createElement(
@@ -29,20 +35,28 @@ export const component1 = defineComponent({
   },
 });
 
-export const component2 = defineComponent({
+export const component2 = defineCustomComponent({
   name: "component2",
   render: () => `Component 2 = ${randomString()}`,
 });
 
-export const component3 = defineComponent({
+export const component3 = defineCustomComponent({
   name: "component3",
   render: function () {
-    const rendered = createElement(
-      "div",
-      createElement("component2", "TRADAAA")
-    );
+    const rendered = createElement("div", createElement("flat"));
     return rendered;
   },
 });
 
-export default { component1, component2, component3 };
+export const flatComponent = defineFlatComponent({
+  name: "flat",
+  render: function () {
+    const rendered = createElement("div", [
+      createElement("button", "FLAT HELLO WORLD!!!"),
+      createElement("span", "OH YEAH"),
+    ]);
+    return rendered;
+  },
+  as: "h1",
+});
+export default { component1, component2, component3, flatComponent };
