@@ -48,8 +48,6 @@ function createElement(
     const classnameHTML = classname ? ` class='${classname}'` : "";
     const attributesHTML = reduceHTMLProps(attributes);
     const propertiesHTML = reduceHTMLProps(properties, "(", ")()");
-    console.log(properties, propertiesHTML);
-
     return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${content}</${tagname}>`;
   }
 }

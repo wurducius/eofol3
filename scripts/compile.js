@@ -229,7 +229,14 @@ try {
   die("Clean error", ex);
 }
 
-const eofolDefsJS = require(path.resolve(PATH_CWD, "dist", "index.js"));
+// @TODO: HARDCODED filename index.js
+const eofolDefsJS = require(path.resolve(
+  PATH_CWD,
+  "dist",
+  "views",
+  "index",
+  "index.js"
+));
 const eofolDefs = Object.keys(eofolDefsJS).map(
   (eofolDefJS) => eofolDefsJS[eofolDefJS]
 );

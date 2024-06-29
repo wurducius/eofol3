@@ -7,13 +7,18 @@
     "build": "node ./bin/eofol-scripts.js build",
     "clean": "node ./bin/eofol-scripts.js clean",
     "serve": "node ./bin/eofol-scripts.js serve",
+    "compile-ts": "tsc -p ./tsconfig.json",
+    "compile-after-ts": "node ./scripts/before-compile.js",
     "compile-static": "node ./scripts/compile.js",
-    "compile-ts": "tsc",
-    "precompile": "npm run compile-ts && npm run compile-static",
+    "compile-build": "npm run build",
+    "compile-after-build": "node ./scripts/after-build.js",
+    "precompile": "npm run compile-ts && npm run compile-after-ts && npm run compile-static",
+    "postcompile": "npm run compile-build && npm run compile-after-build",
     "estart": "cls && npm run precompile && npm run start",
-    "eserve": "cls && npm run precompile && npm run build && npm run serve",
-    "emid": "cls && npm run precompile && npm run build"
+    "eserve": "cls && npm run precompile && npm run postcompile && npm run serve",
+    "emid": "cls && npm run precompile && npm run postcompile"
   },
+  "type": "commonjs",
   "dependencies": {
     "@babel/core": "^7.24.6",
     "@babel/plugin-transform-class-properties": "^7.24.6",
