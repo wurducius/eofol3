@@ -1,5 +1,3 @@
-// import "./index.css";
-
 type VDOMType = "tag" | "custom";
 
 type HTMLTag = any;
@@ -65,7 +63,7 @@ const initEofol = () => {
   const htmlPageRaw = isBrowser
     ? window.location.pathname.split("/").pop()
     : "";
-  const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw?.split(".")[0];
+  const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw;
 
   return isBrowser
     ? Promise.all([
@@ -83,7 +81,7 @@ const initEofol = () => {
     : Promise.all([undefined, undefined]);
 };
 
-export const forceRerender = () => {
+const forceRerender = () => {
   instances?.forEach((child: any) => {
     const id = child.id;
     const name = child.name;
@@ -110,43 +108,13 @@ initEofol();
 
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
 
-const onclick = () => {
-  console.log("(R)");
-  forceRerender();
+export default {
+  defineComponent,
+  isBrowser,
+  forceRerender,
+  createElement,
+  randomString,
+  vdom,
+  instances,
+  defs,
 };
-
-const onclickSerialized = onclick.toString();
-
-export const component1 = defineComponent({
-  name: "component1",
-  render: () => {
-    const button = createElement(
-      "button",
-      "Force rerender",
-      undefined,
-      undefined,
-      {
-        onclick: eval(onclickSerialized),
-      }
-    );
-    return button;
-  },
-});
-
-export const component2 = defineComponent({
-  name: "component2",
-  render: () => `Component 2 = ${randomString()}`,
-});
-
-export const component3 = defineComponent({
-  name: "component3",
-  render: function () {
-    const rendered = createElement(
-      "div",
-      createElement("component2", "TRADAAA")
-    );
-    return rendered;
-  },
-});
-
-export default { component1, component2, component3, forceRerender };
