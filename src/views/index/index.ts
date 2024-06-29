@@ -1,12 +1,57 @@
 // import "./index.css";
-import { JSONToHTML } from "html-to-json-parser";
+
+type VDOMType = "tag" | "custom";
+
+type HTMLTag = any;
+
+interface VDOM {
+  type: VDOMType;
+  name: string;
+  children?: VDOM[];
+  id?: string;
+}
+
+interface Instances {
+  name: string;
+  id: string;
+  as: HTMLTag;
+}
+
+interface Def {
+  type: string;
+  name: string;
+  children?: VDOM[];
+}
 
 const isBrowser =
   typeof window !== "undefined" && typeof window.document !== "undefined";
 
-function createElement(tagname: string, content: any) {
-  // return JSONToHTML({ type: tagname, content });
-  return `<${tagname}>${content}</${tagname}>`;
+const reduceHTMLProps = (props: any, prefix?: string, suffix?: string) =>
+  props
+    ? Object.keys(props).reduce((acc, next) => {
+        const val = props[next].toString().replaceAll('"', "'");
+        return `${acc} ${next}="${prefix ?? ""}${val}${suffix ?? ""}"`;
+      }, "")
+    : "";
+
+function createElement(
+  tagname: string,
+  content: any,
+  classname?: string,
+  attributes?: any,
+  properties?: any
+) {
+  const def = defs.find((def: any) => def.name === tagname);
+  if (def) {
+    return def.render();
+  } else {
+    const classnameHTML = classname ? ` class='${classname}'` : "";
+    const attributesHTML = reduceHTMLProps(attributes);
+    const propertiesHTML = reduceHTMLProps(properties, "(", ")()");
+    console.log(properties, propertiesHTML);
+
+    return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${content}</${tagname}>`;
+  }
 }
 
 let vdom: any = undefined;
@@ -40,7 +85,7 @@ const initEofol = () => {
     : Promise.all([undefined, undefined]);
 };
 
-const forceRerender = () => {
+export const forceRerender = () => {
   instances?.forEach((child: any) => {
     const id = child.id;
     const name = child.name;
@@ -53,7 +98,6 @@ const forceRerender = () => {
           // target.textContent = rendered;
           target.innerHTML = rendered;
         } else {
-          console.log(rendered);
           //  target.textContent = target.innerHTML = "";
           //  target.appendChild(rendered);
           //target.textContent = rendered;
@@ -64,32 +108,47 @@ const forceRerender = () => {
   });
 };
 
-initEofol().then(() => {
-  setInterval(() => {
-    console.log("(R)");
-    forceRerender();
-  }, 2000);
-});
+initEofol();
 
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
 
+const onclick = () => {
+  console.log("(R)");
+  forceRerender();
+};
+
+const onclickSerialized = onclick.toString();
+
 export const component1 = defineComponent({
   name: "component1",
-  render: () => "COMPONENT 1 CONTENT " + randomString(),
+  render: () => {
+    const button = createElement(
+      "button",
+      "Force rerender",
+      undefined,
+      undefined,
+      {
+        onclick: eval(onclickSerialized),
+      }
+    );
+    return button;
+  },
 });
 
 export const component2 = defineComponent({
   name: "component2",
-  render: () => "COMPONENT 2 CONTENT" + randomString(),
+  render: () => `Component 2 = ${randomString()}`,
 });
 
 export const component3 = defineComponent({
   name: "component3",
   render: function () {
-    const rendered = createElement("div", "TRADAAA");
-    console.log(rendered);
+    const rendered = createElement(
+      "div",
+      createElement("component2", "TRADAAA")
+    );
     return rendered;
   },
 });
 
-export default { component1, component2, component3 };
+export default { component1, component2, component3, forceRerender };
