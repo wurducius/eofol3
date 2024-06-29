@@ -4,13 +4,17 @@ const path = require("path");
 const PATH_CWD = fs.realpathSync(process.cwd());
 const PATH_DERIVED = path.resolve(PATH_CWD, "dist");
 
-const PATH_SOURCE = path.resolve(PATH_DERIVED, "views", "index", "index.js");
+const sourceViews = fs.readdirSync(path.resolve(PATH_DERIVED, "views"));
 
-const scriptContent = fs.readFileSync(PATH_SOURCE);
+sourceViews.forEach((view) => {
+  const source = path.resolve(PATH_DERIVED, "views", view, `${view}.js`);
 
-const result = scriptContent
-  .toString()
-  .replaceAll("export ", "")
-  .replace("default", "module.exports = ");
+  const scriptContent = fs.readFileSync(source);
 
-fs.writeFileSync(PATH_SOURCE, result);
+  const result = scriptContent
+    .toString()
+    .replaceAll("export ", "")
+    .replace("default", "module.exports = ");
+
+  fs.writeFileSync(source, result);
+});

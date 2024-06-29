@@ -5,11 +5,15 @@ const PATH_CWD = fs.realpathSync(process.cwd());
 const PATH_DIST = path.resolve(PATH_CWD, "dist");
 const PATH_BUILD = path.resolve(PATH_CWD, "build");
 
-const PATH_SOURCE = path.resolve(PATH_DIST, "views", "index", "index.js");
-const PATH_TARGET = path.resolve(PATH_BUILD, "assets", "js", "index.js");
+const sourceViews = fs.readdirSync(path.resolve(PATH_DIST, "views"));
 
-const scriptContent = fs.readFileSync(PATH_SOURCE);
+sourceViews.forEach((view) => {
+  const source = path.resolve(PATH_DIST, "views", view, `${view}.js`);
+  const target = path.resolve(PATH_BUILD, "assets", "js", `${view}.js`);
 
-const result = scriptContent.toString().split("module.exports")[0];
+  const scriptContent = fs.readFileSync(source);
 
-fs.writeFileSync(PATH_TARGET, result);
+  const result = scriptContent.toString().split("module.exports")[0];
+
+  fs.writeFileSync(target, result);
+});
