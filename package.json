@@ -6,7 +6,13 @@
     "start": "node ./bin/eofol-scripts.js start",
     "build": "node ./bin/eofol-scripts.js build",
     "clean": "node ./bin/eofol-scripts.js clean",
-    "serve": "node ./bin/eofol-scripts.js serve"
+    "serve": "node ./bin/eofol-scripts.js serve",
+    "compile-static": "node ./scripts/compile.js",
+    "compile-ts": "tsc",
+    "precompile": "npm run compile-ts && npm run compile-static",
+    "estart": "cls && npm run precompile && npm run start",
+    "eserve": "cls && npm run precompile && npm run build && npm run serve",
+    "emid": "cls && npm run precompile && npm run build"
   },
   "dependencies": {
     "@babel/core": "^7.24.6",
