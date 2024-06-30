@@ -59,13 +59,28 @@ sourceViews.forEach((view, i) => {
 fs.mkdirSync(path.resolve(PATH_BUILD, "assets", "css"));
 
 sourceViews.forEach((view, i) => {
-  const source = path.resolve(PATH_CWD, "src", "views", view, `${view}.css`);
-  const target = path.resolve(PATH_BUILD, "assets", "css", `${view}.css`);
+  const mutations = ["sm", "md", "lg"];
 
-  if (fs.existsSync(source)) {
-    const styleContent = fs.readFileSync(source);
-    fs.writeFileSync(target, styleContent.toString());
-  }
+  mutations.forEach((mutation) => {
+    const source = path.resolve(
+      PATH_CWD,
+      "src",
+      "views",
+      view,
+      `${view}-${mutation}.css`
+    );
+    const target = path.resolve(
+      PATH_BUILD,
+      "assets",
+      "css",
+      `${view}-${mutation}.css`
+    );
+
+    if (fs.existsSync(source)) {
+      const styleContent = fs.readFileSync(source);
+      fs.writeFileSync(target, styleContent.toString());
+    }
+  });
 });
 
 const checkExistsCreate = (pathToCheck) => {

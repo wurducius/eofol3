@@ -1,5 +1,3 @@
-// import "./index.css";
-
 // @IMPORT-START
 import Core from "../../eofol/core";
 const {
