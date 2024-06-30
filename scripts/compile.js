@@ -40,10 +40,20 @@ const isVerbose = config.verbose;
 const minifyOptions = {
   continueOnParseError: true,
   removeRedundantAttributes: true,
-  removeComments: config.minifyHTML,
+  removeComments: true,
   collapseWhitespace: config.minifyHTML,
+  collapseInlineTagWhitespace: true,
+  noNewlinesBeforeTagClose: true,
+  removeTagWhitespace: true,
   minifyCSS: config.minifyHTML,
   minifyJS: config.minifyHTML,
+  processScripts: config.minifyHTML,
+  minifyHTML: config.minifyHTML,
+  minifyURLs: config.minifyHTML,
+  collapseBooleanAttributes: true,
+  sortAttributes: true,
+  sortClassName: true,
+  removeOptionalTags: true,
 };
 
 const HTML_DOCTYPE_TAG = `<!DOCTYPE html>${config.minifyHTML ? "" : "\n"}`;
@@ -356,7 +366,10 @@ const resultPromise = sources.map((source) => {
     die(`Cannot open source file: ${sourcePath}`, ex);
   }
 
-  return HTMLToJSON(sourceHTML.toString(), false)
+  return minify(sourceHTML.toString(), { removeComments: true })
+    .then((res) => {
+      return HTMLToJSON(res.toString(), false);
+    })
     .then((res) => {
       if (isVerbose) {
         msgStepParser("Parse successful");

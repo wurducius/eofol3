@@ -12,6 +12,13 @@ const PATH_BUILD = path.resolve(PATH_CWD, "build");
 
 const sourceViews = fs.readdirSync(path.resolve(PATH_DIST, "views"));
 
+const MUTATIONS = ["sm", "md", "lg"];
+const MUTATIONS_IMG_WIDTH = [
+  { width: 767, breakpoint: "sm" },
+  { width: 1287, breakpoint: "md" },
+  { width: 1800, breakpoint: "lg" },
+];
+
 const uglifyOptions = {
   parse: {},
   compress: false,
@@ -21,6 +28,17 @@ const uglifyOptions = {
     //  code: false, // optional - faster if false
   },
 };
+
+const IMG_COMPRESS_PNG_COMPRESSION_LEVEL = [
+  { compression: 9, breakpoint: "sm" },
+  { compression: 9, breakpoint: "md" },
+  { compression: 9, breakpoint: "lg" },
+];
+const IMG_COMPRESS_JPG_COMPRESSION_QUALITY = [
+  { compression: 50, breakpoint: "sm" },
+  { compression: 50, breakpoint: "md" },
+  { compression: 50, breakpoint: "lg" },
+];
 
 function extract(s, prefix, suffix) {
   var i = s.indexOf(prefix);
@@ -75,9 +93,7 @@ sourceViews.forEach((view, i) => {
 fs.mkdirSync(path.resolve(PATH_BUILD, "assets", "css"));
 
 sourceViews.forEach((view, i) => {
-  const mutations = ["sm", "md", "lg"];
-
-  mutations.forEach((mutation) => {
+  MUTATIONS.forEach((mutation) => {
     const source = path.resolve(
       PATH_CWD,
       "src",
@@ -139,27 +155,32 @@ const parsePublicTree = (node, source, target) => {
             .join("/")
         );
         fs.writeFileSync(target, nodeContent, { recursive: true });
-        // console.log(source);
-        //  console.log(source, target);
+
         return;
       } else {
-        /*
-        return parsePublicTree(
-          node,
-          path.resolve(source, node),
-          path.resolve(target, node)
-        );
-        */
       }
     }
   }
 };
 
-const mutationImageSizes = [
-  { width: 767, breakpoint: "sm" },
-  { width: 1287, breakpoint: "md" },
-  { width: 1800, breakpoint: "lg" },
-];
+const processImage = (imagePath, content, handler, mutationQuality) => {
+  let i = 0;
+  MUTATIONS_IMG_WIDTH.forEach(async (mutation) => {
+    const processedContent = await handler(
+      await sharp(content).resize(mutation.width),
+      mutationQuality[i]
+    ).toBuffer();
+    const filenameSplit = imagePath.split(".");
+    fs.writeFileSync(
+      path.resolve(
+        PATH_BUILD,
+        `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
+      ),
+      processedContent
+    );
+  });
+  i++;
+};
 
 fs.mkdirSync(path.resolve(PATH_BUILD, "fonts"));
 
@@ -175,40 +196,23 @@ publicTree.flat().forEach(async (x) => {
     path.resolve(PATH_CWD, "public", x)
   );
 
-  let processedContent;
   if (x.includes(".jpg") || x.includes(".jpeg")) {
-    mutationImageSizes.forEach(async (mutation) => {
-      processedContent = await sharp(publicFileContent)
-        .resize(mutation.width)
-        .jpeg({ quality: 60 })
-        .toBuffer();
-      const filenameSplit = x.split(".");
-      fs.writeFileSync(
-        path.resolve(
-          PATH_BUILD,
-          `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
-        ),
-        processedContent
-      );
-    });
+    processImage(
+      x,
+      publicFileContent,
+      (img, mutationQuality) => img.jpeg({ quality: mutationQuality.compress }),
+      IMG_COMPRESS_JPG_COMPRESSION_QUALITY
+    );
   } else if (x.includes(".png")) {
-    mutationImageSizes.forEach(async (mutation) => {
-      processedContent = await sharp(publicFileContent)
-        .resize(mutation.width)
-        .png({ compressionLevel: 9 })
-        .toBuffer();
-      const filenameSplit = x.split(".");
-      fs.writeFileSync(
-        path.resolve(
-          PATH_BUILD,
-          `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
-        ),
-        processedContent
-      );
-    });
+    processImage(
+      x,
+      publicFileContent,
+      (img, mutationQuality) =>
+        img.png({ compressionLevel: mutationQuality.compress }),
+      IMG_COMPRESS_PNG_COMPRESSION_LEVEL
+    );
   } else {
-    processedContent = publicFileContent;
-    fs.writeFileSync(path.resolve(PATH_BUILD, x), processedContent);
+    fs.writeFileSync(path.resolve(PATH_BUILD, x), publicFileContent);
   }
 });
 
