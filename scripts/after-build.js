@@ -1,11 +1,26 @@
 const fs = require("fs");
 const path = require("path");
 
+const UglifyJS = require("uglify-js");
+const { minify } = UglifyJS;
+
+const sharp = require("sharp");
+
 const PATH_CWD = fs.realpathSync(process.cwd());
 const PATH_DIST = path.resolve(PATH_CWD, "dist");
 const PATH_BUILD = path.resolve(PATH_CWD, "build");
 
 const sourceViews = fs.readdirSync(path.resolve(PATH_DIST, "views"));
+
+const uglifyOptions = {
+  parse: {},
+  compress: false,
+  mangle: true,
+  output: {
+    ast: true,
+    //  code: false, // optional - faster if false
+  },
+};
 
 function extract(s, prefix, suffix) {
   var i = s.indexOf(prefix);
@@ -30,8 +45,9 @@ sourceViews.forEach((view, i) => {
   const target = path.resolve(PATH_BUILD, "assets", "js", `${view}.js`);
 
   const scriptContent = fs.readFileSync(source);
+  const minifiedScriptContent = minify(scriptContent.toString(), uglifyOptions);
 
-  let rest = scriptContent.toString();
+  let rest = minifiedScriptContent.code;
   let contains = rest.includes("module.exports");
   let match = extract(rest, "module.exports", "};");
   while (contains) {
@@ -139,20 +155,61 @@ const parsePublicTree = (node, source, target) => {
   }
 };
 
+const mutationImageSizes = [
+  { width: 767, breakpoint: "sm" },
+  { width: 1287, breakpoint: "md" },
+  { width: 1800, breakpoint: "lg" },
+];
+
 fs.mkdirSync(path.resolve(PATH_BUILD, "fonts"));
 
 const publicTree = fs.readdirSync(path.resolve(PATH_CWD, "public"), {
   recursive: true,
 });
-publicTree.flat().forEach((x) => {
+publicTree.flat().forEach(async (x) => {
   if (!x.includes(".") || x.endsWith(".html") || x.endsWith(".css")) {
     return;
   }
-  console.log(x);
-  fs.writeFileSync(
-    path.resolve(PATH_BUILD, x),
-    fs.readFileSync(path.resolve(PATH_CWD, "public", x))
+
+  const publicFileContent = fs.readFileSync(
+    path.resolve(PATH_CWD, "public", x)
   );
+
+  let processedContent;
+  if (x.includes(".jpg") || x.includes(".jpeg")) {
+    mutationImageSizes.forEach(async (mutation) => {
+      processedContent = await sharp(publicFileContent)
+        .resize(mutation.width)
+        .jpeg({ quality: 60 })
+        .toBuffer();
+      const filenameSplit = x.split(".");
+      fs.writeFileSync(
+        path.resolve(
+          PATH_BUILD,
+          `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
+        ),
+        processedContent
+      );
+    });
+  } else if (x.includes(".png")) {
+    mutationImageSizes.forEach(async (mutation) => {
+      processedContent = await sharp(publicFileContent)
+        .resize(mutation.width)
+        .png({ compressionLevel: 9 })
+        .toBuffer();
+      const filenameSplit = x.split(".");
+      fs.writeFileSync(
+        path.resolve(
+          PATH_BUILD,
+          `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
+        ),
+        processedContent
+      );
+    });
+  } else {
+    processedContent = publicFileContent;
+    fs.writeFileSync(path.resolve(PATH_BUILD, x), processedContent);
+  }
 });
 
 /*

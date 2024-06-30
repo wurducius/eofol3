@@ -17,9 +17,10 @@ const {
 // -------------------------------------------
 
 const argsConfig = {
-  minifyHTML: false,
-  minifyRegistryJSON: false,
+  minifyHTML: true,
+  minifyRegistryJSON: true,
   verbose: false,
+  production: true,
 };
 const defaultConfig = {
   production: false,

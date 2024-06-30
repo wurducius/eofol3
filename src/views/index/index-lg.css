@@ -10,6 +10,7 @@ body {
   background-blend-mode: multiply;
   background-attachment: fixed;
   font-family: "Roboto", sans-serif;
+  background-image: url("../../rainbow-mountains-peru-lg.jpg");
 }
 
 #eofol {
