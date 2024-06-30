@@ -27,7 +27,7 @@ let customDefs: any = [];
 let flatDefs: any = [];
 let staticDefs: any = [];
 
-const isBrowser =
+const isBrowser = () =>
   typeof window !== "undefined" && typeof window.document !== "undefined";
 
 const reduceHTMLProps = (props: any, prefix?: string, suffix?: string) =>
@@ -96,12 +96,12 @@ const defineStaticComponent = (componentDef: any) => {
 };
 
 const initEofol = () => {
-  const htmlPageRaw = isBrowser
+  const htmlPageRaw = isBrowser()
     ? window.location.pathname.split("/").pop()
     : "";
   const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw;
 
-  return isBrowser
+  return isBrowser()
     ? Promise.all([
         fetch(`./eofol/${page}-vdom.json`),
         fetch(`./eofol/${page}-instances.json`),
@@ -121,7 +121,7 @@ const forceRerender = () => {
   instances?.forEach((child: any) => {
     const id = child.id;
     const name = child.name;
-    const target = isBrowser ? document.getElementById(id) : null;
+    const target = isBrowser() ? document.getElementById(id) : null;
     if (target) {
       const def = findDef(name);
       if (def) {
@@ -134,6 +134,14 @@ const forceRerender = () => {
 initEofol();
 
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
+
+const registerServiceworker = () => {
+  if (isBrowser() && "serviceWorker" in navigator) {
+    navigator.serviceWorker.register(`./service-worker.js`);
+  }
+};
+
+registerServiceworker();
 
 export default {
   defineCustomComponent,

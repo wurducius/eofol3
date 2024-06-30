@@ -7,6 +7,7 @@ const {
   defineStaticComponent,
   randomString,
   createElement,
+  isBrowser,
 } = Core;
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
