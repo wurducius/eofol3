@@ -9,13 +9,19 @@
       "purpose": "any maskable"
     },
     {
-      "src": "logo192.png",
+      "src": "logo-sm.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "logo512.png",
+      "src": "logo-md.png",
+      "type": "image/png",
+      "sizes": "400x400",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo-lg.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"

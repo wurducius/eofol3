@@ -18,7 +18,12 @@ const MUTATIONS_IMG_WIDTH = [
   { width: 1287, breakpoint: "md" },
   { width: 1800, breakpoint: "lg" },
 ];
-
+const MUTATIONS_LOGO_WIDTH = [
+  { width: 192, breakpoint: "sm" },
+  { width: 320, breakpoint: "md" },
+  { width: 512, breakpoint: "lg" },
+];
+const IMG_BASE_LOGO_WIDTH = 512;
 const uglifyOptions = {
   parse: {},
   compress: false,
@@ -35,9 +40,9 @@ const IMG_COMPRESS_PNG_COMPRESSION_LEVEL = [
   { compression: 9, breakpoint: "lg" },
 ];
 const IMG_COMPRESS_JPG_COMPRESSION_QUALITY = [
-  { compression: 50, breakpoint: "sm" },
-  { compression: 50, breakpoint: "md" },
-  { compression: 50, breakpoint: "lg" },
+  { compression: 30, breakpoint: "sm" },
+  { compression: 30, breakpoint: "md" },
+  { compression: 30, breakpoint: "lg" },
 ];
 
 function extract(s, prefix, suffix) {
@@ -164,22 +169,28 @@ const parsePublicTree = (node, source, target) => {
 };
 
 const processImage = (imagePath, content, handler, mutationQuality) => {
-  let i = 0;
   MUTATIONS_IMG_WIDTH.forEach(async (mutation) => {
-    const processedContent = await handler(
-      await sharp(content).resize(mutation.width),
-      mutationQuality[i]
-    ).toBuffer();
+    const imgBin = sharp(content);
+    const metadata = await imgBin.metadata();
+    const metadataWidth = metadata.width;
+    const widthImpl =
+      metadataWidth <= IMG_BASE_LOGO_WIDTH
+        ? MUTATIONS_LOGO_WIDTH.find((x) => x.breakpoint === mutation.breakpoint)
+            .width
+        : mutation.width;
+    const processedContent = handler(
+      imgBin.resize(widthImpl),
+      mutationQuality.find((y) => y.breakpoint === mutation.breakpoint)
+    );
     const filenameSplit = imagePath.split(".");
     fs.writeFileSync(
       path.resolve(
         PATH_BUILD,
         `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
       ),
-      processedContent
+      await processedContent.toBuffer()
     );
   });
-  i++;
 };
 
 fs.mkdirSync(path.resolve(PATH_BUILD, "fonts"));
@@ -196,11 +207,17 @@ publicTree.flat().forEach(async (x) => {
     path.resolve(PATH_CWD, "public", x)
   );
 
+  if (x.includes("favicon")) {
+    fs.writeFileSync(path.resolve(PATH_BUILD, x), publicFileContent);
+    return;
+  }
+
   if (x.includes(".jpg") || x.includes(".jpeg")) {
     processImage(
       x,
       publicFileContent,
-      (img, mutationQuality) => img.jpeg({ quality: mutationQuality.compress }),
+      (img, mutationQuality) =>
+        img.jpeg({ quality: mutationQuality.compression }),
       IMG_COMPRESS_JPG_COMPRESSION_QUALITY
     );
   } else if (x.includes(".png")) {
@@ -208,7 +225,7 @@ publicTree.flat().forEach(async (x) => {
       x,
       publicFileContent,
       (img, mutationQuality) =>
-        img.png({ compressionLevel: mutationQuality.compress }),
+        img.png({ compressionLevel: mutationQuality.compression }),
       IMG_COMPRESS_PNG_COMPRESSION_LEVEL
     );
   } else {
