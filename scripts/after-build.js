@@ -7,7 +7,10 @@ const { minify } = UglifyJS;
 const sharp = require("sharp");
 
 const { breakpoints } = require("../eofol-config");
-const { IMG_BASE_LOGO_WIDTH, uglifyOptions } = require("../constants/compile");
+const {
+  IMG_BASE_LOGO_WIDTH,
+  uglifyOptions,
+} = require("../constants/after-build");
 const {
   PATH_BUILD,
   PATH_VIEWS_DIST,
@@ -17,6 +20,7 @@ const {
   PATH_ASSETS_FONTS,
   PATH_PUBLIC,
 } = require("../constants/paths");
+const { EXT_HTML, EXT_CSS, EXT_JS } = require("../constants/common");
 
 const extract = (s, prefix, suffix) => {
   let i = s.indexOf(prefix);
@@ -50,7 +54,7 @@ const parsePublicTree = (node, source, target) => {
       const sourcePath = path.resolve(source, nextPath);
       return parsePublicTree(child, sourcePath, nodePath);
     });
-  } else if (node.endsWith(".html") || node.endsWith(".css")) {
+  } else if (node.endsWith(EXT_HTML) || node.endsWith(EXT_CSS)) {
   } else {
     if (source.includes(".")) {
       const nodeContent = fs.readFileSync(source);
@@ -97,8 +101,8 @@ const processImageJpg = processImage("jpg");
 const sourceViews = fs.readdirSync(PATH_VIEWS_DIST);
 
 sourceViews.forEach((view, i) => {
-  const source = path.resolve(PATH_VIEWS_DIST, view, `${view}.js`);
-  const target = path.resolve(PATH_ASSETS_JS, `${view}.js`);
+  const source = path.resolve(PATH_VIEWS_DIST, view, `${view}${EXT_JS}`);
+  const target = path.resolve(PATH_ASSETS_JS, `${view}${EXT_JS}`);
 
   const scriptContent = fs.readFileSync(source);
   const minifiedScriptContent = minify(scriptContent.toString(), uglifyOptions);
@@ -132,7 +136,10 @@ sourceViews.forEach((view, i) => {
       view,
       `${view}-${mutation}.css`,
     );
-    const target = path.resolve(PATH_ASSETS_CSS, `${view}-${mutation}.css`);
+    const target = path.resolve(
+      PATH_ASSETS_CSS,
+      `${view}-${mutation}${EXT_CSS}`,
+    );
 
     if (fs.existsSync(source)) {
       const styleContent = fs.readFileSync(source);
@@ -148,7 +155,7 @@ fs.readdirSync(PATH_PUBLIC, {
 })
   .flat()
   .forEach(async (x) => {
-    if (!x.includes(".") || x.endsWith(".html") || x.endsWith(".css")) {
+    if (!x.includes(".") || x.endsWith(EXT_HTML) || x.endsWith(EXT_CSS)) {
       return;
     }
 

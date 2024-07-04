@@ -13,7 +13,7 @@ const DIRNAME_ASSET_JS = "js";
 const DIRNAME_ASSET_CSS = "css";
 const DIRNAME_ASSET_FONT = "fonts";
 
-const FILENAME_FAVICON = "favicon.png";
+const FILENAME_FAVICON = "favicon";
 const FILENAME_SUFFIX_INSTANCES = "-instances.json";
 const FILENAME_SUFFIX_VDOM = "-vdom.json";
 
@@ -44,4 +44,8 @@ module.exports = {
   PATH_ASSETS_FONTS,
   PATH_EOFOL_INTERNAL,
   PATH_PUBLIC,
+  FILENAME_SUFFIX_INSTANCES,
+  FILENAME_SUFFIX_VDOM,
+  FILENAME_FAVICON,
+  DIRNAME_EOFOL_INTERNAL,
 };

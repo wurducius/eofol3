@@ -1,13 +1,38 @@
-const IMG_BASE_LOGO_WIDTH = 512;
-
-const uglifyOptions = {
-  parse: {},
-  compress: false,
-  mangle: true,
-  output: {
-    ast: true,
-    //  code: false, // optional - faster if false
-  },
+const argsConfig = {
+  minifyHTML: true,
+  minifyRegistryJSON: true,
+  verbose: false,
+  production: true,
 };
+const defaultConfig = {
+  production: false,
+  minifyHTML: false,
+  minifyRegistryJSON: false,
+  verbose: false,
+};
+const config = { ...defaultConfig, ...argsConfig };
+if (argsConfig.production) {
+  config.minifyHTML = true;
+  config.minifyRegistryJSON = true;
+}
+const isVerbose = config.verbose;
 
-module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions };
+const minifyOptions = {
+  continueOnParseError: true,
+  removeRedundantAttributes: true,
+  removeComments: true,
+  collapseWhitespace: config.minifyHTML,
+  collapseInlineTagWhitespace: true,
+  noNewlinesBeforeTagClose: true,
+  removeTagWhitespace: true,
+  minifyCSS: config.minifyHTML,
+  minifyJS: config.minifyHTML,
+  processScripts: config.minifyHTML,
+  minifyHTML: config.minifyHTML,
+  minifyURLs: config.minifyHTML,
+  collapseBooleanAttributes: true,
+  sortAttributes: true,
+  sortClassName: true,
+  removeOptionalTags: true,
+};
+module.exports = { config, isVerbose, minifyOptions };
