@@ -43,7 +43,9 @@ export const component3 = defineCustomComponent({
   name: "component3",
   render: function () {
     const rendered = createElement("div", [
-      createElement("flat"),
+      createElement("flat", undefined, undefined, undefined, undefined, {
+        param: "3",
+      }),
       "Component 3",
     ]);
     return rendered;
@@ -52,12 +54,12 @@ export const component3 = defineCustomComponent({
 
 export const flatComponent = defineFlatComponent({
   name: "flat",
-  render: function () {
+  render: function (props: { param: string }) {
     const rendered = createElement("div", [
       createElement("button", "FLAT HELLO WORLD!!!"),
       createElement("p", "OH YEAH"),
       createElement("static"),
-      "Flat component",
+      "Flat component VARIANT = " + props.param,
     ]);
     return rendered;
   },

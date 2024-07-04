@@ -67,10 +67,11 @@ function createElement(
   classname?: string,
   attributes?: any,
   properties?: any,
+  props?: any,
 ) {
   const def = findDef(tagname);
   if (def) {
-    return def.render();
+    return def.render(props);
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : "";
     const attributesHTML = reduceHTMLProps(attributes);

@@ -1,21 +1,18 @@
 const fs = require("fs");
 const path = require("path");
 
-const PATH_CWD = fs.realpathSync(process.cwd());
-const PATH_DERIVED = path.resolve(PATH_CWD, "dist");
+const { PATH_VIEWS_DIST } = require("../constants/paths");
 
-const sourceViews = fs.readdirSync(path.resolve(PATH_DERIVED, "views"));
-
-function fixExports(scriptStr) {
-  return scriptStr
+const fixExports = (scriptStr) =>
+  scriptStr
     .toString()
     .replaceAll("export ", "")
     .replaceAll("default", "module.exports = ");
-}
 
-sourceViews.forEach((view) => {
-  const source = path.resolve(PATH_DERIVED, "views", view, `${view}.js`);
+// ---------------------------------------------
 
+fs.readdirSync(PATH_VIEWS_DIST).forEach((view) => {
+  const source = path.resolve(PATH_VIEWS_DIST, view, `${view}.js`);
   const scriptContent = fs.readFileSync(source);
   const exportsReplaced = fixExports(scriptContent);
   const x = exportsReplaced.toString().split("// @IMPORT-");

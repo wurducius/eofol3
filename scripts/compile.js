@@ -162,9 +162,20 @@ const renderEofolCustomElement = (element, instances) => {
   };
 };
 
+const notProps = ["name", "as"];
+
+const getProps = (element) => {
+  const props = structuredClone(element.attributes);
+  Object.keys(props)
+    .filter((key) => notProps.includes(key))
+    .forEach((key) => delete props[key]);
+  return props;
+};
+
 const renderEofolFlatElement = (element) => {
   const name = getEofolComponentType(element);
   const def = findEofolComponentDef(name);
+  const props = getProps(element);
 
   if (!def) {
     msgStepEofol(
@@ -179,7 +190,7 @@ const renderEofolFlatElement = (element) => {
 
   return {
     type: as,
-    content: [def.render()],
+    content: [def.render(props)],
     attributes: {},
   };
 };
