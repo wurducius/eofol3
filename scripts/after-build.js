@@ -6,44 +6,11 @@ const { minify } = UglifyJS;
 
 const sharp = require("sharp");
 
-const PATH_CWD = fs.realpathSync(process.cwd());
-const PATH_DIST = path.resolve(PATH_CWD, "dist");
-const PATH_BUILD = path.resolve(PATH_CWD, "build");
+const { breakpoints } = require("../eofol-config");
+const { IMG_BASE_LOGO_WIDTH, uglifyOptions } = require("../constants/compile");
+const { PATH_CWD, PATH_DIST, PATH_BUILD } = require("../constants/paths");
 
 const sourceViews = fs.readdirSync(path.resolve(PATH_DIST, "views"));
-
-const MUTATIONS = ["sm", "md", "lg"];
-const MUTATIONS_IMG_WIDTH = [
-  { width: 767, breakpoint: "sm" },
-  { width: 1287, breakpoint: "md" },
-  { width: 1800, breakpoint: "lg" },
-];
-const MUTATIONS_LOGO_WIDTH = [
-  { width: 192, breakpoint: "sm" },
-  { width: 320, breakpoint: "md" },
-  { width: 512, breakpoint: "lg" },
-];
-const IMG_BASE_LOGO_WIDTH = 512;
-const uglifyOptions = {
-  parse: {},
-  compress: false,
-  mangle: true,
-  output: {
-    ast: true,
-    //  code: false, // optional - faster if false
-  },
-};
-
-const IMG_COMPRESS_PNG_COMPRESSION_LEVEL = [
-  { compression: 9, breakpoint: "sm" },
-  { compression: 9, breakpoint: "md" },
-  { compression: 9, breakpoint: "lg" },
-];
-const IMG_COMPRESS_JPG_COMPRESSION_QUALITY = [
-  { compression: 30, breakpoint: "sm" },
-  { compression: 30, breakpoint: "md" },
-  { compression: 30, breakpoint: "lg" },
-];
 
 function extract(s, prefix, suffix) {
   var i = s.indexOf(prefix);
@@ -83,12 +50,7 @@ sourceViews.forEach((view, i) => {
         return acc + next;
       }
     }, "");
-    /*
-    rest = rest
-      .replace(match, "")
-      .replace("module.exports", "")
-      .replace("};", "");
-      */
+
     match = extract(rest, "module.exports", "};");
     contains = rest.includes("module.exports");
   }
@@ -98,19 +60,19 @@ sourceViews.forEach((view, i) => {
 fs.mkdirSync(path.resolve(PATH_BUILD, "assets", "css"));
 
 sourceViews.forEach((view, i) => {
-  MUTATIONS.forEach((mutation) => {
+  breakpoints.forEach(({ name: mutation }) => {
     const source = path.resolve(
       PATH_CWD,
       "src",
       "views",
       view,
-      `${view}-${mutation}.css`
+      `${view}-${mutation}.css`,
     );
     const target = path.resolve(
       PATH_BUILD,
       "assets",
       "css",
-      `${view}-${mutation}.css`
+      `${view}-${mutation}.css`,
     );
 
     if (fs.existsSync(source)) {
@@ -132,7 +94,6 @@ const parsePublicTree = (node, source, target) => {
       const nextPath = child.split("/")[0];
       const nodePath = path.resolve(target, nextPath);
       const sourcePath = path.resolve(source, nextPath);
-      //  checkExistsCreate(target);
       return parsePublicTree(child, sourcePath, nodePath);
     });
   } else {
@@ -145,19 +106,19 @@ const parsePublicTree = (node, source, target) => {
           target
             .split("/")
             .filter((x, i) => i < x.length)
-            .join("/")
+            .join("/"),
         );
         checkExistsCreate(
           target
             .split("/")
             .filter((x, i) => i < x.length)
-            .join("/")
+            .join("/"),
         );
         console.log(
           target
             .split("/")
             .filter((x, i) => i < x.length)
-            .join("/")
+            .join("/"),
         );
         fs.writeFileSync(target, nodeContent, { recursive: true });
 
@@ -168,30 +129,32 @@ const parsePublicTree = (node, source, target) => {
   }
 };
 
-const processImage = (imagePath, content, handler, mutationQuality) => {
-  MUTATIONS_IMG_WIDTH.forEach(async (mutation) => {
+const processImage = (format) => (imagePath, content, handler) => {
+  breakpoints.forEach(async (breakpoint) => {
+    const name = breakpoint.name;
     const imgBin = sharp(content);
     const metadata = await imgBin.metadata();
-    const metadataWidth = metadata.width;
     const widthImpl =
-      metadataWidth <= IMG_BASE_LOGO_WIDTH
-        ? MUTATIONS_LOGO_WIDTH.find((x) => x.breakpoint === mutation.breakpoint)
-            .width
-        : mutation.width;
+      metadata.width <= IMG_BASE_LOGO_WIDTH
+        ? breakpoint.logoWidth
+        : breakpoint.imgWidth;
     const processedContent = handler(
       imgBin.resize(widthImpl),
-      mutationQuality.find((y) => y.breakpoint === mutation.breakpoint)
+      breakpoint[format],
     );
     const filenameSplit = imagePath.split(".");
     fs.writeFileSync(
       path.resolve(
         PATH_BUILD,
-        `${filenameSplit[0]}-${mutation.breakpoint}.${filenameSplit[1]}`
+        `${filenameSplit[0]}-${name}.${filenameSplit[1]}`,
       ),
-      await processedContent.toBuffer()
+      await processedContent.toBuffer(),
     );
   });
 };
+
+const processImagePng = processImage("png");
+const processImageJpg = processImage("jpg");
 
 fs.mkdirSync(path.resolve(PATH_BUILD, "fonts"));
 
@@ -204,7 +167,7 @@ publicTree.flat().forEach(async (x) => {
   }
 
   const publicFileContent = fs.readFileSync(
-    path.resolve(PATH_CWD, "public", x)
+    path.resolve(PATH_CWD, "public", x),
   );
 
   if (x.includes("favicon")) {
@@ -213,30 +176,14 @@ publicTree.flat().forEach(async (x) => {
   }
 
   if (x.includes(".jpg") || x.includes(".jpeg")) {
-    processImage(
-      x,
-      publicFileContent,
-      (img, mutationQuality) =>
-        img.jpeg({ quality: mutationQuality.compression }),
-      IMG_COMPRESS_JPG_COMPRESSION_QUALITY
+    processImageJpg(x, publicFileContent, (img, mutationQuality) =>
+      img.jpeg({ quality: mutationQuality.compression }),
     );
   } else if (x.includes(".png")) {
-    processImage(
-      x,
-      publicFileContent,
-      (img, mutationQuality) =>
-        img.png({ compressionLevel: mutationQuality.compression }),
-      IMG_COMPRESS_PNG_COMPRESSION_LEVEL
+    processImagePng(x, publicFileContent, (img, mutationQuality) =>
+      img.png({ compressionLevel: mutationQuality.compression }),
     );
   } else {
     fs.writeFileSync(path.resolve(PATH_BUILD, x), publicFileContent);
   }
 });
-
-/*
-const publicTree = fs.readdirSync(path.resolve(PATH_CWD, "public"), {
-  recursive: true,
-});
-const target = path.resolve(PATH_BUILD);
-parsePublicTree(publicTree, path.resolve(PATH_CWD, "public"), target);
-*/

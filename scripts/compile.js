@@ -102,7 +102,7 @@ const getEofolComponentType = (element) =>
 
 const findEofolComponentDef = (name) =>
   eofolDefs.find(
-    (componentDef) => componentDef[EOFOL_COMPONENT_ATTRIBUTE_TYPE] === name
+    (componentDef) => componentDef[EOFOL_COMPONENT_ATTRIBUTE_TYPE] === name,
   );
 
 const isEofolCustomElement = (element) =>
@@ -118,8 +118,8 @@ const validateEofolCustomElement = (element) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
     die(
       `Eofol validation error: Custom eofol component cannot have children: Component ${getEofolComponentType(
-        element
-      )}`
+        element,
+      )}`,
     );
   }
 };
@@ -132,7 +132,7 @@ const renderEofolCustomElement = (element, instances) => {
     msgStepEofol(
       'Cannot render custom eofol element: definition not found for component type: "' +
         name +
-        '"'
+        '"',
     );
   }
 
@@ -170,7 +170,7 @@ const renderEofolFlatElement = (element) => {
     msgStepEofol(
       'Cannot render custom eofol element: definition not found for component type: "' +
         name +
-        '"'
+        '"',
     );
   }
 
@@ -192,7 +192,7 @@ const renderEofolStaticElement = (element) => {
     msgStepEofol(
       'Cannot render custom eofol element: definition not found for component type: "' +
         name +
-        '"'
+        '"',
     );
   }
 
@@ -332,15 +332,11 @@ try {
 }
 
 // @TODO: HARDCODED filename index.js
-const eofolDefsJS = require(path.resolve(
-  PATH_CWD,
-  "dist",
-  "views",
-  "index",
-  "index.js"
-));
+const eofolDefsJS = require(
+  path.resolve(PATH_CWD, "dist", "views", "index", "index.js"),
+);
 const eofolDefs = Object.keys(eofolDefsJS).map(
-  (eofolDefJS) => eofolDefsJS[eofolDefJS]
+  (eofolDefJS) => eofolDefsJS[eofolDefJS],
 );
 
 const sources = fs
@@ -433,23 +429,23 @@ const resultPromise = sources.map((source) => {
       const targetVDOMPath = path.resolve(internalDirPath, targetVDOMFilename);
       fs.writeFileSync(
         targetVDOMPath,
-        JSON.stringify(vdom[0], null, config.minifyRegistryJSON ? 0 : 2)
+        JSON.stringify(vdom[0], null, config.minifyRegistryJSON ? 0 : 2),
       );
       const targetInstancesFilename = `${
         path.parse(source).name
       }-${FILENAME_SUFFIX_INSTANCES}.json`;
       const targetInstancesPath = path.resolve(
         internalDirPath,
-        targetInstancesFilename
+        targetInstancesFilename,
       );
       fs.writeFileSync(
         targetInstancesPath,
-        JSON.stringify(eofolInstances, null, config.minifyRegistryJSON ? 0 : 2)
+        JSON.stringify(eofolInstances, null, config.minifyRegistryJSON ? 0 : 2),
       );
       msgStepEofol(
         `[${i + 1}/${sources.length}] Compiled ${source} in ${prettyTime(
-          new Date() - timeStart
-        )}`
+          new Date() - timeStart,
+        )}`,
       );
       i += 1;
     });
@@ -458,7 +454,7 @@ const resultPromise = sources.map((source) => {
 Promise.all(resultPromise).then(() => {
   msgStepEofolSuccess(
     `Compiled successfully at ${PATH_DERIVED} in ${prettyTime(
-      new Date() - timeStart
-    )}.`
+      new Date() - timeStart,
+    )}.`,
   );
 });

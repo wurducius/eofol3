@@ -34,7 +34,7 @@ sourceViews.forEach((view) => {
             .replaceAll(")", "")
             .trim();
           const script = fs.readFileSync(
-            path.resolve(source, "..", scriptPathRaw + ".js")
+            path.resolve(source, "..", scriptPathRaw + ".js"),
           );
           return acc + script.toString();
         }

@@ -23,9 +23,9 @@ interface Def {
 
 let vdom: any = undefined;
 let instances: any = undefined;
-let customDefs: any = [];
-let flatDefs: any = [];
-let staticDefs: any = [];
+const customDefs: any = [];
+const flatDefs: any = [];
+const staticDefs: any = [];
 
 const isBrowser = () =>
   typeof window !== "undefined" && typeof window.document !== "undefined";
@@ -66,7 +66,7 @@ function createElement(
   content?: any,
   classname?: string,
   attributes?: any,
-  properties?: any
+  properties?: any,
 ) {
   const def = findDef(tagname);
   if (def) {

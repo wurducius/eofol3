@@ -7,7 +7,6 @@ const {
   defineStaticComponent,
   randomString,
   createElement,
-  isBrowser,
 } = Core;
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -29,7 +28,7 @@ export const component1 = defineCustomComponent({
       undefined,
       {
         onclick: eval(onclickSerialized),
-      }
+      },
     );
     return button;
   },

@@ -7,7 +7,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(`${CACHE_NAME}-${CACHE_VERSION}`)
-      .then((cache) => cache.addAll(urlsToCache))
+      .then((cache) => cache.addAll(urlsToCache)),
   );
 });
 
@@ -18,6 +18,6 @@ self.addEventListener("fetch", (event) => {
         return response;
       }
       return fetch(event.request);
-    })
+    }),
   );
 });

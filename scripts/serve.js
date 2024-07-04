@@ -27,12 +27,12 @@ if (fs.existsSync(BUILD_PATH)) {
     ],
     {
       stdio: "inherit",
-    }
+    },
   );
 
   process.exit(result.status);
 } else {
   console.log(
-    error("Build folder not found. Please run 'npm run build' first.")
+    error("Build folder not found. Please run 'npm run build' first."),
   );
 }
