@@ -14,9 +14,9 @@
     "compile-after-build": "node ./scripts/after-build.js",
     "precompile": "npm run compile-ts && npm run compile-after-ts && npm run compile-static",
     "postcompile": "npm run compile-build && npm run compile-after-build",
-    "estart": "npm run precompile && npm run start",
-    "eserve": "npm run precompile && npm run postcompile && npm run serve",
-    "emid": "npm run precompile && npm run postcompile",
+    "estart": "npm run eclean && npm run precompile && npm run start",
+    "eserve": "npm run eclean && npm run precompile && npm run postcompile && npm run serve",
+    "emid": "npm run eclean && npm run precompile && npm run postcompile",
     "eclean": "node ./scripts/eclean.js",
     "prettify": "npx prettier . --write",
     "lint": "npx eslint ."

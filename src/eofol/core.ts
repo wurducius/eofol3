@@ -100,7 +100,9 @@ const initEofol = () => {
   const htmlPageRaw = isBrowser()
     ? window.location.pathname.split("/").pop()
     : "";
-  const page = htmlPageRaw?.length === 0 ? "index" : htmlPageRaw;
+  const page = (
+    !htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw
+  ).split(".")[0];
 
   return isBrowser()
     ? Promise.all([
@@ -120,13 +122,12 @@ const initEofol = () => {
 
 const forceRerender = () => {
   instances?.forEach((child: any) => {
-    const id = child.id;
-    const name = child.name;
+    const { id, name, props } = child;
     const target = isBrowser() ? document.getElementById(id) : null;
     if (target) {
       const def = findDef(name);
       if (def) {
-        target.innerHTML = def.render();
+        target.innerHTML = def.render(undefined, undefined, props);
       }
     }
   });
