@@ -1,4 +1,4 @@
-const IMG_BASE_LOGO_WIDTH = 512;
+const IMG_BASE_LOGO_WIDTH = 512
 
 const uglifyOptions = {
   parse: {},
@@ -8,6 +8,6 @@ const uglifyOptions = {
     ast: true,
     //  code: false, // optional - faster if false
   },
-};
+}
 
-module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions };
+module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions }

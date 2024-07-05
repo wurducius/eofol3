@@ -3,19 +3,19 @@ const argsConfig = {
   minifyRegistryJSON: true,
   verbose: false,
   production: true,
-};
+}
 const defaultConfig = {
   production: false,
   minifyHTML: false,
   minifyRegistryJSON: false,
   verbose: false,
-};
-const config = { ...defaultConfig, ...argsConfig };
-if (argsConfig.production) {
-  config.minifyHTML = true;
-  config.minifyRegistryJSON = true;
 }
-const isVerbose = config.verbose;
+const config = { ...defaultConfig, ...argsConfig }
+if (argsConfig.production) {
+  config.minifyHTML = true
+  config.minifyRegistryJSON = true
+}
+const isVerbose = config.verbose
 
 const minifyOptions = {
   continueOnParseError: true,
@@ -34,5 +34,5 @@ const minifyOptions = {
   sortAttributes: true,
   sortClassName: true,
   removeOptionalTags: true,
-};
-module.exports = { config, isVerbose, minifyOptions };
+}
+module.exports = { config, isVerbose, minifyOptions }

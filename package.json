@@ -18,7 +18,7 @@
     "eserve": "npm run eclean && npm run precompile && npm run postcompile && npm run serve",
     "emid": "npm run eclean && npm run precompile && npm run postcompile",
     "eclean": "node ./scripts/eclean.js",
-    "prettify": "npx prettier . --write",
+    "prettify": "npx prettier --config ./.prettierrc . --write",
     "check": "npx eslint -c ./eslint.config.js .",
     "check-fix": "npx eslint -c ./eslint.config.js --fix .",
     "lint": "npm run check-fix && npm run prettify"

@@ -1,5 +1,5 @@
 // @IMPORT-START
-import Core from "../../eofol/core";
+import Core from "../../eofol/core"
 
 const {
   forceRerender,
@@ -8,35 +8,29 @@ const {
   defineStaticComponent,
   randomString,
   createElement,
-} = Core;
+} = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
 const onclick = () => {
-  console.log("(R)");
-  forceRerender();
-};
+  console.log("(R)")
+  forceRerender()
+}
 
-const onclickSerialized = onclick.toString();
+const onclickSerialized = onclick.toString()
 
 export const component1 = defineCustomComponent({
   name: "component1",
   render: (state: any, setState: any, props: { param: string }) =>
-    createElement(
-      "button",
-      "Component 1 - Force rerender - " + props.param,
-      undefined,
-      undefined,
-      {
-        onclick: eval(onclickSerialized),
-      },
-    ),
-});
+    createElement("button", "Component 1 - Force rerender - " + props.param, undefined, undefined, {
+      onclick: eval(onclickSerialized),
+    }),
+})
 
 export const component2 = defineCustomComponent({
   name: "component2",
   render: () => `Component 2 = ${randomString()}`,
-});
+})
 
 export const component3 = defineCustomComponent({
   name: "component3",
@@ -47,7 +41,7 @@ export const component3 = defineCustomComponent({
       }),
       "Component 3",
     ]),
-});
+})
 
 export const flatComponent = defineFlatComponent({
   name: "flat",
@@ -58,16 +52,12 @@ export const flatComponent = defineFlatComponent({
       createElement("static"),
       "Flat component VARIANT = " + props.param,
     ]),
-});
+})
 
 export const staticComponent = defineStaticComponent({
   name: "static",
-  render: () => [
-    createElement("p", "STATIC HELLO WORLD!!!"),
-    createElement("p", "OH YEAH"),
-    "Static component",
-  ],
-});
+  render: () => [createElement("p", "STATIC HELLO WORLD!!!"), createElement("p", "OH YEAH"), "Static component"],
+})
 
 export default {
   component1,
@@ -75,4 +65,4 @@ export default {
   component3,
   flatComponent,
   staticComponent,
-};
+}

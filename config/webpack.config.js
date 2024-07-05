@@ -1,19 +1,12 @@
-const webpack = require("webpack");
-require("dotenv").config();
-const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack")
+require("dotenv").config()
+const ProgressBarPlugin = require("progress-bar-webpack-plugin")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 // const ChunksWebpackPlugin = require("chunks-webpack-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const {
-  PORT,
-  HOST,
-  LOG_LEVEL,
-  ASSET_IMG_INLINE_SIZE_LIMIT,
-  ASSET_SVG_INLINE_SIZE_LIMIT,
-} = require("./env");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const { PORT, HOST, LOG_LEVEL, ASSET_IMG_INLINE_SIZE_LIMIT, ASSET_SVG_INLINE_SIZE_LIMIT } = require("./env")
 const {
   MODE,
   BROWSER,
@@ -24,7 +17,7 @@ const {
   MINIMIZE,
   TERSER,
   CSS_MINIMIZE,
-} = require("./env-impl");
+} = require("./env-impl")
 const {
   ASSETS_BUILD_PATH,
   ASSETS_INNER_PATH,
@@ -35,17 +28,17 @@ const {
   ASSETS_FONT_PATH,
   ENTRYPOINT_ROOT_PATH,
   PUBLIC_PATH,
-} = require("./paths");
-const { collectViews } = require("@eofol/eofol-dev-utils");
+} = require("./paths")
+const { collectViews } = require("@eofol/eofol-dev-utils")
 
-const entry = collectViews(ENTRYPOINT_ROOT_PATH);
+const entry = collectViews(ENTRYPOINT_ROOT_PATH)
 
 const config = () => {
   return {
     mode: MODE,
     entry,
     output: {
-      filename: `${ASSETS_JS_PATH  }/[name].js`,
+      filename: `${ASSETS_JS_PATH}/[name].js`,
       path: ASSETS_BUILD_PATH,
       publicPath: ASSETS_INNER_PATH,
       /*
@@ -56,20 +49,16 @@ const config = () => {
     },
     plugins: [
       ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
-      new MiniCssExtractPlugin({ filename: `${ASSETS_CSS_PATH  }/[name].css` }),
+      new MiniCssExtractPlugin({ filename: `${ASSETS_CSS_PATH}/[name].css` }),
       // new ChunksWebpackPlugin({ generateChunksManifest: false }),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify(process.env),
       }),
-      SHOW_PROGRESS &&
-        new ProgressBarPlugin({ width: 80, total: 100, summary: false }),
+      SHOW_PROGRESS && new ProgressBarPlugin({ width: 80, total: 100, summary: false }),
     ].filter(Boolean),
     optimization: {
       minimize: MINIMIZE,
-      minimizer: [
-        TERSER && new TerserPlugin(),
-        CSS_MINIMIZE && new CssMinimizerPlugin(),
-      ].filter(Boolean),
+      minimizer: [TERSER && new TerserPlugin(), CSS_MINIMIZE && new CssMinimizerPlugin()].filter(Boolean),
       //  splitChunks: {
       //    chunks: "all",
       //  },
@@ -94,7 +83,7 @@ const config = () => {
             },
           },
           generator: {
-            filename: `${ASSETS_SVG_PATH  }/[hash][ext]`,
+            filename: `${ASSETS_SVG_PATH}/[hash][ext]`,
           },
         },
         {
@@ -106,14 +95,14 @@ const config = () => {
             },
           },
           generator: {
-            filename: `${ASSETS_IMG_PATH  }/[hash][ext]`,
+            filename: `${ASSETS_IMG_PATH}/[hash][ext]`,
           },
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/i,
           type: "asset/resource",
           generator: {
-            filename: `${ASSETS_FONT_PATH  }/[hash][ext]`,
+            filename: `${ASSETS_FONT_PATH}/[hash][ext]`,
           },
         },
         { test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" },
@@ -141,7 +130,7 @@ const config = () => {
     infrastructureLogging: {
       level: LOG_LEVEL,
     },
-  };
-};
+  }
+}
 
-module.exports = config;
+module.exports = config

@@ -32,10 +32,7 @@ copyPublicDir()
 fs.readdirSync(PATH_DERIVED)
   .filter((filename) => filename.endsWith(EXT_HTML))
   .forEach((htmlFile) => {
-    fs.copyFileSync(
-      resolve(PATH_DERIVED, htmlFile),
-      resolve(PATH_BUILD, htmlFile),
-    )
+    fs.copyFileSync(resolve(PATH_DERIVED, htmlFile), resolve(PATH_BUILD, htmlFile))
   })
 
 const PATH_DERIVED_INTERNAL = resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
@@ -44,8 +41,5 @@ const PATH_BUILD_INTERNAL = resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
 checkExistsCreate(PATH_BUILD_INTERNAL)
 
 fs.readdirSync(PATH_DERIVED_INTERNAL).forEach((filename) => {
-  fs.copyFileSync(
-    resolve(PATH_DERIVED_INTERNAL, filename),
-    resolve(PATH_BUILD_INTERNAL, filename),
-  )
+  fs.copyFileSync(resolve(PATH_DERIVED_INTERNAL, filename), resolve(PATH_BUILD_INTERNAL, filename))
 })

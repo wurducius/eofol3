@@ -1,5 +1,5 @@
 // @IMPORT-START
-import Core from "../../eofol/core";
+import Core from "../../eofol/core"
 
 const {
   forceRerender,
@@ -8,28 +8,24 @@ const {
   defineStaticComponent,
   randomString,
   createElement,
-} = Core;
+} = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
 const onclick = () => {
-  console.log("(R)");
-  forceRerender();
-};
+  console.log("(R)")
+  forceRerender()
+}
 
-const onclickSerialized = onclick.toString();
-const incrementCount =
-  (state: { count: number }, setState: (arg0: { count: any }) => void) =>
-  () => {
-    console.log("setState()");
-    setState({ count: 1 });
-    // console.log("setState - " + { count: state.count + 1 });
-    // setState({ count: state.count + 1 });
-  };
-const incrementCountSerialized = (
-  state: { count: number },
-  setState: (arg0: { count: any }) => void,
-) => incrementCount(state, setState).toString();
+const onclickSerialized = onclick.toString()
+const incrementCount = (state: { count: number }, setState: (arg0: { count: any }) => void) => () => {
+  console.log("setState()")
+  setState({ count: 1 })
+  // console.log("setState - " + { count: state.count + 1 });
+  // setState({ count: state.count + 1 });
+}
+const incrementCountSerialized = (state: { count: number }, setState: (arg0: { count: any }) => void) =>
+  incrementCount(state, setState).toString()
 
 export const component1 = defineCustomComponent({
   name: "component1",
@@ -42,29 +38,23 @@ export const component1 = defineCustomComponent({
       {
         onclick: eval(
           (() => {
-            setState({ count: 69 });
+            setState({ count: 69 })
           }).toString(),
         ),
       },
-    );
-    const otherButton = createElement(
-      "button",
-      `Force rerender - ${props.param}`,
-      undefined,
-      undefined,
-      {
-        onclick: eval(onclickSerialized),
-      },
-    );
-    return createElement("div", [button, otherButton]);
+    )
+    const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
+      onclick: eval(onclickSerialized),
+    })
+    return createElement("div", [button, otherButton])
   },
   initialState: { count: 0 },
-});
+})
 
 export const component2 = defineCustomComponent({
   name: "component2",
   render: () => `Component 2 = ${randomString()}`,
-});
+})
 
 export const component3 = defineCustomComponent({
   name: "component3",
@@ -75,7 +65,7 @@ export const component3 = defineCustomComponent({
       }),
       "Component 3",
     ]),
-});
+})
 
 export const flatComponent = defineFlatComponent({
   name: "flat",
@@ -86,16 +76,12 @@ export const flatComponent = defineFlatComponent({
       createElement("static"),
       "Flat component VARIANT = " + props.param,
     ]),
-});
+})
 
 export const staticComponent = defineStaticComponent({
   name: "static",
-  render: () => [
-    createElement("p", "STATIC HELLO WORLD!!!"),
-    createElement("p", "OH YEAH"),
-    "Static component",
-  ],
-});
+  render: () => [createElement("p", "STATIC HELLO WORLD!!!"), createElement("p", "OH YEAH"), "Static component"],
+})
 
 export default {
   component1,
@@ -103,4 +89,4 @@ export default {
   component3,
   flatComponent,
   staticComponent,
-};
+}
