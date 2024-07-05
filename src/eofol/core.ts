@@ -82,17 +82,15 @@ function createElement(
 }
 
 const defineCustomComponent = (componentDef: any) => {
-  customDefs.push(componentDef);
+  customDefs.push({ ...componentDef, type: "custom" });
   return componentDef;
 };
-
 const defineFlatComponent = (componentDef: any) => {
-  flatDefs.push(componentDef);
+  flatDefs.push({ ...componentDef, type: "flat" });
   return componentDef;
 };
-
 const defineStaticComponent = (componentDef: any) => {
-  staticDefs.push(componentDef);
+  staticDefs.push({ ...componentDef, type: "static" });
   return componentDef;
 };
 
@@ -120,20 +118,81 @@ const initEofol = () => {
     : Promise.all([undefined, undefined]);
 };
 
+const renderEofolElement = (name: string, props: any, id: string) => {
+  const def = findDef(name);
+  if (def) {
+    const type = def.type;
+    let result;
+    switch (type) {
+      case "custom": {
+        const thisInstance = instances.find(
+          (instance: { id: string }) => instance.id === id,
+        );
+        const state = thisInstance?.state;
+        result = def.render(
+          state,
+          (nextState: any) => {
+            // @TODO Statically compiled setState
+            if (thisInstance) {
+              thisInstance.state = nextState;
+              forceRerender();
+            } else {
+              console.log(
+                `EOFOL ERROR - Couldn't find component instance for name: ${name}.`,
+              );
+            }
+          },
+          props,
+        );
+        break;
+      }
+      case "flat": {
+        result = def.render(props);
+        break;
+      }
+      case "static": {
+        result = def.render();
+        break;
+      }
+      default: {
+        console.log(
+          `EOFOL ERROR - Invalid Eofol component type: ${type} for component with name: ${name}.`,
+        );
+        result = undefined;
+      }
+    }
+    return result;
+  } else {
+    console.log(
+      "EOFOL ERROR - Couldn't find def for Eofol element with name = " + name,
+    );
+    return undefined;
+  }
+};
+
 const forceRerender = () => {
   instances?.forEach((child: any) => {
     const { id, name, props } = child;
     const target = isBrowser() ? document.getElementById(id) : null;
     if (target) {
-      const def = findDef(name);
-      if (def) {
-        target.innerHTML = def.render(undefined, undefined, props);
+      const rendered = renderEofolElement(name, props, id);
+      if (rendered) {
+        target.innerHTML = rendered;
       }
     }
   });
 };
 
-initEofol();
+const postInitEofol = (eofolInternals: boolean | Awaited<undefined>[]) => {
+  // @ts-ignore
+  const vdom = eofolInternals[0];
+  // @ts-ignore
+  const instances = eofolInternals[1];
+
+  // TODO play initial render effects
+};
+
+initEofol().then(postInitEofol);
 
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
 

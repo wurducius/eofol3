@@ -26,18 +26,36 @@ const renderEofolCustomElement = (element, instances, defs) => {
   }
 
   const as = element?.attributes?.as ?? "div";
+  const stateImpl = def.initialState ? { ...def.initialState } : undefined;
 
   instances.push({
     name,
     id,
-    state: def.initialState ? { ...def.initialState } : undefined,
+    state: stateImpl,
     props,
     as,
   });
 
   return {
     type: as,
-    content: [def.render(undefined, undefined, props)],
+    content: [
+      def.render(
+        stateImpl,
+        (nextState) => {
+          // @TODO Statically compiled setState
+          const thisInstance = instances.find((instance) => instance.id === id);
+          if (thisInstance) {
+            thisInstance.state = nextState;
+            forceRerender();
+          } else {
+            console.log(
+              `EOFOL ERROR - Couldn't find component instance for name: ${name}.`,
+            );
+          }
+        },
+        props,
+      ),
+    ],
     attributes: {
       id,
     },

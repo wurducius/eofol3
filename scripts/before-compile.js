@@ -8,7 +8,7 @@ const fixExports = (scriptStr) =>
   scriptStr
     .toString()
     .replaceAll("export ", "")
-    .replaceAll("default", "module.exports = ");
+    .replaceAll("default ", "module.exports = ");
 
 const resolveImports = (sourcePath, content) =>
   content

@@ -17,21 +17,40 @@ const onclick = () => {
 };
 
 const onclickSerialized = onclick.toString();
+const incrementCount =
+  (state: { count: number }, setState: (arg0: { count: any }) => void) =>
+  () => {
+    setState({ count: state.count + 1 });
+  };
+const incrementCountSerialized = (
+  state: { count: number },
+  setState: (arg0: { count: any }) => void,
+) => incrementCount(state, setState).toString();
 
 export const component1 = defineCustomComponent({
   name: "component1",
   render: (state: any, setState: any, props: { param: string }) => {
     const button = createElement(
       "button",
-      "Component 1 - Force rerender - " + props.param,
+      `(${state.count}) - Component 1 - Force rerender - ` + props.param,
+      undefined,
+      undefined,
+      {
+        onclick: eval(incrementCountSerialized(state, setState)),
+      },
+    );
+    const otherButton = createElement(
+      "button",
+      `Force rerender - ` + props.param,
       undefined,
       undefined,
       {
         onclick: eval(onclickSerialized),
       },
     );
-    return button;
+    return createElement("div", [button, otherButton]);
   },
+  initialState: { count: 0 },
 });
 
 export const component2 = defineCustomComponent({
