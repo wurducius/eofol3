@@ -10,9 +10,9 @@ module.exports = [
       "*.d.ts",
     ],
     rules: {
-      semi: "error",
+      semi: ["error", "never"],
       quotes: [2, "double", { avoidEscape: true }],
       "prefer-template": "error",
     },
   },
-];
+]

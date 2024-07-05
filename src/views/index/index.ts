@@ -34,7 +34,6 @@ const incrementCountSerialized = (
 export const component1 = defineCustomComponent({
   name: "component1",
   render: (state: any, setState: any, props: { param: string }) => {
-    console.log(setState);
     const button = createElement(
       "button",
       `(${state}) - Component 1 - Force rerender - ` + props.param,

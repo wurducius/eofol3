@@ -1,7 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const { PATH_VIEWS_DIST } = require("../constants/paths");
+const {
+  PATH_VIEWS_DIST,
+  PATH_DIST,
+  DIRNAME_EOFOL_INTERNAL,
+} = require("../constants/paths");
 const { EXT_JS } = require("../constants/common");
 
 const fixExports = (scriptStr) =>
@@ -38,6 +42,13 @@ const resolveImports = (sourcePath, content) =>
       }
     });
 
+const precompile = (source) => {
+  const content = fs.readFileSync(source);
+  const exportsReplaced = fixExports(content);
+  const importsResolved = resolveImports(source, exportsReplaced);
+  fs.writeFileSync(source, fixExports(importsResolved.join("")));
+};
+
 // ---------------------------------------------
 // 1. Transforms script from ES module into CommonJS
 // 2. Resolves imports (so far only depth 1 file)
@@ -45,8 +56,7 @@ const resolveImports = (sourcePath, content) =>
 
 fs.readdirSync(PATH_VIEWS_DIST).forEach((view) => {
   const source = path.resolve(PATH_VIEWS_DIST, view, `${view}${EXT_JS}`);
-  const content = fs.readFileSync(source);
-  const exportsReplaced = fixExports(content);
-  const importsResolved = resolveImports(source, exportsReplaced);
-  fs.writeFileSync(source, fixExports(importsResolved.join("")));
+  precompile(source);
 });
+
+precompile(path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, `core${EXT_JS}`));

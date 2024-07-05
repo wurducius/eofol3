@@ -24,10 +24,10 @@ const {
   isEofolCustomElement,
   isEofolFlatElement,
   isEofolStaticElement,
-} = require("../eofol/core");
-const { renderEofolCustomElement } = require("../eofol/custom");
-const { renderEofolFlatElement } = require("../eofol/flat");
-const { renderEofolStaticElement } = require("../eofol/static");
+  renderEofolCustomElement,
+  renderEofolFlatElement,
+  renderEofolStaticElement,
+} = require("../dist/eofol/core");
 
 // -------------------------------------------
 
@@ -131,7 +131,6 @@ if (isVerbose) {
 
 const timeStart = new Date();
 
-// @TODO: HARDCODED filename index.js
 const views = fs.readdirSync(PATH_VIEWS_DIST);
 
 views.forEach((view) => {
