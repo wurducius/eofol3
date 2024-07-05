@@ -12,9 +12,9 @@ const renderEofolFlatElement = (element, defs) => {
 
   if (!def) {
     die(
-      'Cannot render custom eofol element: definition not found for component type: "' +
-        name +
-        '"',
+      `Cannot render custom eofol element: definition not found for component type: "${ 
+        name 
+        }"`,
     );
   }
 

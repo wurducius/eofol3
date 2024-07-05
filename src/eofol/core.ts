@@ -2,6 +2,8 @@ type VDOMType = "tag" | "custom";
 
 type HTMLTag = any;
 
+type Handler = Function;
+
 interface VDOM {
   type: VDOMType;
   name: string;
@@ -9,23 +11,39 @@ interface VDOM {
   id?: string;
 }
 
-interface Instances {
+interface Instance {
   name: string;
   id: string;
   as: HTMLTag;
+  type: string;
+  state?: Object;
 }
 
 interface Def {
   type: string;
   name: string;
-  children?: VDOM[];
+  render: Handler;
+  initialState?: Object;
+  effect?: Handler | Handler[];
+  subscribe?: string | string[];
+  cases?: Handler;
 }
 
-let vdom: any = undefined;
-let instances: any = undefined;
-const customDefs: any = [];
-const flatDefs: any = [];
-const staticDefs: any = [];
+const EOFOL_COMPONENT_TYPE_CUSTOM = "custom";
+const EOFOL_COMPONENT_TYPE_FLAT = "flat";
+const EOFOL_COMPONENT_TYPE_STATIC = "static";
+
+let vdom: VDOM = { type: "tag", name: "initial" };
+let instances: Instance[] = [];
+const customDefs: Def[] = [];
+const flatDefs: Def[] = [];
+const staticDefs: Def[] = [];
+
+const EOFOL_ERROR_MSG_PREFIX = "EOFOL ERROR - ";
+
+const errorRuntime = (msg: string) => {
+  console.log(`${EOFOL_ERROR_MSG_PREFIX}${msg}`);
+};
 
 const isBrowser = () =>
   typeof window !== "undefined" && typeof window.document !== "undefined";
@@ -47,19 +65,17 @@ const findStaticDef = findGeneralDef(staticDefs);
 const findDef = (tagname: string) =>
   findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname);
 
-const resolveContent = (content: any): any => {
+const getContentHTML = (content: any): any => {
   if (!content) {
     return "";
   } else if (Array.isArray(content)) {
-    return content.reduce((acc, next) => acc + resolveContent(next), "");
+    return content.reduce((acc, next) => acc + getContentHTML(next), "");
   } else if (typeof content === "string") {
     return content;
   } else {
     return content;
   }
 };
-
-const getContentHTML = (content: any) => resolveContent(content);
 
 function createElement(
   tagname: string,
@@ -69,9 +85,12 @@ function createElement(
   properties?: any,
   props?: any,
 ) {
+  // @TODO remove double findDef call
   const def = findDef(tagname);
   if (def) {
-    return def.render(props);
+    // @TODO finish
+    const id = "";
+    renderEofolElement(tagname, props, id);
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : "";
     const attributesHTML = reduceHTMLProps(attributes);
@@ -82,15 +101,15 @@ function createElement(
 }
 
 const defineCustomComponent = (componentDef: any) => {
-  customDefs.push({ ...componentDef, type: "custom" });
+  customDefs.push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_CUSTOM });
   return componentDef;
 };
 const defineFlatComponent = (componentDef: any) => {
-  flatDefs.push({ ...componentDef, type: "flat" });
+  flatDefs.push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_FLAT });
   return componentDef;
 };
 const defineStaticComponent = (componentDef: any) => {
-  staticDefs.push({ ...componentDef, type: "static" });
+  staticDefs.push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_STATIC });
   return componentDef;
 };
 
@@ -124,7 +143,7 @@ const renderEofolElement = (name: string, props: any, id: string) => {
     const type = def.type;
     let result;
     switch (type) {
-      case "custom": {
+      case EOFOL_COMPONENT_TYPE_CUSTOM: {
         const thisInstance = instances.find(
           (instance: { id: string }) => instance.id === id,
         );
@@ -132,13 +151,14 @@ const renderEofolElement = (name: string, props: any, id: string) => {
         result = def.render(
           state,
           (nextState: any) => {
-            // @TODO Statically compiled setState
+            console.log("Dynamically compiled setState fired!");
+            // @TODO Dynamically compiled setState
             if (thisInstance) {
               thisInstance.state = nextState;
               forceRerender();
             } else {
-              console.log(
-                `EOFOL ERROR - Couldn't find component instance for name: ${name}.`,
+              errorRuntime(
+                `Couldn't find component instance for name: ${name}.`,
               );
             }
           },
@@ -146,31 +166,30 @@ const renderEofolElement = (name: string, props: any, id: string) => {
         );
         break;
       }
-      case "flat": {
+      case EOFOL_COMPONENT_TYPE_FLAT: {
         result = def.render(props);
         break;
       }
-      case "static": {
+      case EOFOL_COMPONENT_TYPE_STATIC: {
         result = def.render();
         break;
       }
       default: {
-        console.log(
-          `EOFOL ERROR - Invalid Eofol component type: ${type} for component with name: ${name}.`,
+        errorRuntime(
+          `Invalid Eofol component type: ${type} for component with name: ${name}.`,
         );
         result = undefined;
       }
     }
     return result;
   } else {
-    console.log(
-      "EOFOL ERROR - Couldn't find def for Eofol element with name = " + name,
-    );
+    errorRuntime(`Couldn't find def for Eofol element with name = ${name}.`);
     return undefined;
   }
 };
 
 const forceRerender = () => {
+  // @TODO Instead rather rerender VDOM from top level down
   instances?.forEach((child: any) => {
     const { id, name, props } = child;
     const target = isBrowser() ? document.getElementById(id) : null;
@@ -183,16 +202,7 @@ const forceRerender = () => {
   });
 };
 
-const postInitEofol = (eofolInternals: boolean | Awaited<undefined>[]) => {
-  // @ts-ignore
-  const vdom = eofolInternals[0];
-  // @ts-ignore
-  const instances = eofolInternals[1];
-
-  // TODO play initial render effects
-};
-
-initEofol().then(postInitEofol);
+initEofol();
 
 const randomString = () => (Math.random() + 1).toString(36).substring(7);
 

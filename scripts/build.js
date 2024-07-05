@@ -22,19 +22,27 @@ if (!copyResult) {
   process.exit();
 }
 
-return new Promise((resolve, reject) => {
-  compiler.run((err, stats) => {
-    if (err) {
-      console.log(error(err.message));
-      return reject(err.message);
-    }
-    const time = stats.endTime - stats.startTime;
-    let size = 0;
-    stats.compilation.assetsInfo.forEach((asset) => {
-      size += asset.size;
+function doBuild(x) {
+  return new Promise((resolve, reject) => {
+    compiler.run((err, stats) => {
+      if (err) {
+        console.log(error(err.message));
+        return reject(err.message);
+      }
+      const time = stats.endTime - stats.startTime;
+      let size = 0;
+      stats.compilation.assetsInfo.forEach((asset) => {
+        size += asset.size;
+      });
+      console.log(success(`Built successfully at ${  BUILD_PATH}`));
+      console.log(success("Building took ") + primary(prettyTime(time)));
+      console.log(success("Total bundle size: ") + primary(prettySize(size)));
     });
-    console.log(success("Built successfully at " + BUILD_PATH));
-    console.log(success("Building took ") + primary(prettyTime(time)));
-    console.log(success("Total bundle size: ") + primary(prettySize(size)));
   });
-});
+}
+
+async function asyncBuild() {
+  await doBuild();
+}
+
+asyncBuild();

@@ -19,7 +19,7 @@ if (["build", "start", "clean", "serve"].includes(script)) {
   const result = spawn.sync(
     process.execPath,
     nodeArgs
-      .concat(require.resolve("../scripts/" + script))
+      .concat(require.resolve(`../scripts/${  script}`))
       .concat(args.slice(scriptIndex + 1)),
     { stdio: "inherit" },
   );
@@ -41,5 +41,5 @@ if (["build", "start", "clean", "serve"].includes(script)) {
   }
   process.exit(result.status);
 } else {
-  console.log('Unknown script "' + script + '".');
+  console.log(`Unknown script "${  script  }".`);
 }

@@ -1,5 +1,6 @@
 // @IMPORT-START
 import Core from "../../eofol/core";
+
 const {
   forceRerender,
   defineCustomComponent,
@@ -20,8 +21,8 @@ const onclickSerialized = onclick.toString();
 
 export const component1 = defineCustomComponent({
   name: "component1",
-  render: (state: any, setState: any, props: { param: string }) => {
-    const button = createElement(
+  render: (state: any, setState: any, props: { param: string }) =>
+    createElement(
       "button",
       "Component 1 - Force rerender - " + props.param,
       undefined,
@@ -29,9 +30,7 @@ export const component1 = defineCustomComponent({
       {
         onclick: eval(onclickSerialized),
       },
-    );
-    return button;
-  },
+    ),
 });
 
 export const component2 = defineCustomComponent({
@@ -41,40 +40,33 @@ export const component2 = defineCustomComponent({
 
 export const component3 = defineCustomComponent({
   name: "component3",
-  render: function () {
-    const rendered = createElement("div", [
+  render: () =>
+    createElement("div", [
       createElement("flat", undefined, undefined, undefined, undefined, {
         param: "3",
       }),
       "Component 3",
-    ]);
-    return rendered;
-  },
+    ]),
 });
 
 export const flatComponent = defineFlatComponent({
   name: "flat",
-  render: function (props: { param: string }) {
-    const rendered = createElement("div", [
+  render: (props: { param: string }) =>
+    createElement("div", [
       createElement("button", "FLAT HELLO WORLD!!!"),
       createElement("p", "OH YEAH"),
       createElement("static"),
       "Flat component VARIANT = " + props.param,
-    ]);
-    return rendered;
-  },
+    ]),
 });
 
 export const staticComponent = defineStaticComponent({
   name: "static",
-  render: function () {
-    const rendered = [
-      createElement("p", "STATIC HELLO WORLD!!!"),
-      createElement("p", "OH YEAH"),
-      "Static component",
-    ];
-    return rendered;
-  },
+  render: () => [
+    createElement("p", "STATIC HELLO WORLD!!!"),
+    createElement("p", "OH YEAH"),
+    "Static component",
+  ],
 });
 
 export default {

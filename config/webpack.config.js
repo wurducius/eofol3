@@ -45,7 +45,7 @@ const config = () => {
     mode: MODE,
     entry,
     output: {
-      filename: ASSETS_JS_PATH + "/[name].js",
+      filename: `${ASSETS_JS_PATH  }/[name].js`,
       path: ASSETS_BUILD_PATH,
       publicPath: ASSETS_INNER_PATH,
       /*
@@ -56,7 +56,7 @@ const config = () => {
     },
     plugins: [
       ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
-      new MiniCssExtractPlugin({ filename: ASSETS_CSS_PATH + "/[name].css" }),
+      new MiniCssExtractPlugin({ filename: `${ASSETS_CSS_PATH  }/[name].css` }),
       // new ChunksWebpackPlugin({ generateChunksManifest: false }),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify(process.env),
@@ -94,7 +94,7 @@ const config = () => {
             },
           },
           generator: {
-            filename: ASSETS_SVG_PATH + "/[hash][ext]",
+            filename: `${ASSETS_SVG_PATH  }/[hash][ext]`,
           },
         },
         {
@@ -106,14 +106,14 @@ const config = () => {
             },
           },
           generator: {
-            filename: ASSETS_IMG_PATH + "/[hash][ext]",
+            filename: `${ASSETS_IMG_PATH  }/[hash][ext]`,
           },
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/i,
           type: "asset/resource",
           generator: {
-            filename: ASSETS_FONT_PATH + "/[hash][ext]",
+            filename: `${ASSETS_FONT_PATH  }/[hash][ext]`,
           },
         },
         { test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" },

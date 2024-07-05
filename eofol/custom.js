@@ -5,6 +5,8 @@ const {
 } = require("./core");
 const { generateId, die } = require("../util/common");
 
+const renderCustomElementTree = () => {};
+
 const renderEofolCustomElement = (element, instances, defs) => {
   const name = getEofolComponentType(element);
   const def = findEofolComponentDef(defs)(name);
@@ -12,9 +14,9 @@ const renderEofolCustomElement = (element, instances, defs) => {
 
   if (!def) {
     die(
-      'Cannot render custom eofol element: definition not found for component type: "' +
-        name +
-        '"',
+      `Cannot render custom eofol element: definition not found for component type: "${ 
+        name 
+        }"`,
     );
   }
 
@@ -42,12 +44,16 @@ const renderEofolCustomElement = (element, instances, defs) => {
       def.render(
         stateImpl,
         (nextState) => {
+          console.log("Statically compiled setState fired!");
           // @TODO Statically compiled setState
           const thisInstance = instances.find((instance) => instance.id === id);
           if (thisInstance) {
             thisInstance.state = nextState;
-            forceRerender();
+            // @TODO import
+            // forceRerender();
+            console.log("forceRerender()");
           } else {
+            // @TODO Extract
             console.log(
               `EOFOL ERROR - Couldn't find component instance for name: ${name}.`,
             );
