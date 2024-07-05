@@ -29,6 +29,6 @@ const breakpoints = [
     },
     jpg: { compression: 30 },
   },
-];
+]
 
-module.exports = { breakpoints };
+module.exports = { breakpoints }
