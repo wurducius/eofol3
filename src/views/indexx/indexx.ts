@@ -1,14 +1,8 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
 
-const {
-  forceRerender,
-  defineCustomComponent,
-  defineFlatComponent,
-  defineStaticComponent,
-  randomString,
-  createElement,
-} = Core
+const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticComponent, createElement, generateId } =
+  Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
@@ -29,7 +23,7 @@ export const component1 = defineCustomComponent({
 
 export const component2 = defineCustomComponent({
   name: "component2",
-  render: () => `Component 2 = ${randomString()}`,
+  render: () => `Component 2 = ${generateId()}`,
 })
 
 export const component3 = defineCustomComponent({

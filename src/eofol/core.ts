@@ -188,7 +188,12 @@ const forceRerender = () => {
 
 initEofol()
 
-const randomString = () => (Math.random() + 1).toString(36).substring(7)
+const generateString = (length: number) => () =>
+  Array(length)
+    .fill("")
+    .map((v) => Math.random().toString(36).charAt(2))
+    .join("")
+const generateId = generateString(17)
 
 const registerServiceworker = () => {
   if (isBrowser() && "serviceWorker" in navigator) {
@@ -236,7 +241,7 @@ const notProps = ["name", "as"]
 const getProps = (element: any) => {
   const props = structuredClone(element.attributes)
   Object.keys(props)
-    .filter((key) => notProps.includes(key))
+    .filter((key) => notProps.reduce((acc, next) => acc || key === next, false))
     .forEach((key) => delete props[key])
   return props
 }
@@ -354,8 +359,6 @@ const renderEofolStaticElement = (element: any, defs: any) => {
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-const generateId = () => (Math.random() + 1).toString(36).substring(7)
-
 export default {
   defineCustomComponent,
   defineFlatComponent,
@@ -363,7 +366,7 @@ export default {
   isBrowser,
   forceRerender,
   createElement,
-  randomString,
+  generateId,
   vdom,
   instances,
   customDefs,
