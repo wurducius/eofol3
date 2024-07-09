@@ -1,6 +1,6 @@
 // @IMPORT-START
 import Common from "./common"
-const { findDef, isBrowser } = Common
+const { findDef, findInstance, isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
@@ -29,7 +29,7 @@ const renderEofolElement = (name: string, props: any, id: string) => {
     let result
     switch (type) {
       case EOFOL_COMPONENT_TYPE_CUSTOM: {
-        const thisInstance = getInstances().find((instance: { id: string }) => instance.id === id)
+        const thisInstance = findInstance(id)
         const state = thisInstance?.state
         result = def.render(
           state,

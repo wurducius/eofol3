@@ -1,6 +1,6 @@
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { getCustomDefs, getFlatDefs, getStaticDefs } = EofolInternals
+const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 
@@ -13,6 +13,8 @@ const findStaticDef = findGeneralDef(getStaticDefs())
 
 const findDef = (tagname: string) => findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname)
 
+const findInstance = (id: string) => getInstances().find((instance) => instance.id === id)
+
 const notProps = ["name", "as"]
 
 const getProps = (element: any) => {
@@ -23,4 +25,4 @@ const getProps = (element: any) => {
   return props
 }
 
-export default { isBrowser, findDef, getProps }
+export default { isBrowser, findDef, findInstance, getProps }

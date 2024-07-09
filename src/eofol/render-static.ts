@@ -6,7 +6,7 @@ const { errorRuntime, generateId } = Util
 
 // @IMPORT-START
 import Common from "./common"
-const { getProps } = Common
+const { getProps, findInstance } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
@@ -55,7 +55,7 @@ const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
         (nextState: any) => {
           console.log("Statically compiled setState fired!")
           // @TODO Statically compiled setState
-          const thisInstance = instances.find((instance: any) => instance.id === id)
+          const thisInstance = findInstance(id)
           if (thisInstance) {
             thisInstance.state = nextState
             // @TODO import
