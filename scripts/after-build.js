@@ -14,14 +14,17 @@ const { checkExistsCreate } = require("../util/fs")
 const compileScript = require("../compiler/script")
 const compileStyle = require("../compiler/style")
 const copyPublicDir = require("../compiler/public")
-const { EXT_HTML } = require("../constants/common")
+const { EXT_HTML, EXT_GZIP } = require("../constants/common")
 
 const babel = require("@babel/core")
 const { minify } = require("uglify-js")
-const { uglifyOptions, babelOptions } = require("../constants/after-build")
+const { uglifyOptions, babelOptions, COMPRESS_GZIP_BUILD_FILES } = require("../constants/after-build")
+const gzip = require("../compiler/gzip")
 
 const PATH_DERIVED_INTERNAL = resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
 const PATH_BUILD_INTERNAL = resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
+
+const appendGzipExt = (sourcePath) => `${sourcePath}${EXT_GZIP}`
 
 checkExistsCreate(PATH_BUILD)
 checkExistsCreate(resolve(PATH_BUILD, "assets"))
@@ -40,7 +43,12 @@ copyPublicDir()
 fs.readdirSync(PATH_DERIVED)
   .filter((filename) => filename.endsWith(EXT_HTML))
   .forEach((htmlFile) => {
-    fs.copyFileSync(resolve(PATH_DERIVED, htmlFile), resolve(PATH_BUILD, htmlFile))
+    const targetPath = resolve(PATH_BUILD, htmlFile)
+    fs.copyFileSync(resolve(PATH_DERIVED, htmlFile), targetPath)
+
+    if (COMPRESS_GZIP_BUILD_FILES) {
+      gzip(targetPath, appendGzipExt(targetPath), htmlFile)
+    }
   })
 
 fs.readdirSync(PATH_DERIVED_INTERNAL).forEach((filename) => {
@@ -52,4 +60,8 @@ fs.readdirSync(PATH_ASSETS_JS).forEach((filename) => {
   const babelized = babel.transformSync(fs.readFileSync(scriptPath), babelOptions).code
   const minified = minify(babelized.toString(), uglifyOptions).code
   fs.writeFileSync(scriptPath, minified)
+
+  if (COMPRESS_GZIP_BUILD_FILES) {
+    gzip(scriptPath, appendGzipExt(scriptPath), filename)
+  }
 })

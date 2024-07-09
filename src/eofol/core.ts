@@ -1,6 +1,6 @@
 // @IMPORT-START
 import RenderStatic from "./render-static"
-const { woot, renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement } = RenderStatic
+const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement } = RenderStatic
 // @IMPORT("./render-static")
 // @IMPORT-END
 
@@ -35,6 +35,12 @@ const { generateId } = Util
 // @IMPORT-END
 
 // @IMPORT-START
+import ServiceWorker from "./service-worker"
+const { registerServiceworker } = ServiceWorker
+// @IMPORT("./service-worker")
+// @IMPORT-END
+
+// @IMPORT-START
 import Components from "./components"
 const {
   defineCustomComponent,
@@ -49,7 +55,11 @@ const {
 // @IMPORT("./components")
 // @IMPORT-END
 
-woot()
+// @IMPORT-START
+import EofolConfigRuntime from "./eofol-config-runtime"
+const { SERVICE_WORKER_REGISTER_AT_INIT, SERVICE_WORKER_SCRIPT_FILENAME } = EofolConfigRuntime
+// @IMPORT("./eofol-config-runtime")
+// @IMPORT-END
 
 const initEofol = () => {
   const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
@@ -68,13 +78,10 @@ const initEofol = () => {
 
 initEofol()
 
-const registerServiceworker = () => {
-  if (isBrowser() && "serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-  }
+if (SERVICE_WORKER_REGISTER_AT_INIT) {
+  // @TODO allow relative path from view page
+  registerServiceworker(`./${SERVICE_WORKER_SCRIPT_FILENAME}`)
 }
-
-registerServiceworker()
 
 export default {
   isBrowser,

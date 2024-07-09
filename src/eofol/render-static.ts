@@ -125,8 +125,4 @@ const renderEofolStaticElement = (element: any, defs: any) => {
   }
 }
 
-const woot = () => {
-  console.log("WOOT RECURSIVE IMPORT WORKING !!!")
-}
-
-export default { woot, renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement }
+export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement }
