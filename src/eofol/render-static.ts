@@ -12,13 +12,14 @@ const { getProps, findInstance } = Common
 
 // @IMPORT-START
 import Components from "./components"
+import { Defs, Instances, JSONElement } from "./types"
 const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
 const EOFOL_RENDER_DEFAULT_AS_TAGNAME = "div"
 
-const initRender = (element: any, defs: any) => {
+const initRender = (element: JSONElement, defs: Defs) => {
   const name = getEofolComponentType(element)
   const def = findEofolComponentDef(defs)(name)
 
@@ -29,11 +30,15 @@ const initRender = (element: any, defs: any) => {
   return { name, def }
 }
 
-const getAsProp = (element: any, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
+const getAsProp = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
 
-const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
+const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
   const { name, def } = initRender(element, defs)
   const props = getProps(element)
+
+  if (!def) {
+    return undefined
+  }
 
   let id
   if (element.attributes.id) {
@@ -82,9 +87,13 @@ const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
   }
 }
 
-const renderEofolFlatElement = (element: any, defs: any) => {
+const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
   const { def } = initRender(element, defs)
   const props = getProps(element)
+
+  if (!def) {
+    return undefined
+  }
 
   // @TODO
   const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
@@ -96,8 +105,12 @@ const renderEofolFlatElement = (element: any, defs: any) => {
   }
 }
 
-const renderEofolStaticElement = (element: any, defs: any) => {
+const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
   const { def } = initRender(element, defs)
+
+  if (!def) {
+    return undefined
+  }
 
   const rendered = def.render()
   const reduced = Array.isArray(rendered) ? rendered.join("") : rendered
