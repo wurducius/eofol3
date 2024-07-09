@@ -1,7 +1,13 @@
-const { clean } = require("@eofol/eofol-dev-utils")
-const { primary, success } = require("@eofol/eofol-dev-utils")
-const { BUILD_PATH } = require("../config/paths")
+const fs = require("fs")
 
-console.log(primary("Cleaning build folder.."))
-clean(BUILD_PATH)
-console.log(success("Clean succesful."))
+const { PATH_DERIVED, PATH_BUILD, PATH_DIST } = require("../constants/paths")
+
+const cleanDir = (target) => {
+  if (fs.existsSync(target)) {
+    fs.rmSync(target, { recursive: true })
+  }
+}
+
+cleanDir(PATH_DIST)
+cleanDir(PATH_DERIVED)
+cleanDir(PATH_BUILD)

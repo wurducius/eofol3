@@ -3,6 +3,8 @@ derived/
 dist/
 build/
 
+.env
+
 .idea/
 
 package-lock.json

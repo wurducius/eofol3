@@ -2,12 +2,19 @@ const IMG_BASE_LOGO_WIDTH = 512
 
 const uglifyOptions = {
   parse: {},
-  compress: false,
+  compress: true,
   mangle: true,
   output: {
-    ast: true,
+    // ast: false,
     //  code: false, // optional - faster if false
+    semicolons: false,
   },
 }
 
-module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions }
+const babelOptions = {}
+// presets: ["@babel/preset-env"]
+
+const COMPRESS_GZIP_BUILD_FILES = true
+const COMPRESS_GZIP_LEVEL = 9
+
+module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions, babelOptions, COMPRESS_GZIP_BUILD_FILES, COMPRESS_GZIP_LEVEL }

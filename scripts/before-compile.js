@@ -4,11 +4,13 @@ const path = require("path")
 const { PATH_VIEWS_DIST, PATH_DIST, DIRNAME_EOFOL_INTERNAL } = require("../constants/paths")
 const { EXT_JS } = require("../constants/common")
 
+const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split("module.exports")[0]
+
 const fixExports = (scriptStr) =>
   scriptStr.toString().replaceAll("export ", "").replaceAll("default ", "module.exports = ")
 
-const resolveImports = (sourcePath, content) =>
-  content
+const resolveImports = (sourcePath, content, importedScripts) => {
+  return content
     .toString()
     .split("// @IMPORT-")
     .map((y, i) => {
@@ -18,23 +20,36 @@ const resolveImports = (sourcePath, content) =>
         const z = yy.split("// @IMPORT(")
         return z.reduce((acc, next, innerIndex) => {
           if (innerIndex === 0) {
-            return acc
+            return ""
           } else {
             const scriptPathRaw = next.replaceAll('"', "").replaceAll(")", "").trim()
-            const script = fs.readFileSync(path.resolve(sourcePath, "..", scriptPathRaw + EXT_JS))
-            return acc + script.toString()
+            if (importedScripts.includes(scriptPathRaw)) {
+              return acc
+            } else {
+              const scriptPath = path.resolve(sourcePath, scriptPathRaw + EXT_JS)
+              const script = fs.readFileSync(scriptPath).toString()
+              const hasNext = script.includes("@IMPORT")
+              importedScripts.push(scriptPathRaw)
+              const resolvedTreeScript = hasNext
+                ? resolveImports(path.resolve(scriptPath, ".."), cleanExport(script), importedScripts)
+                : script
+              return acc + cleanExport(resolvedTreeScript.toString())
+            }
           }
         }, "")
       } else {
         return fixExports(yy)
       }
     })
+    .join("")
+}
 
-const precompile = (source) => {
+const precompile = (source, suffixPath) => {
   const content = fs.readFileSync(source)
   const exportsReplaced = fixExports(content)
-  const importsResolved = resolveImports(source, exportsReplaced)
-  fs.writeFileSync(source, fixExports(importsResolved.join("")))
+  const importedScripts = []
+  const importsResolved = resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
+  fs.writeFileSync(source, fixExports(importsResolved))
 }
 
 // ---------------------------------------------
@@ -43,8 +58,7 @@ const precompile = (source) => {
 // ---------------------------------------------
 
 fs.readdirSync(PATH_VIEWS_DIST).forEach((view) => {
-  const source = path.resolve(PATH_VIEWS_DIST, view, `${view}${EXT_JS}`)
-  precompile(source)
+  precompile(path.resolve(PATH_VIEWS_DIST, view, `${view}${EXT_JS}`), "..")
 })
 
-precompile(path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, `core${EXT_JS}`))
+precompile(path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, `core${EXT_JS}`), "..")
