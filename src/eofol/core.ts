@@ -114,17 +114,15 @@ const initEofol = () => {
   const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
   const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
 
-  return isBrowser()
-    ? Promise.all([fetch(`./eofol/${page}-vdom.json`), fetch(`./eofol/${page}-instances.json`)])
-        .then((res) => {
-          return Promise.all([res[0].json(), res[1].json()])
-        })
-        .then((res) => {
-          vdom = res[0]
-          instances = res[1]
-          return true
-        })
-    : Promise.all([undefined, undefined])
+  return (
+    isBrowser() &&
+    fetch(`./eofol/${page}-eofol-internals.json`)
+      .then((res) => res.json())
+      .then((res) => {
+        vdom = res.vdom
+        instances = res.instances
+      })
+  )
 }
 
 const renderEofolElement = (name: string, props: any, id: string) => {

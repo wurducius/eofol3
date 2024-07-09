@@ -14,8 +14,7 @@ const DIRNAME_ASSET_CSS = "css"
 const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
-const FILENAME_SUFFIX_INSTANCES = "-instances.json"
-const FILENAME_SUFFIX_VDOM = "-vdom.json"
+const FILENAME_SUFFIX_EOFOL_INTERNALS = "-eofol-internals.json"
 
 const PATH_CWD = fs.realpathSync(process.cwd())
 const PATH_DIST = path.resolve(PATH_CWD, DIRNAME_DIST)
@@ -44,8 +43,7 @@ module.exports = {
   PATH_ASSETS_FONTS,
   PATH_EOFOL_INTERNAL,
   PATH_PUBLIC,
-  FILENAME_SUFFIX_INSTANCES,
-  FILENAME_SUFFIX_VDOM,
+  FILENAME_SUFFIX_EOFOL_INTERNALS,
   FILENAME_FAVICON,
   DIRNAME_EOFOL_INTERNAL,
 }
