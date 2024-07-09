@@ -86,8 +86,8 @@ function createElement(
   const def = findDef(tagname)
   if (def) {
     // @TODO finish
-    const id = ""
-    renderEofolElement(tagname, props, id)
+    const id = isBrowser() ? attributes.id : undefined
+    return renderEofolElement(tagname, props, id)
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : ""
     const attributesHTML = reduceHTMLProps(attributes)
