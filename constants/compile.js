@@ -19,7 +19,6 @@ const isVerbose = config.verbose
 
 const minifyOptions = {
   continueOnParseError: true,
-  removeRedundantAttributes: true,
   removeComments: true,
   collapseWhitespace: config.minifyHTML,
   collapseInlineTagWhitespace: true,
@@ -33,6 +32,5 @@ const minifyOptions = {
   collapseBooleanAttributes: true,
   sortAttributes: true,
   sortClassName: true,
-  removeOptionalTags: true,
 }
 module.exports = { config, isVerbose, minifyOptions }
