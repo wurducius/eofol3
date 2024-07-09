@@ -86,7 +86,7 @@ function createElement(
   const def = findDef(tagname)
   if (def) {
     // @TODO finish
-    const id = isBrowser() ? attributes.id : undefined
+    const id = attributes && attributes.id
     return renderEofolElement(tagname, props, id)
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : ""
@@ -178,10 +178,7 @@ const forceRerender = () => {
     const { id, name, props } = child
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
-      const rendered = renderEofolElement(name, props, id)
-      if (rendered) {
-        target.innerHTML = rendered
-      }
+      target.innerHTML = renderEofolElement(name, props, id)
     }
   })
 }
