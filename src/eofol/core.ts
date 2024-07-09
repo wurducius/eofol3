@@ -1,3 +1,11 @@
+// @IMPORT-START
+import RenderStatic from "./render-static"
+const { woot } = RenderStatic
+// @IMPORT("./render-static")
+// @IMPORT-END
+
+woot()
+
 type VDOMType = "tag" | "custom"
 
 type HTMLTag = any
