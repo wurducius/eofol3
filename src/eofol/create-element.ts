@@ -43,7 +43,7 @@ function createElement(
   if (def) {
     // @TODO finish
     const id = attributes && attributes.id
-    return renderEofolElement(tagname, props, id)
+    return renderEofolElement(tagname, props, id, def)
   } else {
     const classnameHTML = classname ? ` class='${classname}'` : ""
     const attributesHTML = reduceHTMLProps(attributes)

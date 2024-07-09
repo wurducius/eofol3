@@ -22,8 +22,7 @@ const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_
 // @IMPORT("./components")
 // @IMPORT-END
 
-const renderEofolElement = (name: string, props: any, id: string) => {
-  const def = findDef(name)
+const renderEofolElement = (name: string, props: any, id: string, def: any) => {
   if (def) {
     const type = def.type
     let result
@@ -73,7 +72,8 @@ const forceRerender = () => {
     const { id, name, props } = child
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
-      target.innerHTML = renderEofolElement(name, props, id)
+      const def = findDef(name)
+      target.innerHTML = renderEofolElement(name, props, id, def)
     }
   })
 }

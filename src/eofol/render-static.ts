@@ -16,18 +16,24 @@ const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////     CUSTOM       ///////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+const EOFOL_RENDER_DEFAULT_AS_TAGNAME = "div"
 
-const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
+const initRender = (element: any, defs: any) => {
   const name = getEofolComponentType(element)
   const def = findEofolComponentDef(defs)(name)
-  const props = getProps(element)
 
   if (!def) {
     errorRuntime(`Cannot render custom eofol element: definition not found for component type: "${name}"`)
   }
+
+  return { name, def }
+}
+
+const getAsProp = (element: any, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
+
+const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
+  const { name, def } = initRender(element, defs)
+  const props = getProps(element)
 
   let id
   if (element.attributes.id) {
@@ -36,7 +42,8 @@ const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
     id = generateId()
   }
 
-  const as = element?.attributes?.as ?? "div"
+  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+
   const stateImpl = def.initialState ? { ...def.initialState } : undefined
 
   instances.push({
@@ -63,7 +70,7 @@ const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
             console.log("forceRerender()")
           } else {
             // @TODO Extract
-            console.log(`EOFOL ERROR - Couldn't find component instance for name: ${name}.`)
+            errorRuntime(`Couldn't find component instance for name: ${name}.`)
           }
         },
         props,
@@ -75,21 +82,12 @@ const renderEofolCustomElement = (element: any, instances: any, defs: any) => {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////     FLAT    ///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 const renderEofolFlatElement = (element: any, defs: any) => {
-  const name = getEofolComponentType(element)
-  const def = findEofolComponentDef(defs)(name)
+  const { def } = initRender(element, defs)
   const props = getProps(element)
 
-  if (!def) {
-    errorRuntime(`Cannot render custom eofol element: definition not found for component type: "${name}"`)
-  }
-
   // @TODO
-  const as = element?.attributes?.as ?? "h5"
+  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
 
   return {
     type: as,
@@ -98,30 +96,17 @@ const renderEofolFlatElement = (element: any, defs: any) => {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////    STATIC    ///////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 const renderEofolStaticElement = (element: any, defs: any) => {
-  const name = getEofolComponentType(element)
-  const def = findEofolComponentDef(defs)(name)
-
-  if (!def) {
-    errorRuntime(`Cannot render custom eofol element: definition not found for component type: "${name}"`)
-  }
-
-  // @TODO
-  // const as = element?.attributes?.as ?? "h5";
+  const { def } = initRender(element, defs)
 
   const rendered = def.render()
   const reduced = Array.isArray(rendered) ? rendered.join("") : rendered
 
+  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+
   return {
-    // @TODO
-    //  type: "static",
-    type: "div",
+    type: as,
     content: [reduced],
-    // attributes: {},
   }
 }
 
