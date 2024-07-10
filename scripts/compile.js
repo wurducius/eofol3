@@ -59,7 +59,7 @@ const resultPromise = views.map((view) => {
 
     return new Promise(() =>
       minifyPre(sourceHTML.toString())
-        .then(parseHTMLToJSON)
+        .then(parseHTMLToJSON(view))
         .then(traverseTreeAsync(vdom, eofolInstances, eofolDefs))
         .then(JSONToHTML)
         .then(compileStyle(view))

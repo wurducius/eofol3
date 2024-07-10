@@ -1,6 +1,8 @@
 const { minify } = require("html-minifier-terser")
 
 const { isVerbose, minifyOptions, minifyHTMLOptions } = require("../constants/compile")
+const { msgStepMinifier } = require("./log")
+const { die } = require("../util/common")
 
 const minifyImpl = (options) => (res) =>
   minify(res, options)
