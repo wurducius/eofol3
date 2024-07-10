@@ -6,50 +6,58 @@ const { findDef } = Common
 
 // @IMPORT-START
 import RenderDynamic from "./render-dynamic"
+import { Attributes, JSONNode, Properties, Props, StringRecord } from "./types"
 const { renderEofolElement } = RenderDynamic
 // @IMPORT("./render-dynamic")
 // @IMPORT-END
 
-const reduceHTMLProps = (props: any, prefix?: string, suffix?: string) =>
+const reduceHTMLProps = (props: StringRecord | undefined, prefix?: string, suffix?: string) =>
   props
     ? Object.keys(props).reduce((acc, next) => {
+        // @ts-ignore
         const val = props[next].toString().replaceAll('"', "'")
         return `${acc} ${next}="${prefix ?? ""}${val}${suffix ?? ""}"`
       }, "")
     : ""
 
-const getContentHTML = (content: any): any => {
+const getContentHTML = (content: JSONNode | undefined): JSONNode => {
   if (!content) {
     return ""
   } else if (Array.isArray(content)) {
-    return content.reduce((acc, next) => acc + getContentHTML(next), "")
-  } else if (typeof content === "string") {
-    return content
+    return content.reduce((acc, next) => acc + getContentHTML(next).toString(), "")
   } else {
     return content
   }
 }
 
-function createElement(
+const renderTagElement = (
   tagname: string,
-  content?: any,
+  content?: JSONNode,
   classname?: string,
-  attributes?: any,
-  properties?: any,
-  props?: any,
-) {
-  // @TODO remove double findDef call
+  attributes?: Attributes,
+  properties?: Properties,
+) => {
+  const classnameHTML = classname ? ` class='${classname}'` : ""
+  const attributesHTML = reduceHTMLProps(attributes)
+  const propertiesHTML = reduceHTMLProps(properties, "(", ")()")
+  const contentHTML = getContentHTML(content)
+  return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${contentHTML}</${tagname}>`
+}
+
+const createElement = (
+  tagname: string,
+  content?: JSONNode,
+  classname?: string,
+  attributes?: Attributes,
+  properties?: Properties,
+  props?: Props,
+) => {
   const def = findDef(tagname)
   if (def) {
-    // @TODO finish
-    const id = attributes && attributes.id
-    return renderEofolElement(tagname, props, id)
+    const id = attributes && attributes.id ? attributes.id : undefined
+    return renderEofolElement(tagname, props, id, def)
   } else {
-    const classnameHTML = classname ? ` class='${classname}'` : ""
-    const attributesHTML = reduceHTMLProps(attributes)
-    const propertiesHTML = reduceHTMLProps(properties, "(", ")()")
-    const contentHTML = getContentHTML(content)
-    return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${contentHTML}</${tagname}>`
+    return renderTagElement(tagname, content, classname, attributes, properties)
   }
 }
 

@@ -1,5 +1,6 @@
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
+import { Def, Defs, JSONElement } from "./types"
 const { getCustomDefs, getFlatDefs, getStaticDefs } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
@@ -20,31 +21,31 @@ const EOFOL_STATIC_COMPONENT_TAGNAME = "static"
 
 const EOFOL_COMPONENT_ATTRIBUTE_TYPE = "name"
 
-const defineCustomComponent = (componentDef: any) => {
+const defineCustomComponent = (componentDef: Def) => {
   getCustomDefs().push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_CUSTOM })
   return componentDef
 }
-const defineFlatComponent = (componentDef: any) => {
+const defineFlatComponent = (componentDef: Def) => {
   getFlatDefs().push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_FLAT })
   return componentDef
 }
-const defineStaticComponent = (componentDef: any) => {
+const defineStaticComponent = (componentDef: Def) => {
   getStaticDefs().push({ ...componentDef, type: EOFOL_COMPONENT_TYPE_STATIC })
   return componentDef
 }
 
-const getEofolComponentType = (element: any) => element && element.attributes[EOFOL_COMPONENT_ATTRIBUTE_TYPE]
+const getEofolComponentType = (element: JSONElement) => element && element.attributes[EOFOL_COMPONENT_ATTRIBUTE_TYPE]
 
-const findEofolComponentDef = (defs: any) => (name: any) =>
-  defs.find((componentDef: any) => componentDef[EOFOL_COMPONENT_ATTRIBUTE_TYPE] === name)
+const findEofolComponentDef = (defs: Defs) => (name: string) =>
+  defs.find((componentDef: Def) => componentDef[EOFOL_COMPONENT_ATTRIBUTE_TYPE] === name)
 
-const isEofolCustomElement = (element: any) => element && element.type === EOFOL_CUSTOM_COMPONENT_TAGNAME
+const isEofolCustomElement = (element: JSONElement) => element && element.type === EOFOL_CUSTOM_COMPONENT_TAGNAME
 
-const isEofolFlatElement = (element: any) => element && element.type === EOFOL_FLAT_COMPONENT_TAGNAME
+const isEofolFlatElement = (element: JSONElement) => element && element.type === EOFOL_FLAT_COMPONENT_TAGNAME
 
-const isEofolStaticElement = (element: any) => element && element.type === EOFOL_STATIC_COMPONENT_TAGNAME
+const isEofolStaticElement = (element: JSONElement) => element && element.type === EOFOL_STATIC_COMPONENT_TAGNAME
 
-const validateEofolCustomElement = (element: any) => {
+const validateEofolCustomElement = (element: JSONElement) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
     errorRuntime(
       `Eofol validation error: Custom eofol component cannot have children: Component ${getEofolComponentType(

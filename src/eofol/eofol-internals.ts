@@ -1,33 +1,4 @@
-type VDOMType = "tag" | "custom"
-
-type HTMLTag = any
-
-type Handler = Function
-
-interface VDOM {
-  type: VDOMType
-  name: string
-  children?: VDOM[]
-  id?: string
-}
-
-interface Instance {
-  name: string
-  id: string
-  as: HTMLTag
-  type: string
-  state?: Object
-}
-
-interface Def {
-  type: string
-  name: string
-  render: Handler
-  initialState?: Object
-  effect?: Handler | Handler[]
-  subscribe?: string | string[]
-  cases?: Handler
-}
+import { VDOM, Instance, Def } from "./types"
 
 let vdom: VDOM = { type: "tag", name: "initial" }
 let instances: Instance[] = []
