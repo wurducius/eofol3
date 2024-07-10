@@ -8,8 +8,14 @@ const validator = require("html-validator")
 const { prettyTime, primary, success } = require("@eofol/eofol-dev-utils")
 
 const { config, isVerbose, minifyOptions } = require("../constants/compile")
-const { PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST, DIRNAME_EOFOL_INTERNAL } = require("../constants/paths")
-const { EXT_HTML, EXT_JS } = require("../constants/common")
+const {
+  PATH_DERIVED,
+  PATH_PUBLIC,
+  PATH_VIEWS_DIST,
+  DIRNAME_EOFOL_INTERNAL,
+  PATH_VIEWS_SRC,
+} = require("../constants/paths")
+const { EXT_HTML, EXT_JS, EXT_CSS } = require("../constants/common")
 const { die } = require("../util/common")
 const { checkExistsCreate, removeFilePart } = require("../util/fs")
 const writeInternal = require("../compiler/internal")
@@ -108,6 +114,24 @@ const transverseTree = (tree, vdom, instances, defs) => {
   return tree
 }
 
+const compileStyle = (view, htmlPage) => {
+  //breakpoints.forEach(({ name: mutation }) => {
+  const mutation = "lg"
+  const source = path.resolve(PATH_VIEWS_SRC, view, `${view}-${mutation}${EXT_CSS}`)
+
+  if (fs.existsSync(source)) {
+    const stylesContent = fs.readFileSync(source).toString()
+    const htmlWithStyles = htmlPage
+      .split("</style>")
+      .map((htmlPart, i) => (i === 0 ? `${htmlPart} ${stylesContent}</style>` : htmlPart))
+      .join("")
+    return htmlWithStyles
+  } else {
+    return undefined
+  }
+  // })
+}
+
 // -------------------------------------------
 
 msgStepEofol("Starting Eofol3 static compilation...")
@@ -144,70 +168,84 @@ views.forEach((view) => {
       die(`Cannot open source file: ${sourcePath}`, ex)
     }
 
-    return minify(sourceHTML.toString(), minifyHTMLOptions)
-      .then((res) => {
-        return HTMLToJSON(res.toString(), false)
-      })
-      .then((res) => {
-        if (isVerbose) {
-          msgStepParser("Parse successful")
-        }
-        return res
-      })
-      .catch((ex) => {
-        die("Parse error", ex)
-      })
-      .then((res) => {
-        transverseTree(res, vdom, eofolInstances, eofolDefs)
-        return res
-      })
-      .then((res) => {
-        return JSONToHTML(res)
-      })
-      .then((res) => {
-        return minify(res, minifyOptions)
-      })
-      .catch((ex) => {
-        die("Minify error", ex)
-      })
-      .then((res) => {
-        if (isVerbose) {
-          msgStepMinifier("Minified successfully")
-        }
-        return res
-      })
-      .then((res) => {
-        const options = {
-          format: "text",
-          data: res,
-        }
-
-        try {
-          validator(options)
+    return (
+      minify(sourceHTML.toString(), minifyHTMLOptions)
+        .then((res) => {
+          return HTMLToJSON(res.toString(), false)
+        })
+        .then((res) => {
           if (isVerbose) {
-            msgStepValidator("Valid HTML")
+            msgStepParser("Parse successful")
           }
-        } catch (ex) {
-          die("Invalid HTML", ex)
-        }
-
+          return res
+        })
+        .catch((ex) => {
+          die("Parse error", ex)
+        })
+        .then((res) => {
+          transverseTree(res, vdom, eofolInstances, eofolDefs)
+          return res
+        })
+        .then((res) => {
+          return JSONToHTML(res)
+        })
+        /*
+      .then((res) => {
         return res
+          .toString()
+          .split("</head>")
+          .map((part, i) => (i === 0 ? `${part}<style></style></head>` : part))
+          .join("")
       })
-      .then((res) => {
-        return HTML_DOCTYPE_TAG + res
-      })
-      .then((res) => {
-        const targetPath = path.resolve(PATH_DERIVED, source)
-        checkExistsCreate(PATH_DERIVED)
-        const targetDir = removeFilePart(targetPath)
-        checkExistsCreate(targetDir)
-        fs.writeFileSync(targetPath, res)
-        const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
-        checkExistsCreate(internalDir)
-        writeInternal(vdom, eofolInstances, internalDir, path.parse(source).name)
-        msgStepEofol(`[${i + 1}/${sources.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
-        i += 1
-      })
+      */
+        .then((res) => {
+          return compileStyle(view, res)
+        })
+        .then((res) => {
+          return minify(res, minifyOptions)
+        })
+        .catch((ex) => {
+          die("Minify error", ex)
+        })
+        .then((res) => {
+          if (isVerbose) {
+            msgStepMinifier("Minified successfully")
+          }
+          return res
+        })
+        .then((res) => {
+          const options = {
+            format: "text",
+            data: res,
+          }
+
+          try {
+            validator(options)
+            if (isVerbose) {
+              msgStepValidator("Valid HTML")
+            }
+          } catch (ex) {
+            die("Invalid HTML", ex)
+          }
+
+          return res
+        })
+        .then((res) => {
+          return HTML_DOCTYPE_TAG + res
+        })
+        .then((res) => {
+          const targetPath = path.resolve(PATH_DERIVED, source)
+          checkExistsCreate(PATH_DERIVED)
+          const targetDir = removeFilePart(targetPath)
+          checkExistsCreate(targetDir)
+          fs.writeFileSync(targetPath, res)
+          const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
+          checkExistsCreate(internalDir)
+          writeInternal(vdom, eofolInstances, internalDir, path.parse(source).name)
+          msgStepEofol(`[${i + 1}/${sources.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
+          i += 1
+        })
+    )
   })
 
   Promise.all(resultPromise).then(() => {

@@ -12,7 +12,6 @@ const {
 } = require("../constants/paths")
 const { checkExistsCreate } = require("../util/fs")
 const compileScript = require("../compiler/script")
-const compileStyle = require("../compiler/style")
 const copyPublicDir = require("../compiler/public")
 const { EXT_HTML, EXT_GZIP } = require("../constants/common")
 
@@ -36,7 +35,6 @@ checkExistsCreate(PATH_BUILD_INTERNAL)
 const sourceViews = fs.readdirSync(PATH_VIEWS_DIST)
 
 sourceViews.forEach((view, i) => compileScript(view))
-sourceViews.forEach((view, i) => compileStyle(view))
 
 copyPublicDir()
 
