@@ -31,17 +31,18 @@ const views = fs.readdirSync(PATH_VIEWS_DIST)
 
 checkExistsCreate(PATH_DERIVED)
 
-views.forEach((view) => {
+let i = 0
+
+const resultPromise = views.map((view) => {
   const eofolDefsJS = require(path.resolve(PATH_VIEWS_DIST, view, view + EXT_JS))
   const eofolDefs = Object.keys(eofolDefsJS).map((eofolDefJS) => eofolDefsJS[eofolDefJS])
 
-  const sources = fs
+  const source = fs
     .readdirSync(PATH_PUBLIC, { recursive: true })
     .filter((sourceFilename) => sourceFilename.endsWith(EXT_HTML))
+    .find((filename) => filename.replace(".html", "") === view)
 
-  let i = 0
-
-  const resultPromise = sources.map(async (source) => {
+  return new Promise(() => {
     const eofolInstances = []
     const vdom = []
 
@@ -56,29 +57,31 @@ views.forEach((view) => {
       die(`Cannot open source file: ${sourcePath}`, ex)
     }
 
-    return minifyPre(sourceHTML.toString())
-      .then(parseHTMLToJSON)
-      .then(traverseTreeAsync(vdom, eofolInstances, eofolDefs))
-      .then(JSONToHTML)
-      .then(compileStyle(view))
-      .then(minifyPost)
-      .then(validate)
-      .then(append)
-      .then((res) => {
-        const targetPath = path.resolve(PATH_DERIVED, source)
-        const targetDir = removeFilePart(targetPath)
-        checkExistsCreate(targetDir)
-        fs.writeFileSync(targetPath, res)
-        const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
-        checkExistsCreate(internalDir)
-        writeInternal(vdom, eofolInstances, internalDir, path.parse(source).name)
-        msgStepEofol(`[${i + 1}/${sources.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
-        i += 1
-        return res
-      })
+    return new Promise(() =>
+      minifyPre(sourceHTML.toString())
+        .then(parseHTMLToJSON)
+        .then(traverseTreeAsync(vdom, eofolInstances, eofolDefs))
+        .then(JSONToHTML)
+        .then(compileStyle(view))
+        .then(minifyPost)
+        .then(validate)
+        .then(append)
+        .then((res) => {
+          const targetPath = path.resolve(PATH_DERIVED, source)
+          const targetDir = removeFilePart(targetPath)
+          checkExistsCreate(targetDir)
+          fs.writeFileSync(targetPath, res)
+          const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
+          checkExistsCreate(internalDir)
+          writeInternal(vdom, eofolInstances, internalDir, path.parse(source).name)
+          msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
+          i += 1
+          return res
+        }),
+    )
   })
+})
 
-  Promise.all(resultPromise).then(() => {
-    msgStepEofolSuccess(`Compiled successfully at ${PATH_DERIVED} in ${prettyTime(new Date() - timeStart)}.`)
-  })
+Promise.all(resultPromise).then(() => {
+  msgStepEofolSuccess(`Compiled successfully at ${PATH_DERIVED} in ${prettyTime(new Date() - timeStart)}.`)
 })
