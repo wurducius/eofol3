@@ -32,4 +32,7 @@ const minifyOptions = {
   sortAttributes: true,
   sortClassName: true,
 }
-module.exports = { config, isVerbose, minifyOptions }
+
+const minifyHTMLOptions = { removeComments: true }
+
+module.exports = { config, isVerbose, minifyOptions, minifyHTMLOptions }

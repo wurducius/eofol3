@@ -3,7 +3,7 @@ const path = require("path")
 const { FILENAME_SUFFIX_EOFOL_INTERNALS } = require("../constants/paths")
 const { config } = require("../constants/compile")
 
-const writeInternal = (vdom, eofolInstances, internalDir, viewName) => {
+const compileInternalImpl = (vdom, eofolInstances, internalDir, viewName) => {
   // @TODO path relative to view dir location
   const targetPath = path.resolve(internalDir, `${viewName}${FILENAME_SUFFIX_EOFOL_INTERNALS}`)
   const contentObj = { vdom: vdom[0], instances: eofolInstances }
@@ -11,4 +11,4 @@ const writeInternal = (vdom, eofolInstances, internalDir, viewName) => {
   fs.writeFileSync(targetPath, content)
 }
 
-module.exports = writeInternal
+module.exports = compileInternalImpl
