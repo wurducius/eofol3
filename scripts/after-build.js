@@ -1,6 +1,6 @@
-const { PATH_BUILD } = require("../constants")
-const { copyPublicDir, touchBuildDirs, compileScripts, copyPages, copyInternal } = require("../compiler")
-const { prettySize, getDirSize, success } = require("../dev-util")
+const { PATH_BUILD } = require("../eofol/constants")
+const { copyPublicDir, touchBuildDirs, compileScripts, copyPages, copyInternal } = require("../eofol/compiler")
+const { prettySize, getDirSize, success } = require("../eofol/dev-util")
 
 touchBuildDirs()
 

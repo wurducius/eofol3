@@ -1,4 +1,4 @@
-const { primary } = require("../dev-util")
+const { primary } = require("../eofol/dev-util")
 
 console.log(primary("Starting the development server..."))
 

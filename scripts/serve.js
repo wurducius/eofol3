@@ -1,5 +1,5 @@
 const fs = require("fs")
-const { spawn, primary, error } = require("../dev-util")
+const { spawn, primary, error } = require("../eofol/dev-util")
 const { BUILD_PATH } = require("../config/paths")
 const { PORT } = require("../config/env")
 

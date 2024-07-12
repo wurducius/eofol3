@@ -11,11 +11,15 @@ const {
   EXT_PNG,
 } = require("../constants")
 const compileImg = require("./img")
-const { breakpoints } = require("../eofol-config")
-const { PATH_DERIVED, PATH_DERIVED_INTERNAL, PATH_BUILD_INTERNAL } = require("../constants/paths")
-const { COMPRESS_GZIP_BUILD_FILES } = require("../constants/after-build")
+const { breakpoints } = require("../../eofol-config")
+const {
+  PATH_DERIVED,
+  PATH_DERIVED_INTERNAL,
+  PATH_BUILD_INTERNAL,
+  EXT_GZIP,
+  COMPRESS_GZIP_BUILD_FILES,
+} = require("../constants")
 const gzip = require("./gzip")
-const { EXT_GZIP } = require("../constants/common")
 
 const copyPublicDir = () => {
   fs.readdirSync(PATH_PUBLIC, {

@@ -1,8 +1,8 @@
 const fs = require("fs")
 const path = require("path")
 
-const { PATH_VIEWS_DIST, PATH_DIST, DIRNAME_EOFOL_INTERNAL, EXT_JS } = require("../constants")
-const { precompile } = require("../compiler")
+const { PATH_VIEWS_DIST, PATH_DIST, DIRNAME_EOFOL_INTERNAL, EXT_JS } = require("../eofol/constants")
+const { precompile } = require("../eofol/compiler")
 
 // ---------------------------------------------
 // 1. Transforms script from ES module into CommonJS

@@ -3,7 +3,7 @@ const { HTMLToJSON } = require("html-to-json-parser")
 const { isVerbose } = require("../constants")
 const { die } = require("../util")
 const { msgStepParser } = require("./log")
-const htmlTemplate = require("../api/head")
+const htmlTemplate = require("../api/head/head")
 
 const parseHTMLToJSON = (view) => (res) =>
   HTMLToJSON(res.toString(), false)

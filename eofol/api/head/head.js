@@ -1,7 +1,7 @@
 const { readFileSync } = require("fs")
 const { resolve } = require("path")
 
-const { PATH_CWD } = require("../constants")
+const { PATH_CWD } = require("../../constants")
 
 const data = {
   title: "Eofol3 app",
@@ -21,7 +21,7 @@ const data = {
     '@font-face { font-family: "Roboto"; font-style: normal; font-weight: 400; font-display: swap; src: url(./fonts/Roboto-Regular.ttf) format("truetype"); }',
 }
 
-const baseStyle = readFileSync(resolve(PATH_CWD, "api", "base.css")).toString()
+const baseStyle = readFileSync(resolve(PATH_CWD, "eofol", "api", "head", "base.css")).toString()
 
 const htmlElement = (tagname, content, attributes) => ({
   type: tagname,

@@ -1,9 +1,9 @@
 const fs = require("fs")
 const path = require("path")
 
-const { prettyTime } = require("../dev-util")
-const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST, EXT_HTML } = require("../constants")
-const { checkExistsCreate, die } = require("../util")
+const { prettyTime } = require("../eofol/dev-util")
+const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST, EXT_HTML } = require("../eofol/constants")
+const { checkExistsCreate, die } = require("../eofol/util")
 const {
   compileStyle,
   minifyPre,
@@ -16,8 +16,8 @@ const {
   parseJSONToHTML,
   importViewEofolDefs,
   writeView,
-} = require("../compiler")
-const transverseTree = require("../transverseTree/transverseTree")
+} = require("../eofol/compiler")
+const transverseTree = require("../eofol/transverseTree/transverseTree")
 
 msgStepEofol("Starting Eofol3 static compilation...")
 
