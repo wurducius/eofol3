@@ -1,4 +1,4 @@
-const { success, primary } = require("@eofol/eofol-dev-utils")
+const { success, primary } = require("../dev-util")
 
 const MSG_EOFOL = ""
 const MSG_HTML_PARSER = "HTML Parser"

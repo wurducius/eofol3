@@ -1,6 +1,8 @@
 const { readFileSync } = require("fs")
 const { resolve } = require("path")
-const { PATH_CWD } = require("../constants/paths")
+
+const { PATH_CWD } = require("../constants")
+
 const data = {
   title: "Eofol3 app",
   themeColor: "#000000",

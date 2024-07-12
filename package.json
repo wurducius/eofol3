@@ -5,14 +5,14 @@
   "scripts": {
     "start": "npm run clean && npm run precompile && npm run start",
     "eserve": "npm run clean && npm run precompile && npm run postcompile && npm run serve",
-    "serve": "node ./bin/eofol-scripts.js serve",
+    "serve": "node ./scripts/serve.js",
     "build": "npm run clean && npm run precompile && npm run postcompile",
     "clean": "node scripts/clean.js",
     "compile-ts": "tsc -p ./tsconfig.json",
-    "compile-after-ts": "node ./scripts/before-compile.js",
+    "compile-before-build": "node ./scripts/before-compile.js",
     "compile-static": "node ./scripts/compile.js",
     "compile-after-build": "node ./scripts/after-build.js",
-    "precompile": "npm run compile-ts && npm run compile-after-ts",
+    "precompile": "npm run compile-ts && npm run compile-before-build",
     "postcompile": "npm run compile-static && npm run compile-after-build",
     "prettify": "npx prettier --config ./.prettierrc . --write",
     "check": "npx eslint -c ./eslint.config.js .",
@@ -29,7 +29,8 @@
     "@babel/plugin-transform-object-rest-spread": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
-    "@eofol/eofol-dev-utils": "^0.2.26",
+    "chalk": "2.4.2",
+    "cross-spawn": "^7.0.3",
     "eslint": "^9.6.0",
     "gzip-js": "^0.3.2",
     "html-minifier-terser": "^7.2.0",
@@ -54,7 +55,6 @@
   "bugs": "https://github.com/wurducius/eofol/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wurducius/eofol.git",
-    "directory": "packages/eofol-app"
+    "url": "git+https://github.com/wurducius/eofol3.git"
   }
 }

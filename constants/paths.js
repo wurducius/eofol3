@@ -1,5 +1,6 @@
 const fs = require("fs")
 const path = require("path")
+const { resolve } = require("path")
 
 const DIRNAME_DIST = "dist"
 const DIRNAME_DERIVED = "derived"
@@ -29,6 +30,8 @@ const PATH_ASSETS_CSS = path.resolve(PATH_ASSETS, DIRNAME_ASSET_CSS)
 const PATH_ASSETS_FONTS = path.resolve(PATH_BUILD, DIRNAME_ASSET_FONT)
 const PATH_EOFOL_INTERNAL = path.resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
 const PATH_PUBLIC = path.resolve(PATH_CWD, DIRNAME_PUBLIC)
+const PATH_DERIVED_INTERNAL = resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
+const PATH_BUILD_INTERNAL = resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
 
 module.exports = {
   PATH_CWD,
@@ -46,4 +49,7 @@ module.exports = {
   FILENAME_SUFFIX_EOFOL_INTERNALS,
   FILENAME_FAVICON,
   DIRNAME_EOFOL_INTERNAL,
+  PATH_DERIVED_INTERNAL,
+  PATH_BUILD_INTERNAL,
+  PATH_ASSETS,
 }

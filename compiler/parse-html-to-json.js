@@ -1,7 +1,7 @@
 const { HTMLToJSON } = require("html-to-json-parser")
 
-const { isVerbose } = require("../constants/compile")
-const { die } = require("../util/common")
+const { isVerbose } = require("../constants")
+const { die } = require("../util")
 const { msgStepParser } = require("./log")
 const htmlTemplate = require("../api/head")
 
