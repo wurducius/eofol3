@@ -1,3 +1,6 @@
+const fs = require("fs")
+const path = require("path")
+
 const {
   BUILD_PATH,
   PUBLIC_PATH,
@@ -11,7 +14,7 @@ const {
   VIEWS_PATH,
 } = require("./env")
 
-const { resolve } = require("@eofol/eofol-dev-utils")
+const resolve = (relativePath) => path.resolve(fs.realpathSync(process.cwd()), relativePath)
 
 module.exports = {
   BUILD_PATH: resolve(BUILD_PATH),

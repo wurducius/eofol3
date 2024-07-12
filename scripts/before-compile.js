@@ -1,8 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-const { PATH_VIEWS_DIST, PATH_DIST, DIRNAME_EOFOL_INTERNAL } = require("../constants/paths")
-const { EXT_JS } = require("../constants/common")
+const { PATH_VIEWS_DIST, PATH_DIST, DIRNAME_EOFOL_INTERNAL, EXT_JS } = require("../constants")
 
 const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split("module.exports")[0]
 

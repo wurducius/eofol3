@@ -2,7 +2,7 @@
 
 "use strict"
 
-const { spawn } = require("@eofol/eofol-dev-utils")
+const { spawn } = require("../dev-util")
 
 process.on("unhandledRejection", (err) => {
   throw err

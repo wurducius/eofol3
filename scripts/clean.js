@@ -1,6 +1,6 @@
 const fs = require("fs")
 
-const { PATH_DERIVED, PATH_BUILD, PATH_DIST } = require("../constants/paths")
+const { PATH_DERIVED, PATH_BUILD, PATH_DIST } = require("../constants")
 
 const cleanDir = (target) => {
   if (fs.existsSync(target)) {
