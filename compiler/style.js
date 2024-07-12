@@ -1,8 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-const { PATH_VIEWS_SRC } = require("../constants/paths")
-const { EXT_CSS } = require("../constants/common")
+const { PATH_VIEWS_SRC, EXT_CSS } = require("../constants")
 
 const compileStyle = (view) => (htmlPage) => {
   //breakpoints.forEach(({ name: mutation }) => {
@@ -18,7 +17,6 @@ const compileStyle = (view) => (htmlPage) => {
   } else {
     return undefined
   }
-  // })
 }
 
 module.exports = compileStyle

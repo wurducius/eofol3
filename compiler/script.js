@@ -1,3 +1,12 @@
+const fs = require("fs")
+const path = require("path")
+
+const { pipe } = require("../util")
+const { PATH_VIEWS_DIST, EXT_JS, PATH_ASSETS_JS, COMPRESS_GZIP_BUILD_FILES, EXT_GZIP } = require("../constants")
+const babelize = require("./babelize")
+const gzip = require("./gzip")
+const uglify = require("./uglify")
+
 const CODE_MODULE_EXPORTS = "module.exports"
 const CODE_EXPORT_SUFFIX = "};"
 
@@ -41,4 +50,17 @@ const compileScript = (scriptContent) => {
   return rest.toString()
 }
 
-module.exports = compileScript
+const compileScripts = () => {
+  fs.readdirSync(PATH_VIEWS_DIST).forEach((view) => {
+    const source = path.resolve(PATH_VIEWS_DIST, view, `${view}${EXT_JS}`)
+    const target = path.resolve(PATH_ASSETS_JS, `${view}${EXT_JS}`)
+
+    fs.writeFileSync(target, pipe(compileScript, babelize, uglify)(fs.readFileSync(source).toString()))
+
+    if (COMPRESS_GZIP_BUILD_FILES) {
+      gzip(target, `${target}${EXT_GZIP}`, view)
+    }
+  })
+}
+
+module.exports = compileScripts

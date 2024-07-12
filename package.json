@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run clean && npm run precompile && npm run start",
     "eserve": "npm run clean && npm run precompile && npm run postcompile && npm run serve",
-    "serve": "node ./bin/eofol-scripts.js serve",
+    "serve": "node ./scripts/serve.js",
     "build": "npm run clean && npm run precompile && npm run postcompile",
     "clean": "node scripts/clean.js",
     "compile-ts": "tsc -p ./tsconfig.json",

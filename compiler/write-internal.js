@@ -1,7 +1,7 @@
 const fs = require("fs")
 const path = require("path")
-const { FILENAME_SUFFIX_EOFOL_INTERNALS } = require("../constants/paths")
-const { config } = require("../constants/compile")
+
+const { FILENAME_SUFFIX_EOFOL_INTERNALS, config } = require("../constants")
 
 const compileInternalImpl = (vdom, eofolInstances, internalDir, viewName) => {
   // @TODO path relative to view dir location

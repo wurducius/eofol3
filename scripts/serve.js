@@ -1,9 +1,7 @@
 const fs = require("fs")
 const { spawn, primary, error } = require("../dev-util")
-const {
-  env: { PORT },
-  paths: { BUILD_PATH },
-} = require("../config")
+const { BUILD_PATH } = require("../config/paths")
+const { PORT } = require("../config/env")
 
 const SERVE_CACHE_TTL_MS = 31536000000
 

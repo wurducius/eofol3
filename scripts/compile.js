@@ -1,32 +1,23 @@
 const fs = require("fs")
 const path = require("path")
 
-const { JSONToHTML } = require("html-to-json-parser")
-
 const { prettyTime } = require("../dev-util")
+const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST, EXT_HTML } = require("../constants")
+const { checkExistsCreate, die } = require("../util")
 const {
-  config,
-  isVerbose,
-  PATH_DERIVED,
-  PATH_PUBLIC,
-  PATH_VIEWS_DIST,
-  DIRNAME_EOFOL_INTERNAL,
-  EXT_HTML,
-  EXT_JS,
-} = require("../constants")
-const { checkExistsCreate, removeFilePart, die } = require("../util")
-const {
-  writeInternal,
   compileStyle,
   minifyPre,
   minifyPost,
   parseHTMLToJSON,
-  validate,
-  transverseTree,
-  append,
   msgStepEofol,
   msgStepEofolSuccess,
+  validateHTML,
+  appendDoctype,
+  parseJSONToHTML,
+  importViewEofolDefs,
+  writeView,
 } = require("../compiler")
+const transverseTree = require("../transverseTree/transverseTree")
 
 msgStepEofol("Starting Eofol3 static compilation...")
 
@@ -36,15 +27,14 @@ if (isVerbose) {
 
 const timeStart = new Date()
 
-const views = fs.readdirSync(PATH_VIEWS_DIST)
-
 checkExistsCreate(PATH_DERIVED)
+
+const views = fs.readdirSync(PATH_VIEWS_DIST)
 
 let i = 0
 
 const resultPromise = views.map((view) => {
-  const eofolDefsJS = require(path.resolve(PATH_VIEWS_DIST, view, view + EXT_JS))
-  const eofolDefs = Object.keys(eofolDefsJS).map((eofolDefJS) => eofolDefsJS[eofolDefJS])
+  const defs = importViewEofolDefs(view)
 
   const source = fs
     .readdirSync(PATH_PUBLIC, { recursive: true })
@@ -52,7 +42,7 @@ const resultPromise = views.map((view) => {
     .find((filename) => filename.replace(".html", "") === view)
 
   return new Promise(() => {
-    const eofolInstances = []
+    const instances = []
     const vdom = []
 
     const sourcePath = path.resolve(PATH_PUBLIC, source)
@@ -69,23 +59,16 @@ const resultPromise = views.map((view) => {
     return new Promise(() =>
       minifyPre(sourceHTML.toString())
         .then(parseHTMLToJSON(view))
-        .then(transverseTree(vdom, eofolInstances, eofolDefs))
-        .then(JSONToHTML)
+        .then(transverseTree(vdom, instances, defs))
+        .then(parseJSONToHTML)
         .then(compileStyle(view))
         .then(minifyPost)
-        .then(validate)
-        .then(append)
+        .then(validateHTML)
+        .then(appendDoctype)
         .then((res) => {
-          const targetPath = path.resolve(PATH_DERIVED, source)
-          const targetDir = removeFilePart(targetPath)
-          checkExistsCreate(targetDir)
-          fs.writeFileSync(targetPath, res)
-          const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
-          checkExistsCreate(internalDir)
-          writeInternal(vdom, eofolInstances, internalDir, path.parse(source).name)
+          writeView(source, res, vdom, instances)
           msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
           i += 1
-          return res
         }),
     )
   })

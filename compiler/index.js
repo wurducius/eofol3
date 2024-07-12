@@ -1,29 +1,40 @@
-const append = require("./append")
+const appendDoctype = require("./append-doctype")
 const babelize = require("./babelize")
-const gzip = require("./gzip")
 const compileImg = require("./img")
-const writeInternal = require("./internal")
+const compileScripts = require("./script")
+const compileStyle = require("./style")
+const gzip = require("./gzip")
+const importViewEofolDefs = require("./import-defs")
+const parseHTMLToJSON = require("./parse-html-to-json")
+const parseJSONToHTML = require("./parse-json-to-html")
+const precompile = require("./precompile")
+const touchBuildDirs = require("./touch-build-dirs")
+const uglify = require("./uglify")
+const validateHTML = require("./validate-html")
+const writeInternal = require("./write-internal")
+const writeView = require("./write-view")
+
+const Copy = require("./copy")
 const Log = require("./log")
 const Minify = require("./minify")
-const parseHTMLToJSON = require("./parse")
-const copyPublicDir = require("./public")
-const compileScript = require("./script")
-const compileStyle = require("./style")
-const transverseTree = require("./traverse-tree")
-const validate = require("./validate")
 
 module.exports = {
-  append,
+  appendDoctype,
   babelize,
-  gzip,
   compileImg,
+  compileScripts,
+  compileStyle,
+  gzip,
+  importViewEofolDefs,
+  parseHTMLToJSON,
+  parseJSONToHTML,
+  precompile,
+  touchBuildDirs,
+  uglify,
+  validateHTML,
   writeInternal,
+  writeView,
+  ...Copy,
   ...Log,
   ...Minify,
-  parseHTMLToJSON,
-  copyPublicDir,
-  compileScript,
-  compileStyle,
-  transverseTree,
-  validate,
 }

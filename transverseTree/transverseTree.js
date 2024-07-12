@@ -75,4 +75,5 @@ const traverseTreeAsync = (vdom, eofolInstances, eofolDefs) => (res) => {
   transverseTree(res, vdom, eofolInstances, eofolDefs)
   return res
 }
+
 module.exports = traverseTreeAsync

@@ -1,7 +1,7 @@
 const fs = require("fs")
 
 const gzip = require("gzip-js")
-const { COMPRESS_GZIP_LEVEL } = require("../constants/after-build")
+const { COMPRESS_GZIP_LEVEL } = require("../constants")
 
 const gzipOptions = {
   level: COMPRESS_GZIP_LEVEL,
