@@ -7,7 +7,7 @@ const {
   renderEofolCustomElement,
   renderEofolFlatElement,
   renderEofolStaticElement,
-} = require("../../dist/eofol/core")
+} = require("../../dist2/eofol/core")
 
 const pushElement = (delta) => (rendered, index) => {
   delta.push({

@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 
 const { prettyTime } = require("../eofol/dev-util")
-const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST, EXT_HTML } = require("../eofol/constants")
+const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST2, EXT_HTML } = require("../eofol/constants")
 const { checkExistsCreate, die } = require("../eofol/util")
 const {
   compileStyle,
@@ -29,7 +29,7 @@ const timeStart = new Date()
 
 checkExistsCreate(PATH_DERIVED)
 
-const views = fs.readdirSync(PATH_VIEWS_DIST)
+const views = fs.readdirSync(PATH_VIEWS_DIST2)
 
 let i = 0
 

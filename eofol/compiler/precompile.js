@@ -42,12 +42,12 @@ const resolveImports = (sourcePath, content, importedScripts) => {
     .join("")
 }
 
-const precompile = (source, suffixPath) => {
+const precompile = (source, suffixPath, target) => {
   const content = fs.readFileSync(source)
   const exportsReplaced = fixExports(content)
   const importedScripts = []
   const importsResolved = resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
-  fs.writeFileSync(source, fixExports(importsResolved))
+  fs.writeFileSync(target, fixExports(importsResolved))
 }
 
 module.exports = precompile
