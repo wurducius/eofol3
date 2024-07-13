@@ -1,3 +1,8 @@
-const { build } = require("./impl")
+const build = require("./impl/build")
+const { logBuildSuccess } = require("./impl")
 
-build()
+const timeStart = new Date()
+
+build().then(() => {
+  logBuildSuccess(timeStart)
+})

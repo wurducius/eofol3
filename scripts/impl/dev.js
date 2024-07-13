@@ -14,7 +14,8 @@ const watchpackOptions = {
   ignored: "**/.git",
 }
 
-const listOfDirectories = ["src", "public"]
+// @TODO extract dirnames from env
+const listOfDirectories = ["src", "pages", "static"]
 
 const recompile = async () => {
   console.log(primary("Recompiling..."))

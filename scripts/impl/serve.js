@@ -1,8 +1,10 @@
+const { success } = require("../../eofol/dev-util")
 const { env, paths } = require("../../config")
-const { PORT, HTTPS, BROWSER, HOST } = env
+const { PORT, HTTPS, HOST } = env
 const { BUILD_PATH } = paths
 
 const liveServer = require("live-server")
+const { SERVE_URL } = require("../../config/env-impl")
 
 // const SERVE_CACHE_TTL_MS = 31536000000
 
@@ -13,13 +15,14 @@ const CORS = true
 const serveOptions = {
   port: PORT,
   host: HOST,
-  root: BUILD_PATH,
+  browser: undefined,
+  https: undefined,
   open: true,
+  root: BUILD_PATH,
   file: "index.html",
   wait: SERVE_RELOAD_WAIT_TIME_MS,
   logLevel: 0,
   cors: CORS,
-  https: HTTPS === "https",
   middleware: [
     (req, res, next) => {
       next()
@@ -28,6 +31,7 @@ const serveOptions = {
 }
 
 const serve = () => {
+  console.log(success(`Serving Eofol3 app now at ${SERVE_URL}.`))
   liveServer.start(serveOptions)
 }
 

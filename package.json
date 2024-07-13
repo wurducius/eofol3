@@ -43,9 +43,13 @@
     "uglify-js": "^3.18.0"
   },
   "files": [
-    "public",
+    "eofol",
+    "static",
+    "pages",
     "src",
+    "scripts",
     ".env",
+    "eofol-config.js",
     "eofol-app.d.ts",
     "README.md",
     "tsconfig.json"
