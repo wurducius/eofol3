@@ -1,13 +1,3 @@
-const fs = require("fs")
+const { clean } = require("./impl")
 
-const { PATH_DERIVED, PATH_BUILD, PATH_DIST } = require("../constants")
-
-const cleanDir = (target) => {
-  if (fs.existsSync(target)) {
-    fs.rmSync(target, { recursive: true })
-  }
-}
-
-cleanDir(PATH_DIST)
-cleanDir(PATH_DERIVED)
-cleanDir(PATH_BUILD)
+clean()

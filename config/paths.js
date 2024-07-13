@@ -12,7 +12,7 @@ const {
   ASSETS_SVG_PATH,
   ASSETS_FONT_PATH,
   VIEWS_PATH,
-} = require("./env")
+} = require("./env-impl")
 
 const resolve = (relativePath) => path.resolve(fs.realpathSync(process.cwd()), relativePath)
 

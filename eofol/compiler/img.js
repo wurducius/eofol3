@@ -1,7 +1,7 @@
 const sharp = require("sharp")
 
-const { breakpoints } = require("../eofol-config")
-const { IMG_BASE_LOGO_WIDTH, PATH_BUILD, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
+const { breakpoints } = require("../../eofol-config")
+const { IMG_BASE_LOGO_WIDTH, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
 
 const processImage = (format) => (imagePath, content, handler) =>
   Promise.all(
