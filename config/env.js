@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const { defaultEnv } = require("../config")
+const defaultEnv = require("./default-env")
 
 function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min

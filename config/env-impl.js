@@ -1,4 +1,6 @@
-const { MODE, BROWSER, HTTPS, HOST, PORT, SHOW_PROGRESS, ANALYZE_BUNDLE, GENERATE_SOURCEMAP } = require("./env")
+const ENV = require("./env")
+
+const { MODE, BROWSER, HTTPS, HOST, PORT, SHOW_PROGRESS, ANALYZE_BUNDLE, GENERATE_SOURCEMAP } = ENV
 
 const isDev = MODE === "development"
 
@@ -20,6 +22,7 @@ const getBrowser = (property) => {
 }
 
 module.exports = {
+  ...ENV,
   MODE: isDev ? "development" : "production",
   BROWSER: getBrowser(BROWSER),
   HTTPS: protocol,

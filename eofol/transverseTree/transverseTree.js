@@ -1,13 +1,4 @@
-const {
-  getEofolComponentType,
-  validateEofolCustomElement,
-  isEofolCustomElement,
-  isEofolFlatElement,
-  isEofolStaticElement,
-  renderEofolCustomElement,
-  renderEofolFlatElement,
-  renderEofolStaticElement,
-} = require("../../dist2/eofol/core")
+const { PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE, DIRNAME_VIEWS } = require("../constants/paths")
 
 const pushElement = (delta) => (rendered, index) => {
   delta.push({
@@ -16,7 +7,31 @@ const pushElement = (delta) => (rendered, index) => {
   })
 }
 
+const invalidateRequireCache = () => {
+  for (let cached in require.cache) {
+    if (
+      cached.includes(PATH_DIST2) &&
+      ((cached.includes(DIRNAME_EOFOL_INTERNAL) && cached.includes(FILENAME_CORE)) || cached.includes(DIRNAME_VIEWS))
+    ) {
+      delete require.cache[cached]
+    }
+  }
+}
+
 const transverseTree = (tree, vdom, instances, defs) => {
+  invalidateRequireCache()
+
+  const {
+    getEofolComponentType,
+    validateEofolCustomElement,
+    isEofolCustomElement,
+    isEofolFlatElement,
+    isEofolStaticElement,
+    renderEofolCustomElement,
+    renderEofolFlatElement,
+    renderEofolStaticElement,
+  } = require("../../dist2/eofol/core")
+
   const isContentNode = tree.type === undefined
   if (isContentNode) {
     return

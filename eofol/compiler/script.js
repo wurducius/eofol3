@@ -55,7 +55,7 @@ const compileScripts = () => {
     const source = path.resolve(PATH_VIEWS_DIST2, view, `${view}${EXT_JS}`)
     const target = path.resolve(PATH_ASSETS_JS, `${view}${EXT_JS}`)
 
-    fs.writeFileSync(target, pipe(compileScript, babelize, uglify)(fs.readFileSync(source).toString()))
+    fs.writeFileSync(target, pipe(compileScript, babelize, uglify)(fs.readFileSync(source).toString()), {})
 
     if (COMPRESS_GZIP_BUILD_FILES) {
       gzip(target, `${target}${EXT_GZIP}`, view)
