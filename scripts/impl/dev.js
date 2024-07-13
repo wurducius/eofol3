@@ -8,7 +8,7 @@ const afterCompile = require("./after-compile")
 const cleanHot = require("./clean-hot")
 
 const watchpackOptions = {
-  aggregateTimeout: 500,
+  aggregateTimeout: 250,
   poll: true,
   followSymlinks: true,
   ignored: "**/.git",
@@ -63,8 +63,7 @@ const dev = () => {
   wp.on("change", handleChange)
   wp.on("remove", handleRemove)
 
-  const args = []
-  serve(true, args)
+  serve()
 
   // console.log(
   //        primary(`Serving eofol app ${appName} in ${MODE} mode at `) +
