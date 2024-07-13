@@ -2,14 +2,16 @@ const { PATH_BUILD } = require("../../eofol/constants")
 const { copyPublicDir, touchBuildDirs, compileScripts, copyPages, copyInternal } = require("../../eofol/compiler")
 const { prettySize, getDirSize, success } = require("../../eofol/dev-util")
 
-const afterCompile = () => {
-  touchBuildDirs()
+const afterCompile = (isHot) => {
+  if (!isHot) {
+    touchBuildDirs()
+  }
 
-  compileScripts()
+  compileScripts(isHot)
 
-  copyPublicDir()
-  copyPages()
-  copyInternal()
+  copyPublicDir(isHot)
+  copyPages(isHot)
+  copyInternal(isHot)
 
   // @TODO measure time delta since build start, probably have to extract to container script
   console.log(

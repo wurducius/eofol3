@@ -1,8 +1,10 @@
 const appendDoctype = require("./append-doctype")
 const babelize = require("./babelize")
+const checksum = require("./checksum")
 const compileImg = require("./img")
 const compileScripts = require("./script")
 const compileStyle = require("./style")
+const hotUpdate = require("./hot-update")
 const gzip = require("./gzip")
 const importViewEofolDefs = require("./import-defs")
 const parseHTMLToJSON = require("./parse-html-to-json")
@@ -21,10 +23,12 @@ const Minify = require("./minify")
 module.exports = {
   appendDoctype,
   babelize,
+  checksum,
   compileImg,
   compileScripts,
   compileStyle,
   gzip,
+  hotUpdate,
   importViewEofolDefs,
   parseHTMLToJSON,
   parseJSONToHTML,

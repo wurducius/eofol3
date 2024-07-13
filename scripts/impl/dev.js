@@ -23,18 +23,18 @@ const recompile = async () => {
   compileTs(args)
   beforeCompile()
   return await compile().then(() => {
-    afterCompile()
+    afterCompile(true)
     console.log(success("Recompiled!"))
   })
 }
 
 const handleChange = async (filePath, mtime, explanation) => {
-  console.log(`CHANGE -> ${filePath} @ ${mtime} -> explanation: ${explanation}`)
+  // console.log(`CHANGE -> ${filePath} @ ${mtime} -> explanation: ${explanation}`)
   await recompile()
 }
 
 const handleRemove = async (filePath, explanation) => {
-  console.log(`REMOVE -> ${filePath} -> explanation: ${explanation}`)
+  // console.log(`DELETED -> ${filePath} -> explanation: ${explanation}`)
   await recompile()
 }
 
@@ -66,29 +66,10 @@ const dev = () => {
   const args = []
   serve(true, args)
 
-  /*
-  wp.on("aggregated", function (changes, removals) {
-    // changes: a Set of all changed files
-    // removals: a Set of all removed files
-    // watchpack gives up ownership on these Sets.
-  })
-  */
-
-  /*
-    const {
-      envImpl: { MODE, SERVE_URL },
-    } = require("../config")
-
-     console.log(
-       primary(`Serving eofol app ${appName} in ${MODE} mode at `) +
-         success(SERVE_URL)
-     );
-
-    ;["SIGINT", "SIGTERM"].forEach(function (sig) {
-      process.on(sig, stopServer)
-    })
-
-    */
+  // console.log(
+  //        primary(`Serving eofol app ${appName} in ${MODE} mode at `) +
+  //          success(SERVE_URL)
+  //      );
 }
 
 module.exports = dev

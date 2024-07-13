@@ -20,8 +20,9 @@ const {
   COMPRESS_GZIP_BUILD_FILES,
 } = require("../constants")
 const gzip = require("./gzip")
+const hotUpdate = require("./hot-update")
 
-const copyPublicDir = () => {
+const copyPublicDir = (isHot) => {
   fs.readdirSync(PATH_PUBLIC, {
     recursive: true,
   })
@@ -31,8 +32,9 @@ const copyPublicDir = () => {
         return
       }
 
+      const source = path.resolve(PATH_PUBLIC, filename)
       const target = path.resolve(PATH_BUILD, filename)
-      const publicFileContent = fs.readFileSync(path.resolve(PATH_PUBLIC, filename))
+      const publicFileContent = fs.readFileSync(source)
 
       if (filename.includes(FILENAME_FAVICON)) {
         fs.writeFileSync(target, publicFileContent)
@@ -43,33 +45,36 @@ const copyPublicDir = () => {
         const processedImgs = await compileImg(filename, publicFileContent)
         processedImgs.forEach((processedImgContent, i) => {
           const filenameSplit = filename.split(".")
-          fs.writeFileSync(
-            path.resolve(PATH_BUILD, `${filenameSplit[0]}-${breakpoints[i].name}.${filenameSplit[1]}`),
-            processedImgContent,
-          )
+          const resultPath = path.resolve(PATH_BUILD, `${filenameSplit[0]}-${breakpoints[i].name}.${filenameSplit[1]}`)
+          hotUpdate(isHot, resultPath, source, processedImgContent)
         })
       } else {
-        fs.writeFileSync(target, publicFileContent)
+        hotUpdate(isHot, target, source, publicFileContent)
       }
     })
 }
 
-const copyPages = () => {
+const copyPages = (isHot) => {
   fs.readdirSync(PATH_DERIVED)
     .filter((filename) => filename.endsWith(EXT_HTML))
     .forEach((htmlFile) => {
-      const targetPath = path.resolve(PATH_BUILD, htmlFile)
-      fs.copyFileSync(path.resolve(PATH_DERIVED, htmlFile), targetPath)
-
-      if (COMPRESS_GZIP_BUILD_FILES) {
-        gzip(targetPath, `${targetPath}${EXT_GZIP}`, htmlFile)
-      }
+      const source = path.resolve(PATH_DERIVED, htmlFile)
+      const target = path.resolve(PATH_BUILD, htmlFile)
+      const content = fs.readFileSync(source).toString()
+      hotUpdate(isHot, target, source, content, () => {
+        if (COMPRESS_GZIP_BUILD_FILES) {
+          gzip(target, `${target}${EXT_GZIP}`, htmlFile)
+        }
+      })
     })
 }
 
-const copyInternal = () => {
+const copyInternal = (isHot) => {
   fs.readdirSync(PATH_DERIVED_INTERNAL).forEach((filename) => {
-    fs.copyFileSync(path.resolve(PATH_DERIVED_INTERNAL, filename), path.resolve(PATH_BUILD_INTERNAL, filename))
+    const source = path.resolve(PATH_DERIVED_INTERNAL, filename)
+    const target = path.resolve(PATH_BUILD_INTERNAL, filename)
+    const content = fs.readFileSync(source).toString()
+    hotUpdate(isHot, target, source, content)
   })
 }
 

@@ -23,7 +23,7 @@ const build = () => {
   return compile().then(() => {
     // 5. AFTER COMPILE
 
-    afterCompile()
+    afterCompile(false)
   })
 }
 
