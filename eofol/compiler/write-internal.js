@@ -1,14 +1,23 @@
 const fs = require("fs")
 const path = require("path")
 
-const { FILENAME_SUFFIX_EOFOL_INTERNALS, config } = require("../constants")
+const { PATH_VIEWS_DIST2, INTERNALS_VARIABLE_NAME, CODE_MODULE_EXPORTS } = require("../constants")
 
 const compileInternalImpl = (vdom, eofolInstances, internalDir, viewName) => {
   // @TODO path relative to view dir location
-  const targetPath = path.resolve(internalDir, `${viewName}${FILENAME_SUFFIX_EOFOL_INTERNALS}`)
   const contentObj = { vdom: vdom[0], instances: eofolInstances }
-  const content = JSON.stringify(contentObj, null, config.minifyRegistryJSON ? 0 : 2)
-  fs.writeFileSync(targetPath, content)
+  // @TODO remove double write
+  const targetPath = path.resolve(PATH_VIEWS_DIST2, viewName, `${viewName}.js`)
+  const prevContent = fs.readFileSync(targetPath).toString()
+  const parts = prevContent.split(CODE_MODULE_EXPORTS)
+  const result = parts
+    .map((part, i) =>
+      i === parts.length - 2
+        ? `${part}\n${INTERNALS_VARIABLE_NAME} = ${JSON.stringify(contentObj)}\nsetVdom(${INTERNALS_VARIABLE_NAME}.vdom)\nsetInstances(${INTERNALS_VARIABLE_NAME}.instances)`
+        : part,
+    )
+    .join(`\n${CODE_MODULE_EXPORTS} `)
+  fs.writeFileSync(targetPath, result, "utf8")
 }
 
 module.exports = compileInternalImpl

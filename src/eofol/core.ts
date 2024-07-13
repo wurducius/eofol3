@@ -61,6 +61,8 @@ const { SERVICE_WORKER_REGISTER_AT_INIT, SERVICE_WORKER_SCRIPT_FILENAME } = Eofo
 // @IMPORT("./eofol-config-runtime")
 // @IMPORT-END
 
+/*
+
 const initEofol = () => {
   const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
   const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
@@ -77,6 +79,8 @@ const initEofol = () => {
 }
 
 initEofol()
+
+*/
 
 if (SERVICE_WORKER_REGISTER_AT_INIT) {
   // @TODO allow relative path from view page

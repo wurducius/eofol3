@@ -2,14 +2,19 @@ const fs = require("fs")
 const path = require("path")
 
 const { pipe } = require("../util")
-const { PATH_VIEWS_DIST2, EXT_JS, PATH_ASSETS_JS, COMPRESS_GZIP_BUILD_FILES, EXT_GZIP } = require("../constants")
+const {
+  PATH_VIEWS_DIST2,
+  EXT_JS,
+  PATH_ASSETS_JS,
+  COMPRESS_GZIP_BUILD_FILES,
+  EXT_GZIP,
+  CODE_MODULE_EXPORTS,
+} = require("../constants")
 const babelize = require("./babelize")
 const gzip = require("./gzip")
 const uglify = require("./uglify")
-const checksum = require("./checksum")
 const hotUpdate = require("./hot-update")
 
-const CODE_MODULE_EXPORTS = "module.exports"
 const CODE_EXPORT_SUFFIX = "};"
 
 const extract = (s, prefix, suffix) => {

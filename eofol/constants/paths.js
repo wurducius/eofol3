@@ -16,7 +16,6 @@ const DIRNAME_ASSET_CSS = "css"
 const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
-const FILENAME_SUFFIX_EOFOL_INTERNALS = "-eofol-internals.json"
 const FILENAME_CORE = "core.js"
 
 const PATH_CWD = fs.realpathSync(process.cwd())
@@ -54,7 +53,6 @@ module.exports = {
   PATH_EOFOL_INTERNAL,
   PATH_STATIC,
   PATH_PAGES,
-  FILENAME_SUFFIX_EOFOL_INTERNALS,
   FILENAME_FAVICON,
   FILENAME_CORE,
   DIRNAME_EOFOL_INTERNAL,
