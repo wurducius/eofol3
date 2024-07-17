@@ -29,12 +29,14 @@ const recompile = async () => {
   })
 }
 
-const handleChange = async (filePath, mtime, explanation) => {
+const handleChange = async () => {
+  // (filePath, mtime, explanation)
   // console.log(`CHANGE -> ${filePath} @ ${mtime} -> explanation: ${explanation}`)
   await recompile()
 }
 
-const handleRemove = async (filePath, explanation) => {
+const handleRemove = async () => {
+  // (filePath, explanation)
   // console.log(`DELETED -> ${filePath} -> explanation: ${explanation}`)
   await recompile()
 }

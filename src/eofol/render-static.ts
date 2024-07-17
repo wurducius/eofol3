@@ -6,7 +6,7 @@ const { errorRuntime, generateId } = Util
 
 // @IMPORT-START
 import Common from "./common"
-const { getProps, findInstance } = Common
+const { getProps } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 

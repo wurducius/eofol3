@@ -13,7 +13,7 @@ const resolveImports = (sourcePath, content, importedScripts) => {
   return content
     .toString()
     .split(`${CODE_EOFOL_IMPORT_OPENING}-`)
-    .map((y, i) => {
+    .map((y) => {
       const yy = y.replaceAll("END", "")
 
       if (yy.includes(CODE_EOFOL_IMPORT_OPENING)) {

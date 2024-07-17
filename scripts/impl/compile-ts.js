@@ -4,7 +4,7 @@ const spawnOptions = {
   stdio: "inherit",
 }
 
-const compileTs = (args) => {
+const compileTs = () => {
   spawn.sync("tsc", ["--project", "./tsconfig.json"], spawnOptions)
 }
 

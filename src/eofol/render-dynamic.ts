@@ -1,13 +1,7 @@
 // @IMPORT-START
 import Common from "./common"
-const { findDef, findInstance, isBrowser } = Common
+const { findInstance } = Common
 // @IMPORT("./common")
-// @IMPORT-END
-
-// @IMPORT-START
-import EofolInternals from "./eofol-internals"
-const { getInstances } = EofolInternals
-// @IMPORT("./eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -18,7 +12,7 @@ const { errorRuntime } = Util
 
 // @IMPORT-START
 import Components from "./components"
-import { Def, Instance, Props } from "./types"
+import { Def, Props } from "./types"
 const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_TYPE_STATIC } = Components
 // @IMPORT("./components")
 // @IMPORT-END
@@ -35,7 +29,7 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
         thisInstance.state = nextState
         forceRerender()
       } else {
-        errorRuntime(`Couldn't find component instance for name: ${name}.`)
+        errorRuntime(`Couldn't find component instance for id: ${id}.`)
       }
     },
     props,
@@ -65,7 +59,7 @@ const renderDynamic = (type: string, def: Def, id: string | undefined, props: Pr
       return renderStaticDynamic(def)
     }
     default: {
-      errorRuntime(`Invalid Eofol component type: ${type} for component with name: ${name}.`)
+      errorRuntime(`Invalid Eofol component type: ${type} for component with name: ${def.name}.`)
       return undefined
     }
   }

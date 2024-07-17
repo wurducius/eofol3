@@ -12,13 +12,13 @@ const onclick = () => {
 }
 
 const onclickSerialized = onclick.toString()
-const incrementCount = (state: { count: number }, setState: (arg0: { count: any }) => void) => () => {
+const incrementCount = (state: { count: number }, setState: (nextState: { count: any }) => void) => () => {
   console.log("setState()")
   setState({ count: 1 })
   // console.log("setState - " + { count: state.count + 1 });
   // setState({ count: state.count + 1 });
 }
-const incrementCountSerialized = (state: { count: number }, setState: (arg0: { count: any }) => void) =>
+const incrementCountSerialized = (state: { count: number }, setState: (nextState: { count: any }) => void) =>
   incrementCount(state, setState).toString()
 
 export const component1 = defineCustomComponent({
@@ -26,7 +26,7 @@ export const component1 = defineCustomComponent({
   render: (state: any, setState: any, props: { param: string }) => {
     const button = createElement(
       "button",
-      `(${state.count}) - Component 1 - Force rerender - ` + props.param,
+      `(${state.count}) - Component 1 - Force rerender - ${props.param}`,
       undefined,
       undefined,
       {
@@ -68,7 +68,7 @@ export const flatComponent = defineFlatComponent({
       createElement("button", "FLAT HELLO WORLD!!!"),
       createElement("p", "OH YEAH"),
       createElement("static"),
-      "Flat component VARIANT = " + props.param,
+      `Flat component VARIANT = ${props.param}`,
     ]),
 })
 

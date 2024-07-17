@@ -1,6 +1,6 @@
 const { success } = require("../../eofol/dev-util")
 const { env, paths } = require("../../config")
-const { PORT, HTTPS, HOST } = env
+const { PORT, HOST } = env
 const { BUILD_PATH } = paths
 
 const liveServer = require("live-server")

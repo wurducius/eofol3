@@ -1,15 +1,6 @@
 const fs = require("fs")
 const path = require("path")
-const {
-  PATH_STATIC,
-  FILENAME_FAVICON,
-  PATH_BUILD,
-  EXT_HTML,
-  EXT_CSS,
-  EXT_JPG,
-  EXT_JPEG,
-  EXT_PNG,
-} = require("../constants")
+const { PATH_STATIC, FILENAME_FAVICON, PATH_BUILD, EXT_HTML, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
 const compileImg = require("./img")
 const { breakpoints } = require("../../eofol-config")
 const {

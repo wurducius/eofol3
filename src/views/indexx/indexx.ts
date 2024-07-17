@@ -16,7 +16,7 @@ const onclickSerialized = onclick.toString()
 export const component1 = defineCustomComponent({
   name: "component1",
   render: (state: any, setState: any, props: { param: string }) =>
-    createElement("button", "Component 1 - Force rerender - " + props.param, undefined, undefined, {
+    createElement("button", `Component 1 - Force rerender - ${props.param}`, undefined, undefined, {
       onclick: eval(onclickSerialized),
     }),
 })
@@ -44,7 +44,7 @@ export const flatComponent = defineFlatComponent({
       createElement("button", "FLAT HELLO WORLD!!!"),
       createElement("p", "OH YEAH"),
       createElement("static"),
-      "Flat component VARIANT = " + props.param,
+      `Flat component VARIANT = ${props.param}`,
     ]),
 })
 

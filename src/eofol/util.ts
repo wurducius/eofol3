@@ -1,7 +1,7 @@
 const generateString = (length: number) => () =>
   Array(length)
     .fill("")
-    .map((v) => Math.random().toString(36).charAt(2))
+    .map(() => Math.random().toString(36).charAt(2))
     .join("")
 const generateId = generateString(17)
 
