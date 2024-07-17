@@ -8,7 +8,7 @@ const { getInstances } = EofolInternals
 
 // @IMPORT-START
 import Util from "./util"
-const { errorRuntime } = Util
+const { errorElementNotFound } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
@@ -36,7 +36,7 @@ const forceRerender = () => {
       }
       target.innerHTML = renderEofolElement(name, props, id, def)
     } else {
-      errorRuntime(`Could't select DOM element with id = ${id} and name = ${name}.`)
+      errorElementNotFound(id, name)
     }
   })
 }

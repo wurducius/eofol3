@@ -2,14 +2,14 @@ import { Def, Props } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
-const { errorRuntime } = Util
+const { errorTypeUnknown, errorInstanceNotFound, errorDefNotFound } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Components from "./components"
-const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_TYPE_STATIC } = Components
-// @IMPORT("./components")
+import Constants from "./constants"
+const { COMPONENT_TYPE_CUSTOM, COMPONENT_TYPE_FLAT, COMPONENT_TYPE_STATIC } = Constants
+// @IMPORT("./constants")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -28,7 +28,7 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
   const stateImpl = getState(id)
   const instance = findInstance(id)
   if (!instance) {
-    console.log(`Couldn't find component instance for id: ${id}`)
+    errorInstanceNotFound(id)
     return ""
   }
   const setStateImpl = getSetState(id)
@@ -47,20 +47,20 @@ const renderStaticDynamic = (def: Def) => {
 
 const renderDynamic = (type: string, def: Def, id: string | undefined, props: Props | undefined) => {
   switch (type) {
-    case EOFOL_COMPONENT_TYPE_CUSTOM: {
+    case COMPONENT_TYPE_CUSTOM: {
       if (!id) {
         return undefined
       }
       return renderCustomDynamic(def, id, props)
     }
-    case EOFOL_COMPONENT_TYPE_FLAT: {
+    case COMPONENT_TYPE_FLAT: {
       return renderFlatDynamic(def, props)
     }
-    case EOFOL_COMPONENT_TYPE_STATIC: {
+    case COMPONENT_TYPE_STATIC: {
       return renderStaticDynamic(def)
     }
     default: {
-      errorRuntime(`Invalid Eofol component type: ${type} for component with name: ${def.name}.`)
+      errorTypeUnknown(type)
       return undefined
     }
   }
@@ -74,7 +74,7 @@ const renderEofolElement = (name: string, props: Props | undefined, id: string |
     }
     return renderDynamic(type, def, id, props)
   } else {
-    errorRuntime(`Couldn't find def for Eofol element with name = ${name}.`)
+    errorDefNotFound(name)
     return undefined
   }
 }

@@ -2,7 +2,7 @@ import { Defs } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
-const { errorRuntime } = Util
+const { errorInstanceNotFound, errorDefNotFound } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
@@ -23,7 +23,7 @@ const getState = (id: string) => {
   if (thisInstance) {
     return thisInstance.state
   } else {
-    errorRuntime(`Couldn't find component instance for id: ${id}.`)
+    errorInstanceNotFound(id)
     return undefined
   }
 }
@@ -33,12 +33,12 @@ const getStateStatic = (name: string, defs: Defs) => {
   if (def) {
     return def.initialState ? { ...def.initialState } : undefined
   } else {
-    errorRuntime(`GETSTATE: Couldn't find def for name: ${name}.`)
+    errorDefNotFound(name)
     return undefined
   }
 }
 
 const getSetState = (id: string) =>
-  `(nextState) => { var thisInstance = findInstance('${id}');  if (thisInstance) { thisInstance.state = nextState } else { errorRuntime(\`Couldn't find component instance for id: ${id}\`); } forceRerender(); }`
+  `(nextState) => { var thisInstance = findInstance('${id}');  if (thisInstance) { thisInstance.state = nextState } else { errorInstanceNotFound('${id}'); } forceRerender(); }`
 
 export default { getState, getSetState, getStateStatic }

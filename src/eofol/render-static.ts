@@ -2,7 +2,7 @@ import { Defs, Instances, JSONElement } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
-const { errorRuntime, generateId } = Util
+const { errorDefNotFound, generateId } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
@@ -31,7 +31,7 @@ const initRender = (element: JSONElement, defs: Defs) => {
   const def = findEofolComponentDef(defs)(name)
 
   if (!def) {
-    errorRuntime(`Cannot render custom eofol element: definition not found for component type: "${name}"`)
+    errorDefNotFound(name)
   }
 
   return { name, def }

@@ -7,7 +7,6 @@ const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticC
 // @IMPORT-END
 
 const onclick = () => {
-  console.log("(R)")
   forceRerender()
 }
 
