@@ -1,3 +1,5 @@
+import { Defs, Instances, JSONElement } from "./types"
+
 // @IMPORT-START
 import Util from "./util"
 const { errorRuntime, generateId } = Util
@@ -12,9 +14,14 @@ const { getProps } = Common
 
 // @IMPORT-START
 import Components from "./components"
-import { Defs, Instances, JSONElement } from "./types"
 const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT("./components")
+// @IMPORT-END
+
+// @IMPORT-START
+import Stateful from "./stateful"
+const { getState, getSetState } = Stateful
+// @IMPORT("./stateful)
 // @IMPORT-END
 
 const EOFOL_RENDER_DEFAULT_AS_TAGNAME = "div"
@@ -34,7 +41,6 @@ const getAsProp = (element: JSONElement, defaultTagname: string) => element?.att
 
 const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
   const { name, def } = initRender(element, defs)
-  const props = getProps(element)
 
   if (!def) {
     return undefined
@@ -48,39 +54,22 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
   }
 
   const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
-
-  const stateImpl = def.initialState ? { ...def.initialState } : undefined
+  const props = { ...getProps(element), id }
+  const stateImpl = getState(id, name, defs)()
+  const setStateImpl = getSetState(id)()
 
   instances.push({
     name,
     id,
     state: stateImpl,
+    setState: setStateImpl,
     props,
     as,
   })
 
   return {
     type: as,
-    content: [
-      def.render(
-        stateImpl,
-        (nextState: any) => {
-          console.log("Statically compiled setState fired!")
-          // @TODO Statically compiled setState
-          const thisInstance = findInstance(id)
-          if (thisInstance) {
-            thisInstance.state = nextState
-            // @TODO import
-            // forceRerender();
-            console.log("forceRerender()")
-          } else {
-            // @TODO Extract
-            errorRuntime(`Couldn't find component instance for name: ${name}.`)
-          }
-        },
-        props,
-      ),
-    ],
+    content: [def.render(stateImpl, setStateImpl, props)],
     attributes: {
       id,
     },

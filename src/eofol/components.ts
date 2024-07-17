@@ -1,6 +1,6 @@
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-import { Def, Defs, JSONElement } from "./types"
+import { Def, Defs, JSONElement, Props } from "./types"
 const { getCustomDefs, getFlatDefs, getStaticDefs } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
@@ -55,6 +55,42 @@ const validateEofolCustomElement = (element: JSONElement) => {
   }
 }
 
+// @TODO typing any
+const switchComponentTypeStatic = (handlers: any) => (element: JSONElement) => {
+  if (isEofolCustomElement(element)) {
+    return handlers[EOFOL_CUSTOM_COMPONENT_TAGNAME](element)
+  } else if (isEofolFlatElement(element)) {
+    return handlers[EOFOL_FLAT_COMPONENT_TAGNAME](element)
+  } else if (isEofolStaticElement(element)) {
+    return handlers[EOFOL_STATIC_COMPONENT_TAGNAME](element)
+  } else {
+    errorRuntime(`Unknown Eofol component type: ${element.type}.`)
+    return undefined
+  }
+}
+
+// @TODO typing any
+const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, id: string, props: Props) => {
+  switch (type) {
+    case EOFOL_COMPONENT_TYPE_CUSTOM: {
+      if (!id) {
+        return undefined
+      }
+      return handlers[EOFOL_COMPONENT_TYPE_CUSTOM](def, id, props)
+    }
+    case EOFOL_COMPONENT_TYPE_FLAT: {
+      return handlers[EOFOL_COMPONENT_TYPE_FLAT](def, id, props)
+    }
+    case EOFOL_COMPONENT_TYPE_STATIC: {
+      return handlers[EOFOL_COMPONENT_TYPE_STATIC](def, id, props)
+    }
+    default: {
+      errorRuntime(`Invalid Eofol component type: ${type} for component with name: ${def.name}.`)
+      return undefined
+    }
+  }
+}
+
 export default {
   getEofolComponentType,
   findEofolComponentDef,
@@ -68,4 +104,6 @@ export default {
   isEofolFlatElement,
   isEofolStaticElement,
   validateEofolCustomElement,
+  switchComponentTypeStatic,
+  switchComponentTypeDynamic,
 }

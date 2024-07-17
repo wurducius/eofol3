@@ -1,44 +1,62 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
 
-const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticComponent, generateId, createElement } =
-  Core
+const {
+  forceRerender,
+  defineCustomComponent,
+  defineFlatComponent,
+  defineStaticComponent,
+  generateId,
+  createElement,
+  findInstance,
+  getSetState,
+  isBrowser,
+} = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
-const onclick = () => {
-  console.log("(R)")
-  forceRerender()
+const serializeJS = (handler: () => void) => `(${handler})()`
+
+const pushVal = (val: string, name: string, handler: (() => void) | string, isString: boolean) =>
+  `var ${name} = ${isString ? "'" : ""}${val}${isString ? "'" : ""}; ${handler}`
+
+const getStatefulHandler = (id: string, state: any, setState: any, handler: () => void) => {
+  const first = pushVal(setState, "setState", serializeJS(handler), false)
+  const second = pushVal(JSON.stringify(state), "state", first, false)
+  return pushVal(id, "id", second, true)
 }
 
-const onclickSerialized = onclick.toString()
-const incrementCount = (state: { count: number }, setState: (nextState: { count: any }) => void) => () => {
-  console.log("setState()")
-  setState({ count: 1 })
-  // console.log("setState - " + { count: state.count + 1 });
-  // setState({ count: state.count + 1 });
-}
-const incrementCountSerialized = (state: { count: number }, setState: (nextState: { count: any }) => void) =>
-  incrementCount(state, setState).toString()
+const pushStateful = (id: string, handler: any, state?: any, setState?: any) =>
+  getStatefulHandler(id, state, setState, handler)
 
 export const component1 = defineCustomComponent({
   name: "component1",
-  render: (state: any, setState: any, props: { param: string }) => {
+  render: (statex: any, setStatex: any, props: any) => {
     const button = createElement(
       "button",
-      `(${state.count}) - Component 1 - Force rerender - ${props.param}`,
+      `(${statex.count}) - Component 1 - Force rerender - ${props.param}`,
       undefined,
       undefined,
       {
-        onclick: eval(
-          (() => {
-            setState({ count: 69 })
-          }).toString(),
+        onclick: pushStateful(
+          props.id,
+          () => {
+            // @ts-ignore
+            // eslint-disable-next-line no-undef
+            setState({ count: Math.floor(Math.random() * 100) })
+            // forceRerender()
+          },
+          statex,
+          setStatex,
         ),
       },
     )
     const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
-      onclick: eval(onclickSerialized),
+      // @ts-ignore
+      onclick: serializeJS(() => {
+        console.log("(R)")
+        forceRerender()
+      }),
     })
     return createElement("div", [button, otherButton])
   },

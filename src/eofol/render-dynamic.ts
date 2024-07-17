@@ -1,10 +1,4 @@
 // @IMPORT-START
-import Common from "./common"
-const { findInstance } = Common
-// @IMPORT("./common")
-// @IMPORT-END
-
-// @IMPORT-START
 import Util from "./util"
 const { errorRuntime } = Util
 // @IMPORT("./util")
@@ -17,23 +11,29 @@ const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_
 // @IMPORT("./components")
 // @IMPORT-END
 
+// @IMPORT-START
+import Stateful from "./stateful"
+const { getState, getSetState, getSetStateDynamic } = Stateful
+// @IMPORT("./stateful")
+// @IMPORT-END
+
+// @IMPORT-START
+import Common from "./common"
+const { findInstance } = Common
+// @IMPORT("./common")
+// @IMPORT-END
+
 const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
-  const thisInstance = findInstance(id)
-  const state = thisInstance?.state
-  return def.render(
-    state,
-    (nextState: any) => {
-      console.log("Dynamically compiled setState fired!")
-      // @TODO Dynamically compiled setState
-      if (thisInstance) {
-        thisInstance.state = nextState
-        forceRerender()
-      } else {
-        errorRuntime(`Couldn't find component instance for id: ${id}.`)
-      }
-    },
-    props,
-  )
+  const stateImpl = getState(id, def.name)()
+  const instance = findInstance(id)
+  if (!instance) {
+    console.log(`error id = ${id}`)
+    return ""
+  }
+  const setStateImpl = getSetStateDynamic(id)()
+  const propsImpl = { ...props, id }
+
+  return def.render(stateImpl, setStateImpl, propsImpl)
 }
 
 const renderFlatDynamic = (def: Def, props: Props | undefined) => {
@@ -78,21 +78,4 @@ const renderEofolElement = (name: string, props: Props | undefined, id: string |
   }
 }
 
-const forceRerender = () => {
-  // @TODO Instead rather rerender VDOM from top level down
-  getInstances()?.forEach((child: Instance) => {
-    const { id, name, props } = child
-    const target = isBrowser() ? document.getElementById(id) : null
-    if (target) {
-      const def = findDef(name)
-      if (!def) {
-        return undefined
-      }
-      target.innerHTML = renderEofolElement(name, props, id, def)
-    } else {
-      errorRuntime(`Could't select DOM element with id = ${id} and name = ${name}.`)
-    }
-  })
-}
-
-export default { renderEofolElement, forceRerender }
+export default { renderEofolElement }

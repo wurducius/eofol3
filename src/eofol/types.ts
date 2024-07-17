@@ -17,6 +17,7 @@ export interface Instance {
   as: HTMLTag
   type?: string
   state?: Object
+  setState?: any
   props?: Props
 }
 

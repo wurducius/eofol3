@@ -39,7 +39,8 @@ const renderTagElement = (
 ) => {
   const classnameHTML = classname ? ` class='${classname}'` : ""
   const attributesHTML = reduceHTMLProps(attributes)
-  const propertiesHTML = reduceHTMLProps(properties, "(", ")()")
+  //  const propertiesHTML = reduceHTMLProps(properties, "(", ")()");
+  const propertiesHTML = reduceHTMLProps(properties, "", "")
   const contentHTML = getContentHTML(content)
   return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${contentHTML}</${tagname}>`
 }
