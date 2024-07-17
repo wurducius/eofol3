@@ -52,3 +52,5 @@ export interface JSONElement {
   attributes: Attributes
   content: JSONNode[]
 }
+
+export type Func = (x: any) => any

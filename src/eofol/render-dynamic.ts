@@ -1,3 +1,5 @@
+import { Def, Props } from "./types"
+
 // @IMPORT-START
 import Util from "./util"
 const { errorRuntime } = Util
@@ -6,7 +8,6 @@ const { errorRuntime } = Util
 
 // @IMPORT-START
 import Components from "./components"
-import { Def, Props } from "./types"
 const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_TYPE_STATIC } = Components
 // @IMPORT("./components")
 // @IMPORT-END
@@ -24,10 +25,10 @@ const { findInstance } = Common
 // @IMPORT-END
 
 const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
-  const stateImpl = getState(id, def.name)
+  const stateImpl = getState(id)
   const instance = findInstance(id)
   if (!instance) {
-    console.log(`error id = ${id}`)
+    console.log(`Couldn't find component instance for id: ${id}`)
     return ""
   }
   const setStateImpl = getSetState(id)

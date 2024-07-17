@@ -1,3 +1,5 @@
+import { Defs } from "./types"
+
 // @IMPORT-START
 import Util from "./util"
 const { errorRuntime } = Util
@@ -5,25 +7,18 @@ const { errorRuntime } = Util
 // @IMPORT-END
 
 // @IMPORT-START
-import ForceRerender from "./force-rerender"
-const { forceRerender } = ForceRerender
-// @IMPORT("./force-rerender")
-// @IMPORT-END
-
-// @IMPORT-START
 import Common from "./common"
-const { findInstance, isBrowser } = Common
+const { findInstance } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
 // @IMPORT-START
 import Components from "./components"
-import { Defs } from "./types"
 const { findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
-const getState = (id: string, name: string) => {
+const getState = (id: string) => {
   const thisInstance = findInstance(id)
   if (thisInstance) {
     return thisInstance.state
@@ -33,7 +28,7 @@ const getState = (id: string, name: string) => {
   }
 }
 
-const getStateStatic = (id: string, name: string, defs: Defs) => {
+const getStateStatic = (name: string, defs: Defs) => {
   const def = findEofolComponentDef(defs)(name)
   if (def) {
     return def.initialState ? { ...def.initialState } : undefined

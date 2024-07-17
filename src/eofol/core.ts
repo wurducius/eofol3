@@ -68,6 +68,12 @@ const { getState, getSetState } = Stateful
 // @IMPORT("./stateful)
 // @IMPORT-END
 
+// @IMPORT-START
+import HandlerSerialize from "./handler-serialize"
+const { handler } = HandlerSerialize
+// @IMPORT("./handler-serialize)
+// @IMPORT-END
+
 const initEofol = () => {
   // const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
   // const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
@@ -100,4 +106,5 @@ export default {
   getSetState,
   findInstance,
   findDef,
+  handler,
 }

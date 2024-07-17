@@ -24,7 +24,7 @@ const { getStateStatic, getSetState } = Stateful
 // @IMPORT("./stateful)
 // @IMPORT-END
 
-const EOFOL_RENDER_DEFAULT_AS_TAGNAME = "div"
+const RENDER_DEFAULT_AS_TAGNAME = "div"
 
 const initRender = (element: JSONElement, defs: Defs) => {
   const name = getEofolComponentType(element)
@@ -53,9 +53,9 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     id = generateId()
   }
 
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
   const props = { ...getProps(element), id }
-  const stateImpl = getStateStatic(id, name, defs)
+  const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(id)
 
   instances.push({
@@ -85,7 +85,7 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
   }
 
   // @TODO
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
 
   return {
     type: as,
@@ -104,7 +104,7 @@ const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
   const rendered = def.render()
   const reduced = Array.isArray(rendered) ? rendered.join("") : rendered
 
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
 
   return {
     type: as,

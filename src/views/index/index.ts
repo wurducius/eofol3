@@ -1,42 +1,34 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
-
-const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticComponent, generateId, createElement } =
-  Core
+const {
+  forceRerender,
+  defineCustomComponent,
+  defineFlatComponent,
+  defineStaticComponent,
+  generateId,
+  createElement,
+  handler,
+} = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
-const serializeJS = (handler: () => void) => `(${handler})()`
-
-const pushVal = (val: string, name: string, handler: (() => void) | string) => `var ${name} = ${val}; ${handler}`
-
-const pushStateful = (props: any, state: any, setState: any, handler: any) => {
-  const withProps = pushVal(JSON.stringify(props), "props", serializeJS(handler))
-  const withSetState = pushVal(setState, "setState", withProps)
-  return pushVal(JSON.stringify(state), "state", withSetState)
-}
-
 export const component1 = defineCustomComponent({
   name: "component1",
-  render: (statex: any, setStatex: any, props: any) => {
+  render: (state: any, setStatex: any, props: any) => {
     const button = createElement(
       "button",
-      `(${statex.count}) - Component 1 - Force rerender - ${props.param}`,
+      `(${state.count}) - Component 1 - Force rerender - ${props.param}`,
       undefined,
       undefined,
       {
-        onclick: pushStateful(props, statex, setStatex, () => {
-          // @ts-ignore
-          // eslint-disable-next-line no-undef
+        onclick: handler(props, state, setStatex, () => {
+          // @ts-ignore eslint-disable-next-line no-undef
           setState({ count: Math.floor(Math.random() * 100) })
-          // forceRerender()
         }),
       },
     )
     const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
-      // @ts-ignore
-      onclick: serializeJS(() => {
-        console.log("(R)")
+      onclick: handler(undefined, undefined, undefined, () => {
         forceRerender()
       }),
     })
