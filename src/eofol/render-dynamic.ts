@@ -13,7 +13,7 @@ const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_
 
 // @IMPORT-START
 import Stateful from "./stateful"
-const { getState, getSetState, getSetStateDynamic } = Stateful
+const { getState, getSetStateDynamic } = Stateful
 // @IMPORT("./stateful")
 // @IMPORT-END
 

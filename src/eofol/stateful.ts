@@ -18,7 +18,6 @@ const { findInstance, isBrowser } = Common
 
 // @IMPORT-START
 import Components from "./components"
-import { Instance } from "./types"
 const { findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END

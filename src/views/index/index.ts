@@ -1,17 +1,8 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
 
-const {
-  forceRerender,
-  defineCustomComponent,
-  defineFlatComponent,
-  defineStaticComponent,
-  generateId,
-  createElement,
-  findInstance,
-  getSetState,
-  isBrowser,
-} = Core
+const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticComponent, generateId, createElement } =
+  Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
