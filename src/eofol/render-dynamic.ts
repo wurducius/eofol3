@@ -13,7 +13,7 @@ const { EOFOL_COMPONENT_TYPE_CUSTOM, EOFOL_COMPONENT_TYPE_FLAT, EOFOL_COMPONENT_
 
 // @IMPORT-START
 import Stateful from "./stateful"
-const { getState, getSetStateDynamic } = Stateful
+const { getState, getSetState } = Stateful
 // @IMPORT("./stateful")
 // @IMPORT-END
 
@@ -24,13 +24,13 @@ const { findInstance } = Common
 // @IMPORT-END
 
 const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
-  const stateImpl = getState(id, def.name)()
+  const stateImpl = getState(id, def.name)
   const instance = findInstance(id)
   if (!instance) {
     console.log(`error id = ${id}`)
     return ""
   }
-  const setStateImpl = getSetStateDynamic(id)()
+  const setStateImpl = getSetState(id)
   const propsImpl = { ...props, id }
 
   return def.render(stateImpl, setStateImpl, propsImpl)

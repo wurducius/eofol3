@@ -20,7 +20,7 @@ const { getEofolComponentType, findEofolComponentDef } = Components
 
 // @IMPORT-START
 import Stateful from "./stateful"
-const { getState, getSetState } = Stateful
+const { getStateStatic, getSetState } = Stateful
 // @IMPORT("./stateful)
 // @IMPORT-END
 
@@ -55,8 +55,8 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
 
   const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
   const props = { ...getProps(element), id }
-  const stateImpl = getState(id, name, defs)()
-  const setStateImpl = getSetState(id)()
+  const stateImpl = getStateStatic(id, name, defs)
+  const setStateImpl = getSetState(id)
 
   instances.push({
     name,

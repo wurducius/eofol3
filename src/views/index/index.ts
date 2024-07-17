@@ -8,17 +8,13 @@ const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticC
 
 const serializeJS = (handler: () => void) => `(${handler})()`
 
-const pushVal = (val: string, name: string, handler: (() => void) | string, isString: boolean) =>
-  `var ${name} = ${isString ? "'" : ""}${val}${isString ? "'" : ""}; ${handler}`
+const pushVal = (val: string, name: string, handler: (() => void) | string) => `var ${name} = ${val}; ${handler}`
 
-const getStatefulHandler = (id: string, state: any, setState: any, handler: () => void) => {
-  const first = pushVal(setState, "setState", serializeJS(handler), false)
-  const second = pushVal(JSON.stringify(state), "state", first, false)
-  return pushVal(id, "id", second, true)
+const pushStateful = (props: any, state: any, setState: any, handler: any) => {
+  const withProps = pushVal(JSON.stringify(props), "props", serializeJS(handler))
+  const withSetState = pushVal(setState, "setState", withProps)
+  return pushVal(JSON.stringify(state), "state", withSetState)
 }
-
-const pushStateful = (id: string, handler: any, state?: any, setState?: any) =>
-  getStatefulHandler(id, state, setState, handler)
 
 export const component1 = defineCustomComponent({
   name: "component1",
@@ -29,17 +25,12 @@ export const component1 = defineCustomComponent({
       undefined,
       undefined,
       {
-        onclick: pushStateful(
-          props.id,
-          () => {
-            // @ts-ignore
-            // eslint-disable-next-line no-undef
-            setState({ count: Math.floor(Math.random() * 100) })
-            // forceRerender()
-          },
-          statex,
-          setStatex,
-        ),
+        onclick: pushStateful(props, statex, setStatex, () => {
+          // @ts-ignore
+          // eslint-disable-next-line no-undef
+          setState({ count: Math.floor(Math.random() * 100) })
+          // forceRerender()
+        }),
       },
     )
     const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
