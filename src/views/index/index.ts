@@ -11,6 +11,7 @@ const {
   handlerSimple,
   internalLink,
   externalLink,
+  sx,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -66,7 +67,7 @@ export const flatComponent = defineFlatComponent({
   name: "flat",
   render: (props: { param: string }) =>
     createElement("div", [
-      createElement("button", "FLAT HELLO WORLD!!!"),
+      createElement("button", "FLAT HELLO WORLD!!!", sx({ "background-color": "red" })),
       createElement("p", "OH YEAH"),
       createElement("static"),
       `Flat component VARIANT = ${props.param}`,
