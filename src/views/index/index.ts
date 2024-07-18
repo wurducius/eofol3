@@ -8,31 +8,33 @@ const {
   generateId,
   createElement,
   handler,
+  handlerSimple,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
 export const component1 = defineCustomComponent({
   name: "component1",
-  render: (state: any, setStatex: any, props: any) => {
-    const button = createElement(
-      "button",
-      `(${state.count}) - Component 1 - Force rerender - ${props.param}`,
-      undefined,
-      undefined,
-      {
-        onclick: handler(props, state, setStatex, () => {
-          // @ts-ignore eslint-disable-next-line no-undef
-          setState({ count: Math.floor(Math.random() * 100) })
-        }),
-      },
-    )
-    const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
-      onclick: handler(undefined, undefined, undefined, () => {
+  render: (statex: any, setStatex: any, props: any) => {
+    const counter = createElement("h2", `You have clicked ${statex.count} times.`)
+    const buttonIncrement = createElement("button", "+", undefined, undefined, {
+      onclick: handler(props, statex, setStatex, () => {
+        // @ts-ignore eslint-disable-next-line no-undef
+        setState({ count: state.count + 1 })
+      }),
+    })
+    const buttonReset = createElement("button", "Reset", undefined, undefined, {
+      onclick: handler(props, statex, setStatex, () => {
+        // @ts-ignore eslint-disable-next-line no-undef
+        setState({ count: 0 })
+      }),
+    })
+    const otherButton = createElement("button", "Force rerender", undefined, undefined, {
+      onclick: handlerSimple(() => {
         forceRerender()
       }),
     })
-    return createElement("div", [button, otherButton])
+    return createElement("div", [counter, buttonIncrement, buttonReset, otherButton])
   },
   initialState: { count: 0 },
 })

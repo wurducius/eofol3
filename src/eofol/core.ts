@@ -70,7 +70,7 @@ const { getState, getSetState } = Stateful
 
 // @IMPORT-START
 import HandlerSerialize from "./handler-serialize"
-const { handler } = HandlerSerialize
+const { handler, handlerProps, handlerSimple } = HandlerSerialize
 // @IMPORT("./handler-serialize)
 // @IMPORT-END
 
@@ -107,4 +107,6 @@ export default {
   findInstance,
   findDef,
   handler,
+  handlerProps,
+  handlerSimple,
 }

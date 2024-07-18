@@ -1,3 +1,5 @@
+import { Handler, Props, SetState, State } from "./types"
+
 // @IMPORT-START
 import Util from "./util"
 const { pipe } = Util
@@ -10,20 +12,21 @@ const { HANDLER_SERIALIZED_PROPS, HANDLER_SERIALIZED_STATE, HANDLER_SERIALIZED_S
 // @IMPORT("./constants")
 // @IMPORT-END
 
-const serializeJS = (handler: () => void) => `(${handler})()`
+const serializeJS = (handler: Handler) => `(${handler.toString()})()`
 
 const pushVal = (val: string, name: string) => (handler: (() => void) | string) => `var ${name} = ${val}; ${handler}`
 
-const handler = (props: any, state: any, setState: any, handler: any) =>
+const pushProps = (props: Props) => pushVal(JSON.stringify(props), HANDLER_SERIALIZED_PROPS)
+
+const handler = (props: Props, state: State, setState: SetState, handler: Handler) =>
   pipe(
-    pushVal(JSON.stringify(props), HANDLER_SERIALIZED_PROPS),
+    pushProps(props),
     pushVal(JSON.stringify(state), HANDLER_SERIALIZED_STATE),
-    pushVal(setState, HANDLER_SERIALIZED_SETSTATE),
+    pushVal(setState.toString(), HANDLER_SERIALIZED_SETSTATE),
   )(serializeJS(handler))
 
-const handlerProps = (props: any, handler: any) =>
-  pushVal(JSON.stringify(props), HANDLER_SERIALIZED_PROPS)(serializeJS(handler))
+const handlerProps = (props: Props, handler: Handler) => pushProps(props)(serializeJS(handler))
 
-const handlerSimple = (handler: any) => serializeJS(handler)
+const handlerSimple = (handler: Handler) => serializeJS(handler)
 
 export default { handler, handlerProps, handlerSimple }

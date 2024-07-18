@@ -62,7 +62,7 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     name,
     id,
     state: stateImpl,
-    setState: setStateImpl,
+    setState: eval(setStateImpl),
     props,
     as,
   })

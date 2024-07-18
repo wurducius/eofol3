@@ -25,7 +25,6 @@ const { findDef, isBrowser } = Common
 // @IMPORT-END
 
 const forceRerender = () => {
-  // @TODO Instead rather rerender VDOM from top level down
   getInstances()?.forEach((child: Instance) => {
     const { id, name, props } = child
     const target = isBrowser() ? document.getElementById(id) : null
@@ -34,7 +33,8 @@ const forceRerender = () => {
       if (!def) {
         return undefined
       }
-      target.innerHTML = renderEofolElement(name, props, id, def)
+      const rendered = renderEofolElement(name, props, id, def)
+      target.innerHTML = rendered ?? ""
     } else {
       errorElementNotFound(id, name)
     }

@@ -2,8 +2,6 @@ export type VDOMType = "tag" | "custom"
 
 export type HTMLTag = any
 
-export type Handler = Function
-
 export interface VDOM {
   type: VDOMType
   name: string
@@ -16,8 +14,8 @@ export interface Instance {
   id: string
   as: HTMLTag
   type?: string
-  state?: Object
-  setState?: any
+  state?: State
+  setState?: SetState
   props?: Props
 }
 
@@ -26,8 +24,9 @@ export type Instances = Instance[]
 export interface Def {
   type?: string
   name: string
-  render: Handler
-  initialState?: Object
+  // @TODO typing render function
+  render: any
+  initialState?: State
   effect?: Handler | Handler[]
   subscribe?: string | string[]
   cases?: Handler
@@ -43,6 +42,11 @@ export type Props = StringRecord
 
 export type Properties = StringRecord
 
+export type State = Object
+
+// eslint-disable-next-line no-unused-vars
+export type SetState = (nextState: State) => void
+
 export type JSONValue = JSONElement | string
 
 export type JSONNode = JSONValue[] | JSONValue
@@ -53,4 +57,8 @@ export interface JSONElement {
   content: JSONNode[]
 }
 
+// eslint-disable-next-line no-unused-vars
 export type Func = (x: any) => any
+
+// eslint-disable-next-line no-unused-vars
+export type Handler = (x: any) => void
