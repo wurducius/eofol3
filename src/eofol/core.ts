@@ -65,13 +65,31 @@ const { SERVICE_WORKER_REGISTER_AT_INIT, SERVICE_WORKER_SCRIPT_FILENAME } = Eofo
 // @IMPORT-START
 import Stateful from "./stateful"
 const { getState, getSetState } = Stateful
-// @IMPORT("./stateful)
+// @IMPORT("./stateful")
 // @IMPORT-END
 
 // @IMPORT-START
 import HandlerSerialize from "./handler-serialize"
 const { handler, handlerProps, handlerSimple } = HandlerSerialize
-// @IMPORT("./handler-serialize)
+// @IMPORT("./handler-serialize")
+// @IMPORT-END
+
+// @IMPORT-START
+import Html from "./html"
+const { a } = Html
+// @IMPORT("./html")
+// @IMPORT-END
+
+// @IMPORT-START
+import Sx from "./sx"
+const { sx, getCompileCache, clearCompileCache } = Sx
+// @IMPORT("./sx")
+// @IMPORT-END
+
+// @IMPORT-START
+import Link from "./link"
+const { internalLink, externalLink } = Link
+// @IMPORT("./link")
 // @IMPORT-END
 
 const initEofol = () => {
@@ -109,4 +127,9 @@ export default {
   handler,
   handlerProps,
   handlerSimple,
+  externalLink,
+  internalLink,
+  sx,
+  getCompileCache,
+  clearCompileCache,
 }

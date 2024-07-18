@@ -19,6 +19,10 @@ const {
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const { PATH_PAGES } = require("../../eofol/constants/paths")
+/*
+const Sx = require("../../dist2/eofol/core")
+const { clearCompileCache, getCompileCache } = Sx
+*/
 
 const compile = () => {
   msgStepEofol("Starting Eofol3 static compilation...")
@@ -57,11 +61,13 @@ const compile = () => {
       die(`Cannot open source file: ${sourcePath}`, ex)
     }
 
+    // clearCompileCache()
+
     return minifyPre(sourceHTML.toString())
       .then(parseHTMLToJSON(view))
       .then(transverseTree(vdom, instances, defs))
       .then(parseJSONToHTML)
-      .then(compileStyle(view))
+      .then(compileStyle(view, []))
       .then(minifyPost)
       .then(validateHTML)
       .then(appendDoctype)
