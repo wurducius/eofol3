@@ -74,6 +74,18 @@ const { handler, handlerProps, handlerSimple } = HandlerSerialize
 // @IMPORT("./handler-serialize)
 // @IMPORT-END
 
+// @IMPORT-START
+import Html from "./html"
+const { a } = Html
+// @IMPORT("./html)
+// @IMPORT-END
+
+// @IMPORT-START
+import Link from "./link"
+const { internalLink, externalLink } = Link
+// @IMPORT("./link)
+// @IMPORT-END
+
 const initEofol = () => {
   // const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
   // const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
@@ -109,4 +121,6 @@ export default {
   handler,
   handlerProps,
   handlerSimple,
+  externalLink,
+  internalLink,
 }

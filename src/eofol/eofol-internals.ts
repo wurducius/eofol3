@@ -21,4 +21,15 @@ const setInstances = (nextInstances: Instance[]) => {
   instances = nextInstances
 }
 
-export default { getVdom, getInstances, getCustomDefs, getFlatDefs, getStaticDefs, setVdom, setInstances }
+const registerAsset = (type: string, val: string) => {}
+
+export default {
+  getVdom,
+  getInstances,
+  getCustomDefs,
+  getFlatDefs,
+  getStaticDefs,
+  setVdom,
+  setInstances,
+  registerAsset,
+}

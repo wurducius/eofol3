@@ -9,6 +9,8 @@ const {
   createElement,
   handler,
   handlerSimple,
+  internalLink,
+  externalLink,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -41,7 +43,12 @@ export const component1 = defineCustomComponent({
 
 export const component2 = defineCustomComponent({
   name: "component2",
-  render: () => `Component 2 = ${generateId()}`,
+  render: () =>
+    createElement("div", [
+      `Component 2 = ${generateId()}`,
+      internalLink({ children: "Internal", href: "indexx.html" }),
+      externalLink({ children: "External", href: "https://youtube.com" }),
+    ]),
 })
 
 export const component3 = defineCustomComponent({
