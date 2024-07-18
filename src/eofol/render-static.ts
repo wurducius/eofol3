@@ -1,30 +1,37 @@
+import { Defs, Instances, JSONElement } from "./types"
+
 // @IMPORT-START
 import Util from "./util"
-const { errorRuntime, generateId } = Util
+const { errorDefNotFound, generateId } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
 // @IMPORT-START
 import Common from "./common"
-const { getProps, findInstance } = Common
+const { getProps } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
 // @IMPORT-START
 import Components from "./components"
-import { Defs, Instances, JSONElement } from "./types"
 const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
-const EOFOL_RENDER_DEFAULT_AS_TAGNAME = "div"
+// @IMPORT-START
+import Stateful from "./stateful"
+const { getStateStatic, getSetState } = Stateful
+// @IMPORT("./stateful)
+// @IMPORT-END
+
+const RENDER_DEFAULT_AS_TAGNAME = "div"
 
 const initRender = (element: JSONElement, defs: Defs) => {
   const name = getEofolComponentType(element)
   const def = findEofolComponentDef(defs)(name)
 
   if (!def) {
-    errorRuntime(`Cannot render custom eofol element: definition not found for component type: "${name}"`)
+    errorDefNotFound(name)
   }
 
   return { name, def }
@@ -34,7 +41,6 @@ const getAsProp = (element: JSONElement, defaultTagname: string) => element?.att
 
 const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
   const { name, def } = initRender(element, defs)
-  const props = getProps(element)
 
   if (!def) {
     return undefined
@@ -47,40 +53,23 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     id = generateId()
   }
 
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
-
-  const stateImpl = def.initialState ? { ...def.initialState } : undefined
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
+  const props = { ...getProps(element), id }
+  const stateImpl = getStateStatic(name, defs)
+  const setStateImpl = getSetState(id)
 
   instances.push({
     name,
     id,
     state: stateImpl,
+    setState: eval(setStateImpl),
     props,
     as,
   })
 
   return {
     type: as,
-    content: [
-      def.render(
-        stateImpl,
-        (nextState: any) => {
-          console.log("Statically compiled setState fired!")
-          // @TODO Statically compiled setState
-          const thisInstance = findInstance(id)
-          if (thisInstance) {
-            thisInstance.state = nextState
-            // @TODO import
-            // forceRerender();
-            console.log("forceRerender()")
-          } else {
-            // @TODO Extract
-            errorRuntime(`Couldn't find component instance for name: ${name}.`)
-          }
-        },
-        props,
-      ),
-    ],
+    content: [def.render(stateImpl, setStateImpl, props)],
     attributes: {
       id,
     },
@@ -96,7 +85,7 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
   }
 
   // @TODO
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
 
   return {
     type: as,
@@ -115,7 +104,7 @@ const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
   const rendered = def.render()
   const reduced = Array.isArray(rendered) ? rendered.join("") : rendered
 
-  const as = getAsProp(element, EOFOL_RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
 
   return {
     type: as,

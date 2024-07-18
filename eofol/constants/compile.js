@@ -33,6 +33,8 @@ const minifyOptions = {
   sortClassName: true,
 }
 
+const INTERNALS_VARIABLE_NAME = "_internals"
+
 const minifyHTMLOptions = { removeComments: true }
 
-module.exports = { config, isVerbose, minifyOptions, minifyHTMLOptions }
+module.exports = { config, isVerbose, minifyOptions, minifyHTMLOptions, INTERNALS_VARIABLE_NAME }

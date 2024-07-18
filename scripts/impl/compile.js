@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 
 const { prettyTime } = require("../../eofol/dev-util")
-const { config, isVerbose, PATH_DERIVED, PATH_PUBLIC, PATH_VIEWS_DIST2, EXT_HTML } = require("../../eofol/constants")
+const { config, isVerbose, PATH_DERIVED, PATH_VIEWS_DIST2, EXT_HTML } = require("../../eofol/constants")
 const { checkExistsCreate, die } = require("../../eofol/util")
 const {
   compileStyle,
@@ -18,6 +18,7 @@ const {
   writeView,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
+const { PATH_PAGES } = require("../../eofol/constants/paths")
 
 const compile = () => {
   msgStepEofol("Starting Eofol3 static compilation...")
@@ -38,14 +39,14 @@ const compile = () => {
     const defs = importViewEofolDefs(view)
 
     const source = fs
-      .readdirSync(PATH_PUBLIC, { recursive: true })
+      .readdirSync(PATH_PAGES, { recursive: true })
       .filter((sourceFilename) => sourceFilename.endsWith(EXT_HTML))
-      .find((filename) => filename.replace(".html", "") === view)
+      .find((filename) => filename.replace(EXT_HTML, "") === view)
 
     const instances = []
     const vdom = []
 
-    const sourcePath = path.resolve(PATH_PUBLIC, source)
+    const sourcePath = path.resolve(PATH_PAGES, source)
     let sourceHTML
     try {
       if (!fs.existsSync(sourcePath)) {
@@ -72,7 +73,9 @@ const compile = () => {
   })
 
   return Promise.all(resultPromise).then(() => {
-    msgStepEofolSuccess(`Compiled successfully at ${PATH_DERIVED} in ${prettyTime(new Date() - timeStart)}.`)
+    if (isVerbose) {
+      msgStepEofolSuccess(`Compiled successfully at ${PATH_DERIVED} in ${prettyTime(new Date() - timeStart)}.`)
+    }
   })
 }
 

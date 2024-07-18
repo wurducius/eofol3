@@ -1,46 +1,40 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
-
-const { forceRerender, defineCustomComponent, defineFlatComponent, defineStaticComponent, generateId, createElement } =
-  Core
+const {
+  forceRerender,
+  defineCustomComponent,
+  defineFlatComponent,
+  defineStaticComponent,
+  generateId,
+  createElement,
+  handler,
+  handlerSimple,
+} = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
-const onclick = () => {
-  console.log("(R)")
-  forceRerender()
-}
-
-const onclickSerialized = onclick.toString()
-const incrementCount = (state: { count: number }, setState: (arg0: { count: any }) => void) => () => {
-  console.log("setState()")
-  setState({ count: 1 })
-  // console.log("setState - " + { count: state.count + 1 });
-  // setState({ count: state.count + 1 });
-}
-const incrementCountSerialized = (state: { count: number }, setState: (arg0: { count: any }) => void) =>
-  incrementCount(state, setState).toString()
-
 export const component1 = defineCustomComponent({
   name: "component1",
-  render: (state: any, setState: any, props: { param: string }) => {
-    const button = createElement(
-      "button",
-      `(${state.count}) - Component 1 - Force rerender - ` + props.param,
-      undefined,
-      undefined,
-      {
-        onclick: eval(
-          (() => {
-            setState({ count: 69 })
-          }).toString(),
-        ),
-      },
-    )
-    const otherButton = createElement("button", `Force rerender - ${props.param}`, undefined, undefined, {
-      onclick: eval(onclickSerialized),
+  render: (statex: any, setStatex: any, props: any) => {
+    const counter = createElement("h2", `You have clicked ${statex.count} times.`)
+    const buttonIncrement = createElement("button", "+", undefined, undefined, {
+      onclick: handler(props, statex, setStatex, () => {
+        // @ts-ignore eslint-disable-next-line no-undef
+        setState({ count: state.count + 1 })
+      }),
     })
-    return createElement("div", [button, otherButton])
+    const buttonReset = createElement("button", "Reset", undefined, undefined, {
+      onclick: handler(props, statex, setStatex, () => {
+        // @ts-ignore eslint-disable-next-line no-undef
+        setState({ count: 0 })
+      }),
+    })
+    const otherButton = createElement("button", "Force rerender", undefined, undefined, {
+      onclick: handlerSimple(() => {
+        forceRerender()
+      }),
+    })
+    return createElement("div", [counter, buttonIncrement, buttonReset, otherButton])
   },
   initialState: { count: 0 },
 })
@@ -68,7 +62,7 @@ export const flatComponent = defineFlatComponent({
       createElement("button", "FLAT HELLO WORLD!!!"),
       createElement("p", "OH YEAH"),
       createElement("static"),
-      "Flat component VARIANT = " + props.param,
+      `Flat component VARIANT = ${props.param}`,
     ]),
 })
 

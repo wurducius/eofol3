@@ -7,7 +7,8 @@ const DIRNAME_DERIVED = "derived"
 const DIRNAME_BUILD = "build"
 const DIRNAME_SRC = "src"
 const DIRNAME_VIEWS = "views"
-const DIRNAME_PUBLIC = "public"
+const DIRNAME_PAGES = "pages"
+const DIRNAME_STATIC = "static"
 const DIRNAME_ASSETS = "assets"
 const DIRNAME_EOFOL_INTERNAL = "eofol"
 const DIRNAME_ASSET_JS = "js"
@@ -15,7 +16,6 @@ const DIRNAME_ASSET_CSS = "css"
 const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
-const FILENAME_SUFFIX_EOFOL_INTERNALS = "-eofol-internals.json"
 const FILENAME_CORE = "core.js"
 
 const PATH_CWD = fs.realpathSync(process.cwd())
@@ -32,7 +32,8 @@ const PATH_ASSETS_JS = path.resolve(PATH_ASSETS, DIRNAME_ASSET_JS)
 const PATH_ASSETS_CSS = path.resolve(PATH_ASSETS, DIRNAME_ASSET_CSS)
 const PATH_ASSETS_FONTS = path.resolve(PATH_BUILD, DIRNAME_ASSET_FONT)
 const PATH_EOFOL_INTERNAL = path.resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
-const PATH_PUBLIC = path.resolve(PATH_CWD, DIRNAME_PUBLIC)
+const PATH_PAGES = path.resolve(PATH_CWD, DIRNAME_PAGES)
+const PATH_STATIC = path.resolve(PATH_CWD, DIRNAME_STATIC)
 const PATH_DERIVED_INTERNAL = path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
 const PATH_BUILD_INTERNAL = path.resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
 
@@ -50,8 +51,8 @@ module.exports = {
   PATH_ASSETS_CSS,
   PATH_ASSETS_FONTS,
   PATH_EOFOL_INTERNAL,
-  PATH_PUBLIC,
-  FILENAME_SUFFIX_EOFOL_INTERNALS,
+  PATH_STATIC,
+  PATH_PAGES,
   FILENAME_FAVICON,
   FILENAME_CORE,
   DIRNAME_EOFOL_INTERNAL,

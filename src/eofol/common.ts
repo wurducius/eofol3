@@ -1,9 +1,17 @@
+import { Def, Defs, JSONElement } from "./types"
+
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-import { Def, Defs, JSONElement } from "./types"
 const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
+
+// @IMPORT-START
+import Contansts from "./constants"
+const { PROPS_EXCLUDED } = Contansts
+// @IMPORT("./constants")
+// @IMPORT-END
+//
 
 const isBrowser = () => typeof window !== "undefined" && typeof window.document !== "undefined"
 
@@ -16,12 +24,10 @@ const findDef = (tagname: string) => findCustomDef(tagname) || findFlatDef(tagna
 
 const findInstance = (id: string) => getInstances().find((instance) => instance.id === id)
 
-const notProps = ["name", "as"]
-
 const getProps = (element: JSONElement) => {
   const props = structuredClone(element.attributes)
   Object.keys(props)
-    .filter((key) => notProps.reduce((acc, next) => acc || key === next, false))
+    .filter((key) => PROPS_EXCLUDED.reduce((acc, next) => acc || key === next, false))
     .forEach((key) => delete props[key])
   return props
 }

@@ -2,26 +2,14 @@ const { readFileSync } = require("fs")
 const { resolve } = require("path")
 
 const { PATH_CWD } = require("../../constants")
-
-const data = {
-  title: "Eofol3 app",
-  themeColor: "#000000",
-  description: "All inclusive web framework with zero configuration, batteries included!",
-  descriptionOg: "All inclusive web framework with zero configuration, batteries included!",
-  keywords: "JS,Frontend framework",
-  author: "Jakub Eliáš",
-  imageOg: "logo-lg.png",
-  imageTypeOg: "image/png",
-  imageWidthOg: "512",
-  imageHeightOg: "512",
-  favicon: "favicon.png",
-  appleTouchIcon: "logo-sm.png",
-  manifest: "manifest.json",
-  fontStyle:
-    '@font-face { font-family: "Roboto"; font-style: normal; font-weight: 400; font-display: swap; src: url(./fonts/Roboto-Regular.ttf) format("truetype"); }',
-}
+const { PATH_PAGES } = require("../../constants/paths")
 
 const baseStyle = readFileSync(resolve(PATH_CWD, "eofol", "api", "head", "base.css")).toString()
+
+const FILENAME_SUFFIX_PAGE_METADATA = "-metadata.js"
+
+// @TODO extract from env and above also extract base.css somewhere
+const metadataDefault = require(resolve(PATH_PAGES, `default${FILENAME_SUFFIX_PAGE_METADATA}`))
 
 const htmlElement = (tagname, content, attributes) => ({
   type: tagname,
@@ -29,8 +17,11 @@ const htmlElement = (tagname, content, attributes) => ({
   attributes,
 })
 
-const htmlTemplate = (body, view) =>
-  htmlElement(
+const htmlTemplate = (body, view) => {
+  const metadataPage = require(resolve(PATH_PAGES, `${view}${FILENAME_SUFFIX_PAGE_METADATA}`))
+  const data = { ...metadataDefault, ...metadataPage }
+
+  return htmlElement(
     "html",
     [
       htmlElement(
@@ -72,5 +63,6 @@ const htmlTemplate = (body, view) =>
       lang: "en",
     },
   )
+}
 
 module.exports = htmlTemplate

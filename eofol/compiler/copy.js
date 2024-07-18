@@ -1,15 +1,6 @@
 const fs = require("fs")
 const path = require("path")
-const {
-  PATH_PUBLIC,
-  FILENAME_FAVICON,
-  PATH_BUILD,
-  EXT_HTML,
-  EXT_CSS,
-  EXT_JPG,
-  EXT_JPEG,
-  EXT_PNG,
-} = require("../constants")
+const { PATH_STATIC, FILENAME_FAVICON, PATH_BUILD, EXT_HTML, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
 const compileImg = require("./img")
 const { breakpoints } = require("../../eofol-config")
 const {
@@ -22,34 +13,34 @@ const {
 const gzip = require("./gzip")
 const hotUpdate = require("./hot-update")
 
-const copyPublicDir = (isHot) => {
-  fs.readdirSync(PATH_PUBLIC, {
+const copyStaticDir = (isHot) => {
+  fs.readdirSync(PATH_STATIC, {
     recursive: true,
   })
     .flat()
     .forEach(async (filename) => {
-      if (!filename.includes(".") || filename.endsWith(EXT_HTML) || filename.endsWith(EXT_CSS)) {
+      if (!filename.includes(".") || filename.endsWith(EXT_HTML)) {
         return
       }
 
-      const source = path.resolve(PATH_PUBLIC, filename)
+      const source = path.resolve(PATH_STATIC, filename)
       const target = path.resolve(PATH_BUILD, filename)
-      const publicFileContent = fs.readFileSync(source)
+      const staticFileContent = fs.readFileSync(source)
 
       if (filename.includes(FILENAME_FAVICON)) {
-        fs.writeFileSync(target, publicFileContent)
+        fs.writeFileSync(target, staticFileContent)
         return
       }
 
       if (filename.includes(EXT_JPG) || filename.includes(EXT_JPEG) || filename.includes(EXT_PNG)) {
-        const processedImgs = await compileImg(filename, publicFileContent)
+        const processedImgs = await compileImg(filename, staticFileContent)
         processedImgs.forEach((processedImgContent, i) => {
           const filenameSplit = filename.split(".")
           const resultPath = path.resolve(PATH_BUILD, `${filenameSplit[0]}-${breakpoints[i].name}.${filenameSplit[1]}`)
           hotUpdate(isHot, resultPath, source, processedImgContent)
         })
       } else {
-        hotUpdate(isHot, target, source, publicFileContent)
+        hotUpdate(isHot, target, source, staticFileContent)
       }
     })
 }
@@ -78,4 +69,4 @@ const copyInternal = (isHot) => {
   })
 }
 
-module.exports = { copyPublicDir, copyPages, copyInternal }
+module.exports = { copyStaticDir, copyPages, copyInternal }

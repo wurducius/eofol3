@@ -1,8 +1,10 @@
 const fs = require("fs")
 const path = require("path")
-const { EXT_JS } = require("../constants")
+const { EXT_JS, CODE_MODULE_EXPORTS } = require("../constants")
 
-const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split("module.exports")[0]
+const CODE_EOFOL_IMPORT_OPENING = "// @IMPORT"
+
+const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split(CODE_MODULE_EXPORTS)[0]
 
 const fixExports = (scriptStr) =>
   scriptStr.toString().replaceAll("export ", "").replaceAll("default ", "module.exports = ")
@@ -10,12 +12,12 @@ const fixExports = (scriptStr) =>
 const resolveImports = (sourcePath, content, importedScripts) => {
   return content
     .toString()
-    .split("// @IMPORT-")
-    .map((y, i) => {
+    .split(`${CODE_EOFOL_IMPORT_OPENING}-`)
+    .map((y) => {
       const yy = y.replaceAll("END", "")
 
-      if (yy.includes("// @IMPORT")) {
-        const z = yy.split("// @IMPORT(")
+      if (yy.includes(CODE_EOFOL_IMPORT_OPENING)) {
+        const z = yy.split(`${CODE_EOFOL_IMPORT_OPENING}(`)
         return z.reduce((acc, next, innerIndex) => {
           if (innerIndex === 0) {
             return ""
@@ -47,7 +49,7 @@ const precompile = (source, suffixPath, target) => {
   const exportsReplaced = fixExports(content)
   const importedScripts = []
   const importsResolved = resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
-  fs.writeFileSync(target, fixExports(importsResolved))
+  fs.writeFileSync(target, `let _internals = {}\n${fixExports(importsResolved)}`)
 }
 
 module.exports = precompile

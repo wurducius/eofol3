@@ -1,3 +1,5 @@
+import { Attributes, JSONNode, Properties, Props, StringRecord } from "./types"
+
 // @IMPORT-START
 import Common from "./common"
 const { findDef } = Common
@@ -6,7 +8,6 @@ const { findDef } = Common
 
 // @IMPORT-START
 import RenderDynamic from "./render-dynamic"
-import { Attributes, JSONNode, Properties, Props, StringRecord } from "./types"
 const { renderEofolElement } = RenderDynamic
 // @IMPORT("./render-dynamic")
 // @IMPORT-END
@@ -24,7 +25,7 @@ const getContentHTML = (content: JSONNode | undefined): JSONNode => {
   if (!content) {
     return ""
   } else if (Array.isArray(content)) {
-    return content.reduce((acc, next) => acc + getContentHTML(next).toString(), "")
+    return content.reduce((acc, next) => `${acc}${getContentHTML(next).toString()}`, "")
   } else {
     return content
   }
@@ -39,7 +40,7 @@ const renderTagElement = (
 ) => {
   const classnameHTML = classname ? ` class='${classname}'` : ""
   const attributesHTML = reduceHTMLProps(attributes)
-  const propertiesHTML = reduceHTMLProps(properties, "(", ")()")
+  const propertiesHTML = reduceHTMLProps(properties)
   const contentHTML = getContentHTML(content)
   return `<${tagname}${classnameHTML}${attributesHTML}${propertiesHTML}>${contentHTML}</${tagname}>`
 }
