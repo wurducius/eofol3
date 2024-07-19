@@ -20,19 +20,19 @@ export const component1 = defineCustomComponent({
   name: "component1",
   render: (statex: any, setStatex: any, props: any) => {
     const counter = createElement("h2", `You have clicked ${statex.count} times.`)
-    const buttonIncrement = createElement("button", "+", undefined, undefined, {
+    const buttonIncrement = createElement("button", "+", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: state.count + 1 })
       }),
     })
-    const buttonReset = createElement("button", "Reset", undefined, undefined, {
+    const buttonReset = createElement("button", "Reset", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: 0 })
       }),
     })
-    const otherButton = createElement("button", "Force rerender", undefined, undefined, {
+    const otherButton = createElement("button", "Force rerender", "eofol-button", undefined, {
       onclick: handlerSimple(() => {
         forceRerender()
       }),
@@ -45,11 +45,15 @@ export const component1 = defineCustomComponent({
 export const component2 = defineCustomComponent({
   name: "component2",
   render: () =>
-    createElement("div", [
-      `Component 2 = ${generateId()}`,
-      internalLink({ children: "Internal", href: "indexx.html" }),
-      externalLink({ children: "External", href: "https://youtube.com" }),
-    ]),
+    createElement(
+      "div",
+      [
+        `Component 2 = ${generateId()}`,
+        internalLink({ children: "Internal", href: "indexx.html" }),
+        externalLink({ children: "External", href: "https://youtube.com" }),
+      ],
+      "col",
+    ),
 })
 
 export const component3 = defineCustomComponent({
@@ -79,10 +83,23 @@ export const staticComponent = defineStaticComponent({
   render: () => [createElement("p", "STATIC HELLO WORLD!!!"), createElement("p", "OH YEAH"), "Static component"],
 })
 
+export const imgPhi = defineStaticComponent({
+  name: "img-phi",
+  render: () => [
+    createElement("img", undefined, "phi", {
+      src: "phi.svg",
+      alt: "Eofol logo - greek letter Phi",
+      height: "128px",
+      width: "128px",
+    }),
+  ],
+})
+
 export default {
   component1,
   component2,
   component3,
   flatComponent,
   staticComponent,
+  imgPhi,
 }

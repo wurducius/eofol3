@@ -1,7 +1,7 @@
-import { VDOM, Instance, Def } from "./types"
+import { VDOM, Instances, Def } from "./types"
 
 let vdom: VDOM = { type: "tag", name: "initial" }
-let instances: Instance[] = []
+let instances: Instances = {}
 
 const customDefs: Def[] = []
 const flatDefs: Def[] = []
@@ -17,7 +17,7 @@ const getStaticDefs = () => staticDefs
 const setVdom = (nextVdom: VDOM) => {
   vdom = nextVdom
 }
-const setInstances = (nextInstances: Instance[]) => {
+const setInstances = (nextInstances: Instances) => {
   instances = nextInstances
 }
 

@@ -22,7 +22,7 @@ const findStaticDef = findGeneralDef(getStaticDefs())
 
 const findDef = (tagname: string) => findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname)
 
-const findInstance = (id: string) => getInstances().find((instance) => instance.id === id)
+const findInstance = (id: string) => getInstances()[id]
 
 const getProps = (element: JSONElement) => {
   const props = structuredClone(element.attributes)

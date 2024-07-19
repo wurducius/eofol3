@@ -26,6 +26,8 @@ module.exports = [
         structuredClone: true,
         document: true,
         navigator: true,
+        fetch: true,
+        Headers: true,
       },
     },
     plugins: { "@typescript-eslint": tsPlugin },

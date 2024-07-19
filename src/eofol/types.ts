@@ -12,14 +12,13 @@ export interface VDOM {
 export interface Instance {
   name: string
   id: string
-  as: HTMLTag
   type?: string
   state?: State
-  setState?: SetState
   props?: Props
+  // as: HTMLTag
 }
 
-export type Instances = Instance[]
+export type Instances = Record<string, Instance>
 
 export interface Def {
   type?: string
