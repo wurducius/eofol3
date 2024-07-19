@@ -11,7 +11,6 @@ const {
   parseHTMLToJSON,
   msgStepEofol,
   msgStepEofolSuccess,
-  validateHTML,
   appendDoctype,
   parseJSONToHTML,
   importViewEofolDefs,
@@ -69,7 +68,6 @@ const compile = () => {
       .then(parseJSONToHTML)
       .then(compileStyle(view, []))
       .then(minifyPost)
-      .then(validateHTML)
       .then(appendDoctype)
       .then((res) => {
         writeView(source, res, vdom, instances)
