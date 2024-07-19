@@ -4,7 +4,7 @@ const { get } = Fetch
 // @IMPORT("./fetch")
 // @IMPORT-END
 
-const assetsPagesInternal = ["indexx"]
+const assetsPagesInternal = ["index", "indexx"]
 
 // const assetsPagesExternal = ["https://youtube.com"]
 const assetsPagesExternal: string[] = []
