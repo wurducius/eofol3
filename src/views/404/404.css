@@ -1,46 +1,16 @@
-body {
-  background-image: url("/rainbow-mountains-peru-lg.jpg");
-}
-
-#eofol {
-  color: magenta;
-  font-size: 24px;
-}
-
-.container {
-  max-width: 800px;
-  margin: auto auto auto auto;
-  text-align: center;
-}
-
 .col {
-  display: flex;
-  flex-direction: column;
-}
-
-a {
-  text-decoration: none;
-  font-weight: 700;
-  color: #278da6;
-}
-a:visited {
-  color: #278da6;
-}
-a:hover {
-  color: #4ea6c1;
-}
-a:active {
-  color: magenta;
+    display: flex;
+    flex-direction: column;
 }
 
 .spacing-m {
-  margin-top: 16px;
+    margin-top: 16px;
 }
 
 .spacing-l {
-  margin-top: 32px;
+    margin-top: 32px;
 }
 
 .spacing-25 {
-  margin-top: 25%;
+    margin-top: 25%;
 }
