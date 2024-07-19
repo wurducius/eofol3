@@ -9,11 +9,7 @@ const assetsPagesInternal = ["indexx"]
 // const assetsPagesExternal = ["https://youtube.com"]
 const assetsPagesExternal: string[] = []
 
-const getInternalPageAssets = (internalUrl: string) => [
-  `${internalUrl}.html`,
-  `assets/js/${internalUrl}.js`,
-  `assets/css/${internalUrl}.css`,
-]
+const getInternalPageAssets = (internalUrl: string) => [`${internalUrl}.html`, `assets/js/${internalUrl}.js`]
 
 const prefetchInit = () => {
   const assetsToPrefetch = []
