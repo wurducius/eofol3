@@ -2,6 +2,21 @@ body {
   background-image: url("../../rainbow-mountains-peru-lg.jpg");
 }
 
+a {
+  text-decoration: none;
+  font-weight: 700;
+  color: #278da6;
+}
+a:visited {
+  color:  #278da6;
+}
+a:hover {
+  color: #4ea6c1;
+}
+a:active {
+  color: magenta;
+}
+
 #eofol {
   color: magenta;
   font-size: 24px;
@@ -15,8 +30,7 @@ body {
 .phi {
   background-color: #278da6;
   border-radius: 8px;
-  font-size: 12px;
-  margin-bottom: 8px;
+  margin: 32px 0 0 0;
 }
 
 .eofol-button {
@@ -29,7 +43,6 @@ body {
   font-weight: 600;
   cursor: pointer;
   border-radius: 8px;
-  margin-top: 16px;
 }
 
 .eofol-button:hover {
@@ -51,4 +64,9 @@ body {
 .no-gutter {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
 }
