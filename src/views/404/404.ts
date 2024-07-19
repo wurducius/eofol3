@@ -6,16 +6,16 @@ const { isBrowser, defineCustomComponent, createElement, forceRerender, internal
 
 let initialized = false
 
-export const staticComponent = defineCustomComponent({
-  name: "static",
+export const component404content = defineCustomComponent({
+  name: "404-content",
   render: () => {
     const page = isBrowser() ? window.location.pathname.replace("/", "") : "unknown"
     return createElement(
       "div",
       [
-        createElement("h3", `The requested page "${page}" doesn't exist.`),
+        createElement("h2", `The requested page "${page}" doesn't exist.`),
         internalLink({ children: "Go back", href: "javascript:history.back()", classname: "spacing-l" }),
-        internalLink({ children: "Go to index", href: "/", classname: "spacing-l" }),
+        internalLink({ children: "Go to index", href: "/", classname: "spacing-m" }),
       ],
       "col",
     )
@@ -34,4 +34,4 @@ if (!initialized && isBrowser()) {
   }
 }
 
-export default { staticComponent }
+export default { component404content }

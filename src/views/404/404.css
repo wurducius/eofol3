@@ -33,6 +33,10 @@ a:active {
     color: magenta;
 }
 
+.spacing-m {
+    margin-top: 16px;
+}
+
 .spacing-l {
     margin-top: 32px;
 }
