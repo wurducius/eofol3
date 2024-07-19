@@ -54,7 +54,7 @@ const htmlTemplate = (body, view) => {
         [
           body,
           htmlElement("noscript", ["You need to enable JavaScript to run this app."], {}),
-          htmlElement("script", [], { src: `assets/js/${view}.js`, async: true, defer: true }),
+          htmlElement("script", [], { src: `/assets/js/${view}.js`, async: true, defer: true }),
         ],
         {},
       ),
