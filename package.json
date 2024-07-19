@@ -37,7 +37,6 @@
     "html-minifier-terser": "^7.2.0",
     "html-to-json-parser": "^2.0.1",
     "html-validator": "^6.0.1",
-    "http-server": "^14.1.1",
     "live-server": "^1.2.2",
     "prettier": "3.3.2",
     "sharp": "^0.33.4",

@@ -12,6 +12,10 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+p {
+  margin: 0 0 0 0;
+}
+
 body::-webkit-scrollbar {
   width: 16px;
 }

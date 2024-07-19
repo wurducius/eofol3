@@ -1,14 +1,11 @@
 const { success } = require("../../eofol/dev-util")
 const { env, paths } = require("../../config")
-const { PORT, HOST } = env
+const { SERVE_URL, PAGE_FALLBACK, PORT, HOST } = env
 const { BUILD_PATH } = paths
 
 const liveServer = require("live-server")
-const { SERVE_URL } = require("../../config/env-impl")
 
-// const SERVE_CACHE_TTL_MS = 31536000000
-
-const SERVE_RELOAD_WAIT_TIME_MS = 250
+const SERVE_RELOAD_WAIT_TIME_MS = 100
 
 const CORS = true
 
@@ -19,7 +16,7 @@ const serveOptions = {
   https: undefined,
   open: true,
   root: BUILD_PATH,
-  file: "index.html",
+  file: `${PAGE_FALLBACK}.html`,
   wait: SERVE_RELOAD_WAIT_TIME_MS,
   logLevel: 0,
   cors: CORS,
