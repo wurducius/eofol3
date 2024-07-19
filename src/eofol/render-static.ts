@@ -61,10 +61,8 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
   instances.push({
     name,
     id,
+    type: as,
     state: stateImpl,
-    setState: eval(setStateImpl),
-    props,
-    as,
   })
 
   return {
@@ -90,7 +88,6 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
   return {
     type: as,
     content: [def.render(props)],
-    attributes: {},
   }
 }
 

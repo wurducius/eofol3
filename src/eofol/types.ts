@@ -12,7 +12,7 @@ export interface VDOM {
 export interface Instance {
   name: string
   id: string
-  as: HTMLTag
+  // as: HTMLTag
   type?: string
   state?: State
   setState?: SetState
