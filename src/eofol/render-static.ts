@@ -58,12 +58,13 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
   const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(id)
 
-  instances.push({
+  instances[id] = {
     name,
     id,
     type: as,
     state: stateImpl,
-  })
+    props,
+  }
 
   return {
     type: as,

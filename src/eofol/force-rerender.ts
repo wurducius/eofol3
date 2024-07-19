@@ -1,5 +1,3 @@
-import { Instance } from "./types"
-
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
 const { getInstances } = EofolInternals
@@ -25,8 +23,9 @@ const { findDef, isBrowser } = Common
 // @IMPORT-END
 
 const forceRerender = () => {
-  getInstances()?.forEach((child: Instance) => {
-    const { id, name, props } = child
+  const instances = getInstances()
+  Object.keys(instances).forEach((childId) => {
+    const { id, name, props } = instances[childId]
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
       const def = findDef(name)

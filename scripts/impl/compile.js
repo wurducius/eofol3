@@ -47,7 +47,7 @@ const compile = () => {
       .filter((sourceFilename) => sourceFilename.endsWith(EXT_HTML))
       .find((filename) => filename.replace(EXT_HTML, "") === view)
 
-    const instances = []
+    const instances = {}
     const vdom = []
 
     const sourcePath = path.resolve(PATH_PAGES, source)
