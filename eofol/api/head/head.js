@@ -1,14 +1,17 @@
 const { readFileSync } = require("fs")
 const { resolve } = require("path")
+const {
+  PATH_PAGES,
+  PATH_BASE_STYLES,
+  FILENAME_SUFFIX_PAGE_METADATA,
+  DIRNAME_ASSETS,
+  DIRNAME_ASSET_JS,
+} = require("../../constants")
+const { relativizePath, relativizeStylesheet, relativizeFontStyle } = require("../../compiler/relativize")
 
-const { PATH_CWD } = require("../../constants")
-const { PATH_PAGES } = require("../../constants/paths")
+const baseStyle = readFileSync(PATH_BASE_STYLES).toString()
 
-const baseStyle = readFileSync(resolve(PATH_CWD, "eofol", "api", "head", "base.css")).toString()
-
-const FILENAME_SUFFIX_PAGE_METADATA = "-metadata.js"
-
-// @TODO extract from env and above also extract base.css somewhere
+// @TODO extract from env
 const metadataDefault = require(resolve(PATH_PAGES, `default${FILENAME_SUFFIX_PAGE_METADATA}`))
 
 const htmlElement = (tagname, content, attributes) => ({
@@ -37,15 +40,15 @@ const htmlTemplate = (body, view) => {
           htmlElement("meta", [], { property: "og:description", content: data.descriptionOg }),
           htmlElement("meta", [], { name: "keywords", content: data.keywords }),
           htmlElement("meta", [], { name: "author", content: data.author }),
-          htmlElement("meta", [], { property: "og:image", content: data.imageOg }),
+          htmlElement("meta", [], { property: "og:image", content: relativizePath(data.imageOg) }),
           htmlElement("meta", [], { property: "og:image:type", content: data.imageTypeOg }),
           htmlElement("meta", [], { property: "og:image:width", content: data.imageWidthOg }),
           htmlElement("meta", [], { property: "og:image:height", content: data.imageHeightOg }),
-          htmlElement("link", [], { rel: "icon", href: data.favicon }),
-          htmlElement("link", [], { rel: "apple-touch-icon", href: data.appleTouchIcon }),
-          htmlElement("link", [], { rel: "manifest", href: data.manifest }),
+          htmlElement("link", [], { rel: "icon", href: relativizePath(data.favicon) }),
+          htmlElement("link", [], { rel: "apple-touch-icon", href: relativizePath(data.appleTouchIcon) }),
+          htmlElement("link", [], { rel: "manifest", href: relativizePath(data.manifest) }),
           htmlElement("title", [data.title], {}),
-          htmlElement("style", [data.fontStyle, baseStyle], {}),
+          htmlElement("style", [relativizeFontStyle(data.fontStyle), relativizeStylesheet(baseStyle)], {}),
         ],
         {},
       ),
@@ -54,7 +57,11 @@ const htmlTemplate = (body, view) => {
         [
           body,
           htmlElement("noscript", ["You need to enable JavaScript to run this app."], {}),
-          htmlElement("script", [], { src: `/assets/js/${view}.js`, async: true, defer: true }),
+          htmlElement("script", [], {
+            src: relativizePath(`${DIRNAME_ASSETS}/${DIRNAME_ASSET_JS}/${view}.js`),
+            async: true,
+            defer: true,
+          }),
         ],
         {},
       ),

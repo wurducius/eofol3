@@ -17,6 +17,8 @@ const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
 const FILENAME_CORE = "core.js"
+const FILENAME_BASE_STYLES = "base.css"
+const FILENAME_SUFFIX_PAGE_METADATA = "-metadata.js"
 
 const PATH_CWD = fs.realpathSync(process.cwd())
 const PATH_DIST = path.resolve(PATH_CWD, DIRNAME_DIST)
@@ -36,6 +38,7 @@ const PATH_PAGES = path.resolve(PATH_CWD, DIRNAME_PAGES)
 const PATH_STATIC = path.resolve(PATH_CWD, DIRNAME_STATIC)
 const PATH_DERIVED_INTERNAL = path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
 const PATH_BUILD_INTERNAL = path.resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
+const PATH_BASE_STYLES = path.resolve(PATH_SRC, FILENAME_BASE_STYLES)
 
 module.exports = {
   PATH_CWD,
@@ -60,4 +63,9 @@ module.exports = {
   PATH_DERIVED_INTERNAL,
   PATH_BUILD_INTERNAL,
   PATH_ASSETS,
+  FILENAME_BASE_STYLES,
+  FILENAME_SUFFIX_PAGE_METADATA,
+  PATH_BASE_STYLES,
+  DIRNAME_ASSETS,
+  DIRNAME_ASSET_JS,
 }

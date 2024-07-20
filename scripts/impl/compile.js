@@ -15,9 +15,11 @@ const {
   parseJSONToHTML,
   importViewEofolDefs,
   writeView,
+  relativizeHtml,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const { PATH_PAGES } = require("../../eofol/constants/paths")
+
 /*
 const Sx = require("../../dist2/eofol/core")
 const { clearCompileCache, getCompileCache } = Sx
@@ -69,6 +71,7 @@ const compile = () => {
       .then(compileStyle(view, []))
       .then(minifyPost)
       .then(appendDoctype)
+      .then(relativizeHtml)
       .then((res) => {
         writeView(source, res, vdom, instances)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)

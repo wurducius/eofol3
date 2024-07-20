@@ -10,6 +10,7 @@ const importViewEofolDefs = require("./import-defs")
 const parseHTMLToJSON = require("./parse-html-to-json")
 const parseJSONToHTML = require("./parse-json-to-html")
 const precompile = require("./precompile")
+const Relativize = require("./relativize")
 const touchBuildDirs = require("./touch-build-dirs")
 const uglify = require("./uglify")
 const writeInternal = require("./write-internal")
@@ -39,4 +40,5 @@ module.exports = {
   ...Copy,
   ...Log,
   ...Minify,
+  ...Relativize,
 }
