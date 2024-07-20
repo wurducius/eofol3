@@ -49,8 +49,8 @@ export const component2 = defineCustomComponent({
       "div",
       [
         `Component 2 = ${generateId()}`,
-        internalLink({ children: "Internal", href: "indexx.html" }),
-        externalLink({ children: "External", href: "https://youtube.com" }),
+        createElement("div", internalLink({ children: "Internal", href: "indexx.html" })),
+        createElement("div", externalLink({ children: "External", href: "https://youtube.com" })),
       ],
       "col",
     ),
@@ -87,10 +87,10 @@ export const imgPhi = defineStaticComponent({
   name: "img-phi",
   render: () => [
     createElement("img", undefined, "phi", {
-      src: "phi.svg",
+      src: "./phi.svg",
       alt: "Eofol logo - greek letter Phi",
-      height: "128px",
-      width: "128px",
+      height: "128",
+      width: "128",
     }),
   ],
 })

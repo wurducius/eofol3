@@ -1,8 +1,8 @@
 module.exports = {
   MODE: "development",
-  PORT: 3005,
+  PORT: 3000,
   BROWSER: true,
-  HOST: "0.0.0.0",
+  HOST: "localhost",
   HTTPS: false,
   LOG_LEVEL: "warn",
   SHOW_PROGRESS: true,
@@ -23,4 +23,6 @@ module.exports = {
   GENERATE_SOURCEMAP: true,
   ASSET_IMG_INLINE_SIZE_LIMIT: 8192,
   ASSET_SVG_INLINE_SIZE_LIMIT: 8192,
+  PAGE_FALLBACK: "404",
+  BASE_URL: "./",
 }

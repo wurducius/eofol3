@@ -1,8 +1,8 @@
 import { Func } from "./types"
 
 // @IMPORT-START
-import Contansts from "./constants"
-const { LOG_ERROR_MSG_PREFIX, ID_GENERATED_LENGTH } = Contansts
+import Constants from "./constants"
+const { LOG_ERROR_MSG_PREFIX, ID_GENERATED_LENGTH } = Constants
 // @IMPORT("./constants")
 // @IMPORT-END
 
@@ -11,6 +11,7 @@ const generateString = (length: number) => () =>
     .fill("")
     .map(() => Math.random().toString(36).charAt(2))
     .join("")
+
 const generateId = generateString(ID_GENERATED_LENGTH)
 
 const errorRuntime = (msg: string) => {
@@ -38,7 +39,7 @@ const errorValidation = (type: string, msg: string) => {
 }
 
 const errorCustomCannotHaveChildren = (type: string) => {
-  errorValidation(type, "Custom eofol component cannot have children.")
+  errorValidation(type, "Custom Eofol component cannot have children.")
 }
 
 const _pipe = (f: Func, g: Func) => (arg: any) => g(f(arg))

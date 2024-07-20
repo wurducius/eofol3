@@ -6,6 +6,8 @@ const beforeCompile = require("./before-compile")
 const compile = require("./compile")
 const afterCompile = require("./after-compile")
 const cleanHot = require("./clean-hot")
+const { env } = require("../../config")
+const { SERVE_URL } = env
 
 const watchpackOptions = {
   aggregateTimeout: 250,
@@ -25,7 +27,7 @@ const recompile = async () => {
   beforeCompile()
   return await compile().then(() => {
     afterCompile(true)
-    console.log(success("Recompiled!"))
+    console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
   })
 }
 

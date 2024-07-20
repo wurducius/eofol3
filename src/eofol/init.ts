@@ -32,7 +32,7 @@ const initEofol = () => {
 
   if (SERVICE_WORKER_REGISTER_AT_INIT) {
     // @TODO allow relative path from view page
-    registerServiceworker(`./${SERVICE_WORKER_SCRIPT_FILENAME}`)
+    registerServiceworker(`/${SERVICE_WORKER_SCRIPT_FILENAME}`)
   }
 }
 

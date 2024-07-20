@@ -9,7 +9,7 @@ const { isBrowser } = Common
 const seed = 69
 
 function murmurhash2_32_gc(str: string, seed: number) {
-  var l = str.length,
+  let l = str.length,
     h = seed ^ l,
     i = 0,
     k
@@ -34,8 +34,10 @@ function murmurhash2_32_gc(str: string, seed: number) {
   switch (l) {
     case 3:
       h ^= (str.charCodeAt(i + 2) & 255) << 16
+    // eslint-disable-next-line no-fallthrough
     case 2:
       h ^= (str.charCodeAt(i + 1) & 255) << 8
+    // eslint-disable-next-line no-fallthrough
     case 1:
       h ^= str.charCodeAt(i) & 255
       h = (h & 65535) * 1540483477 + ((((h >>> 16) * 1540483477) & 65535) << 16)
@@ -62,16 +64,16 @@ const clearCompileCache = () => {
 
 const sx = (styleObj: Object, selector?: string, prefix?: string) => {
   // @ts-ignore
-  const styleStr = Object.keys(styleObj).reduce((acc, next) => acc + " " + next + ": " + styleObj[next] + ";", "")
-  const styleContent = (selector || "") + " { " + styleStr + " } "
-  const hash = "e" + getHash(styleContent).toString()
+  const styleStr = Object.keys(styleObj).reduce((acc, next) => `${acc} ${next}: ${styleObj[next]};`, "")
+  const styleContent = `${selector || ""} { ${styleStr} } `
+  const hash = `e${getHash(styleContent).toString()}`
   // @ts-ignore
   if (!cache.includes(hash)) {
     const style = (prefix || ".") + hash + styleContent
     if (isBrowser()) {
       document.styleSheets.item(0)?.insertRule(style)
     } else {
-      console.log("SX -> " + style)
+      console.log(`SX -> ${style}`)
       compileCache = compileCache + style
       /*
       const targetDir = path.resolve("dist", "views")
