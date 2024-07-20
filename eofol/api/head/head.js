@@ -9,11 +9,6 @@ const {
 } = require("../../constants")
 const { relativizePath, relativizeStylesheet, relativizeFontStyle } = require("../../compiler/relativize")
 
-const baseStyle = readFileSync(PATH_BASE_STYLES).toString()
-
-// @TODO extract from env
-const metadataDefault = require(resolve(PATH_PAGES, `default${FILENAME_SUFFIX_PAGE_METADATA}`))
-
 const htmlElement = (tagname, content, attributes) => ({
   type: tagname,
   content,
@@ -21,6 +16,9 @@ const htmlElement = (tagname, content, attributes) => ({
 })
 
 const htmlTemplate = (body, view) => {
+  const baseStyle = readFileSync(PATH_BASE_STYLES).toString()
+  // @TODO extract from env
+  const metadataDefault = require(resolve(PATH_PAGES, `default${FILENAME_SUFFIX_PAGE_METADATA}`))
   const metadataPage = require(resolve(PATH_PAGES, `${view}${FILENAME_SUFFIX_PAGE_METADATA}`))
   const data = { ...metadataDefault, ...metadataPage }
 

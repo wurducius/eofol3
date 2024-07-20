@@ -49,8 +49,8 @@ export const component2 = defineCustomComponent({
       "div",
       [
         `Component 2 = ${generateId()}`,
-        internalLink({ children: "Internal", href: "index.html" }),
-        externalLink({ children: "External", href: "https://youtube.com" }),
+        createElement("div", internalLink({ children: "Internal", href: "index.html" })),
+        createElement("div", externalLink({ children: "External", href: "https://youtube.com" })),
       ],
       "col",
     ),
