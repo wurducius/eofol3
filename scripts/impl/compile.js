@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 
 const { prettyTime } = require("../../eofol/dev-util")
-const { config, isVerbose, PATH_DERIVED, PATH_VIEWS_DIST2, EXT_HTML } = require("../../eofol/constants")
+const { config, isVerbose, PATH_DERIVED, PATH_VIEWS_DIST2, EXT_HTML, PATH_PAGES } = require("../../eofol/constants")
 const { checkExistsCreate, die } = require("../../eofol/util")
 const {
   compileStyle,
@@ -18,7 +18,6 @@ const {
   relativizeHtml,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
-const { PATH_PAGES } = require("../../eofol/constants/paths")
 
 /*
 const Sx = require("../../dist2/eofol/core")
