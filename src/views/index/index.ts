@@ -12,6 +12,7 @@ const {
   internalLink,
   externalLink,
   sx,
+  fetchGeneral,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -95,6 +96,51 @@ export const imgPhi = defineStaticComponent({
   ],
 })
 
+export const dataComponent = defineCustomComponent({
+  name: "weather",
+  renderCase: (statex: any, setStatex: any, props: any) => {
+    if (statex.data === "ready") {
+      return () => createElement("div", "Ready")
+    } else if (statex.data === "LOADING") {
+      return () => createElement("div", "Loading...")
+    } else if (statex.data === "ERROR") {
+      return () => createElement("div", "Error")
+    } else {
+      return (statey: any) => createElement("div", statey.data.latitude)
+    }
+  },
+  initialState: { data: "ready" },
+  effect: (statex, setStatex) =>
+    eval(
+      handler({}, statex, setStatex, () => {
+        // @ts-ignore eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
+        if (state.data === "ready") {
+          // @ts-ignore eslint-disable-next-line no-undef
+          // eslint-disable-next-line no-undef
+          setState({ data: "LOADING" })
+          fetchGeneral(
+            "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m",
+            undefined,
+            "GET",
+            undefined,
+            true,
+          )
+            .then((res) => {
+              // @ts-ignore eslint-disable-next-line no-undef
+              // eslint-disable-next-line no-undef
+              setState({ data: res })
+            })
+            .catch(() => {
+              // @ts-ignore eslint-disable-next-line no-undef
+              // eslint-disable-next-line no-undef
+              setState({ data: "ERROR" })
+            })
+        }
+      }),
+    ),
+})
+
 export default {
   component1,
   component2,
@@ -102,4 +148,5 @@ export default {
   flatComponent,
   staticComponent,
   imgPhi,
+  dataComponent,
 }

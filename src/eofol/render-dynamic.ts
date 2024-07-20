@@ -34,7 +34,18 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
   const setStateImpl = getSetState(id)
   const propsImpl = { ...props, id }
 
-  return def.render(stateImpl, setStateImpl, propsImpl)
+  let rendered
+  if (def.renderCase) {
+    rendered = def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl)
+  } else {
+    rendered = def.render(stateImpl, setStateImpl, propsImpl)
+  }
+
+  if (def.effect) {
+    def.effect(stateImpl, setStateImpl, propsImpl)
+  }
+
+  return rendered
 }
 
 const renderFlatDynamic = (def: Def, props: Props | undefined) => {

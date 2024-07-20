@@ -66,9 +66,16 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     props,
   }
 
+  let rendered
+  if (def.renderCase) {
+    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
+  } else {
+    rendered = def.render(stateImpl, setStateImpl, props)
+  }
+
   return {
     type: as,
-    content: [def.render(stateImpl, setStateImpl, props)],
+    content: [rendered],
     attributes: {
       id,
     },

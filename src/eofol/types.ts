@@ -24,11 +24,11 @@ export interface Def {
   type?: string
   name: string
   // @TODO typing render function
-  render: any
+  render?: any
   initialState?: State
-  effect?: Handler | Handler[]
+  effect?: any //| Handler[]
   subscribe?: string | string[]
-  cases?: Handler
+  renderCase?: any
 }
 
 export type Defs = Def[]

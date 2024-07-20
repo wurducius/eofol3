@@ -86,6 +86,12 @@ const { initEofol } = Init
 // @IMPORT("./init")
 // @IMPORT-END
 
+// @IMPORT-START
+import Fetch from "./fetch"
+const { get, post, fetchGeneral } = Fetch
+// @IMPORT("./fetch")
+// @IMPORT-END
+
 initEofol()
 
 export default {
@@ -116,4 +122,7 @@ export default {
   sx,
   getCompileCache,
   clearCompileCache,
+  get,
+  post,
+  fetchGeneral,
 }
