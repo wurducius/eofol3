@@ -17,6 +17,7 @@ export interface Instance {
   props?: Props
   // as: HTMLTag
   renderCache?: string
+  memo?: any
 }
 
 export type Instances = Record<string, Instance>
@@ -31,6 +32,7 @@ export interface Def {
   subscribe?: string | string[]
   renderCase?: any
   shouldComponentUpdate?: any
+  memo?: boolean
 }
 
 export type Defs = Def[]

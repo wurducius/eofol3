@@ -46,6 +46,7 @@ export const component1 = defineCustomComponent({
     return div([counter, buttonIncrement, buttonReset, otherButton])
   },
   initialState: { count: 0 },
+  memo: true,
 })
 
 export const component2 = defineCustomComponent({

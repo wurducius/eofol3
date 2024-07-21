@@ -57,9 +57,9 @@ const reduceRendered = (rendered: JSONElement | JSONElement[] | undefined) => {
   if (rendered === undefined) {
     return ""
   } else if (Array.isArray(rendered)) {
-    return rendered.join(" ")
+    return rendered.join("")
   } else {
-    return rendered
+    return rendered.toString()
   }
 }
 
@@ -84,9 +84,9 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
 
   let rendered
   if (def.renderCase) {
-    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
+    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props))
   } else {
-    rendered = def.render(stateImpl, setStateImpl, props)
+    rendered = reduceRendered(def.render(stateImpl, setStateImpl, props))
   }
 
   instances[id] = {
@@ -99,6 +99,10 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
 
   if (def.shouldComponentUpdate) {
     instances[id].renderCache = rendered
+  }
+
+  if (def.memo) {
+    instances[id].memo = { props, state: stateImpl, rendered }
   }
 
   return renderElementWrapper(rendered, as, { id })
