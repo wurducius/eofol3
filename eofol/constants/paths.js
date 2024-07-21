@@ -1,5 +1,6 @@
 const fs = require("fs")
 const path = require("path")
+const { EXT_JS, EXT_LESS, EXT_CSS } = require("./common")
 
 const DIRNAME_DIST = "dist"
 const DIRNAME_DIST2 = "dist2"
@@ -16,9 +17,10 @@ const DIRNAME_ASSET_CSS = "css"
 const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
-const FILENAME_CORE = "core.js"
-const FILENAME_BASE_STYLES = "base.css"
-const FILENAME_SUFFIX_PAGE_METADATA = "-metadata.js"
+const FILENAME_CORE = `core${EXT_JS}`
+const FILENAME_BASE_STYLES_LESS = `base${EXT_LESS}`
+const FILENAME_BASE_STYLES_CSS = `base${EXT_CSS}`
+const FILENAME_SUFFIX_PAGE_METADATA = `-metadata${EXT_JS}`
 
 const PATH_CWD = fs.realpathSync(process.cwd())
 const PATH_DIST = path.resolve(PATH_CWD, DIRNAME_DIST)
@@ -38,7 +40,8 @@ const PATH_PAGES = path.resolve(PATH_CWD, DIRNAME_PAGES)
 const PATH_STATIC = path.resolve(PATH_CWD, DIRNAME_STATIC)
 const PATH_DERIVED_INTERNAL = path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL)
 const PATH_BUILD_INTERNAL = path.resolve(PATH_BUILD, DIRNAME_EOFOL_INTERNAL)
-const PATH_BASE_STYLES = path.resolve(PATH_SRC, FILENAME_BASE_STYLES)
+const PATH_BASE_STYLES_LESS = path.resolve(PATH_SRC, FILENAME_BASE_STYLES_LESS)
+const PATH_BASE_STYLES_CSS = path.resolve(PATH_SRC, FILENAME_BASE_STYLES_CSS)
 
 module.exports = {
   PATH_CWD,
@@ -63,9 +66,11 @@ module.exports = {
   PATH_DERIVED_INTERNAL,
   PATH_BUILD_INTERNAL,
   PATH_ASSETS,
-  FILENAME_BASE_STYLES,
+  FILENAME_BASE_STYLES_LESS,
+  FILENAME_BASE_STYLES_CSS,
   FILENAME_SUFFIX_PAGE_METADATA,
-  PATH_BASE_STYLES,
+  PATH_BASE_STYLES_LESS,
+  PATH_BASE_STYLES_CSS,
   DIRNAME_ASSETS,
   DIRNAME_ASSET_JS,
 }

@@ -18,6 +18,7 @@ const {
   relativizeHtml,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
+const htmlTemplate = require("../../eofol/api/head/head")
 
 /*
 const Sx = require("../../dist2/eofol/core")
@@ -64,7 +65,8 @@ const compile = () => {
     // clearCompileCache()
 
     return minifyPre(sourceHTML.toString())
-      .then(parseHTMLToJSON(view))
+      .then(parseHTMLToJSON)
+      .then(htmlTemplate(view))
       .then(transverseTree(vdom, instances, defs))
       .then(parseJSONToHTML)
       .then(compileStyle(view, []))
@@ -85,6 +87,4 @@ const compile = () => {
   })
 }
 
-module.exports = async () => {
-  await compile()
-}
+module.exports = compile

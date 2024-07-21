@@ -2,6 +2,7 @@ const appendDoctype = require("./append-doctype")
 const babelize = require("./babelize")
 const checksum = require("./checksum")
 const compileImg = require("./img")
+const compileAllStyles = require("./style-impl")
 const compileScripts = require("./script")
 const compileStyle = require("./style")
 const hotUpdate = require("./hot-update")
@@ -25,6 +26,7 @@ module.exports = {
   babelize,
   checksum,
   compileImg,
+  compileAllStyles,
   compileScripts,
   compileStyle,
   gzip,
