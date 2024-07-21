@@ -107,15 +107,24 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
 
 const rerenderComponent = (id: string) => {
   const instances = getInstances()
-  const { name, props } = instances[id]
+  const instance = instances[id]
+  const { name, props } = instance
   const target = isBrowser() ? document.getElementById(id) : null
   if (target) {
     const def = findDef(name)
     if (!def) {
       return undefined
     }
-    const rendered = renderEofolElement(name, props, id, def)
-    target.innerHTML = rendered ?? ""
+    if (def.shouldComponentUpdate && def.shouldComponentUpdate(instance.state)) {
+      if (instance.renderCache) {
+        target.innerHTML = instance.renderCache
+      } else {
+        console.log(`Render cache not found for id = ${id}`)
+        return ""
+      }
+    } else {
+      target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+    }
   } else {
     errorElementNotFound(id, name)
   }

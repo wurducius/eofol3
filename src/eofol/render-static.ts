@@ -82,6 +82,13 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
   const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(id)
 
+  let rendered
+  if (def.renderCase) {
+    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
+  } else {
+    rendered = def.render(stateImpl, setStateImpl, props)
+  }
+
   instances[id] = {
     name,
     id,
@@ -90,11 +97,8 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     props,
   }
 
-  let rendered
-  if (def.renderCase) {
-    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
-  } else {
-    rendered = def.render(stateImpl, setStateImpl, props)
+  if (def.shouldComponentUpdate) {
+    instances[id].renderCache = rendered
   }
 
   return renderElementWrapper(rendered, as, { id })
