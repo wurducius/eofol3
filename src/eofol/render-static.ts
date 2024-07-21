@@ -101,6 +101,10 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     instances[id].renderCache = rendered
   }
 
+  if (def.memo) {
+    instances[id].memo = { props, state: stateImpl, rendered }
+  }
+
   return renderElementWrapper(rendered, as, { id })
 }
 

@@ -39,7 +39,7 @@ const tagnames = [
 ]
 
 const a = tag("a")
-const div = tag("dib")
+const div = tag("div")
 const p = tag("p")
 const h1 = tag("h1")
 const h2 = tag("h2")

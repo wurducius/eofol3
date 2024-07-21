@@ -36,7 +36,7 @@ const componentRenderedCustom = (def: Def, id: string, props: Props | undefined)
   const propsImpl = { ...props, id }
 
   if (def.effect) {
-    def.effect(stateImpl, setStateImpl, props)
+    def.effect(stateImpl, setStateImpl, propsImpl)
   }
 }
 
@@ -75,6 +75,10 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
 
   if (def.shouldComponentUpdate) {
     instance.renderCache = rendered
+  }
+
+  if (def.memo) {
+    instance.memo = { props: propsImpl, state: stateImpl, rendered }
   }
 
   if (def.effect) {

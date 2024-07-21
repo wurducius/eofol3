@@ -105,6 +105,8 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
   }
 }
 
+const deepEqual = (x: any, y: any) => JSON.stringify(x) === JSON.stringify(y)
+
 const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
@@ -120,10 +122,17 @@ const rerenderComponent = (id: string) => {
         target.innerHTML = instance.renderCache
       } else {
         console.log(`Render cache not found for id = ${id}`)
-        return ""
       }
     } else {
-      target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+      if (def.memo) {
+        if (deepEqual(props, instance.memo.props) && deepEqual(instance.state, instance.memo.state)) {
+          target.innerHTML = instance.memo.rendered ?? ""
+        } else {
+          target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+        }
+      } else {
+        target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+      }
     }
   } else {
     errorElementNotFound(id, name)
