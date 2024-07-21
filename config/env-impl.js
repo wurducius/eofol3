@@ -26,6 +26,7 @@ module.exports = {
   MODE: isDev ? "development" : "production",
   BROWSER: getBrowser(BROWSER),
   HTTPS: protocol,
+  PROTOCOL: protocol,
   SHOW_PROGRESS: SHOW_PROGRESS === "true" || SHOW_PROGRESS === true,
   ANALYZE_BUNDLE: ANALYZE_BUNDLE === "true" || ANALYZE_BUNDLE === true,
   GENERATE_SOURCEMAP: GENERATE_SOURCEMAP === "true" || GENERATE_SOURCEMAP === true,

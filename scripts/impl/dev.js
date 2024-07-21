@@ -7,7 +7,7 @@ const compile = require("./compile")
 const afterCompile = require("./after-compile")
 const cleanHot = require("./clean-hot")
 const { env } = require("../../config")
-const { SERVE_URL } = env
+const { PROTOCOL, PORT } = env
 
 const watchpackOptions = {
   aggregateTimeout: 250,
@@ -18,6 +18,8 @@ const watchpackOptions = {
 
 // @TODO extract dirnames from env
 const listOfDirectories = ["src", "pages", "static"]
+
+const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 
 const recompile = async () => {
   console.log(primary("Recompiling..."))
