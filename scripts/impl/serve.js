@@ -1,6 +1,6 @@
 const { success } = require("../../eofol/dev-util")
 const { env, paths } = require("../../config")
-const { SERVE_URL, PAGE_FALLBACK, PORT, HOST } = env
+const { PROTOCOL, PAGE_FALLBACK, PORT, HOST } = env
 const { BUILD_PATH } = paths
 
 const liveServer = require("live-server")
@@ -8,6 +8,8 @@ const liveServer = require("live-server")
 const SERVE_RELOAD_WAIT_TIME_MS = 100
 
 const CORS = true
+
+const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 
 const serveOptions = {
   port: PORT,
