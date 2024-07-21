@@ -20,9 +20,41 @@ const { getState, getSetState } = Stateful
 
 // @IMPORT-START
 import Common from "./common"
-const { findInstance } = Common
+const { findInstance, findDef } = Common
 // @IMPORT("./common")
 // @IMPORT-END
+
+// @IMPORT-START
+import Internals from "./eofol-internals"
+const { getInstances } = Internals
+// @IMPORT("./eofol-internals")
+// @IMPORT-END
+
+const componentRenderedCustom = (def: Def, id: string, props: Props | undefined) => {
+  const stateImpl = getState(id)
+  const setStateImpl = getSetState(id)
+  const propsImpl = { ...props, id }
+
+  if (def.effect) {
+    def.effect(stateImpl, setStateImpl, props)
+  }
+}
+
+const replayInitialEffects = () => {
+  const instances = getInstances()
+  Object.keys(instances).forEach((id) => {
+    const instance = instances[id]
+    if (!instance) {
+      errorInstanceNotFound(id)
+    }
+    const def = findDef(instance.name)
+    if (def) {
+      componentRenderedCustom(def, instance.id, instance.props)
+    } else {
+      errorDefNotFound(instance.name)
+    }
+  })
+}
 
 const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
   const stateImpl = getState(id)
@@ -90,4 +122,4 @@ const renderEofolElement = (name: string, props: Props | undefined, id: string |
   }
 }
 
-export default { renderEofolElement }
+export default { renderEofolElement, replayInitialEffects }
