@@ -2,13 +2,13 @@ import { Def, Defs, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { getCustomDefs, getFlatDefs, getStaticDefs } = EofolInternals
+const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
 import Util from "./util"
-const { errorTypeUnknown, errorCustomCannotHaveChildren } = Util
+const { errorTypeUnknown, errorCustomCannotHaveChildren, errorElementNotFound } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
@@ -24,6 +24,18 @@ const {
   STATIC_COMPONENT_TAGNAME,
 } = Contansts
 // @IMPORT("./constants")
+// @IMPORT-END
+
+// @IMPORT-START
+import RenderDynamic from "./render-dynamic"
+const { renderEofolElement } = RenderDynamic
+// @IMPORT("./render-dynamic")
+// @IMPORT-END
+
+// @IMPORT-START
+import Common from "./common"
+const { findDef, isBrowser } = Common
+// @IMPORT("./common")
 // @IMPORT-END
 
 const defineCustomComponent = (componentDef: Def) => {
@@ -93,6 +105,29 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
   }
 }
 
+const rerenderComponent = (id: string) => {
+  const instances = getInstances()
+  const { name, props } = instances[id]
+  const target = isBrowser() ? document.getElementById(id) : null
+  if (target) {
+    const def = findDef(name)
+    if (!def) {
+      return undefined
+    }
+    const rendered = renderEofolElement(name, props, id, def)
+    target.innerHTML = rendered ?? ""
+  } else {
+    errorElementNotFound(id, name)
+  }
+}
+
+const forceRerender = () => {
+  const instances = getInstances()
+  Object.keys(instances).forEach((id) => {
+    rerenderComponent(id)
+  })
+}
+
 export default {
   getEofolComponentType,
   findEofolComponentDef,
@@ -105,4 +140,6 @@ export default {
   validateEofolCustomElement,
   switchComponentTypeStatic,
   switchComponentTypeDynamic,
+  rerenderComponent,
+  forceRerender,
 }

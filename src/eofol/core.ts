@@ -18,12 +18,6 @@ const { isBrowser, findDef, findInstance } = Common
 // @IMPORT-END
 
 // @IMPORT-START
-import ForceRerender from "./force-rerender"
-const { forceRerender } = ForceRerender
-// @IMPORT("./force-rerender")
-// @IMPORT-END
-
-// @IMPORT-START
 import CreateElement from "./create-element"
 const { createElement } = CreateElement
 // @IMPORT("./create-element")
@@ -46,6 +40,7 @@ const {
   isEofolStaticElement,
   validateEofolCustomElement,
   getEofolComponentType,
+  forceRerender,
 } = Components
 // @IMPORT("./components")
 // @IMPORT-END
