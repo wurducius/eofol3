@@ -18,21 +18,15 @@ const { isBrowser, findDef, findInstance } = Common
 // @IMPORT-END
 
 // @IMPORT-START
-import ForceRerender from "./force-rerender"
-const { forceRerender } = ForceRerender
-// @IMPORT("./force-rerender")
-// @IMPORT-END
-
-// @IMPORT-START
 import CreateElement from "./create-element"
 const { createElement } = CreateElement
 // @IMPORT("./create-element")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
-const { generateId } = Util
-// @IMPORT("./util")
+import Crypto from "./crypto"
+const { generateId } = Crypto
+// @IMPORT("./crypto")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -46,6 +40,7 @@ const {
   isEofolStaticElement,
   validateEofolCustomElement,
   getEofolComponentType,
+  forceRerender,
 } = Components
 // @IMPORT("./components")
 // @IMPORT-END
@@ -64,7 +59,7 @@ const { handler, handlerProps, handlerSimple } = HandlerSerialize
 
 // @IMPORT-START
 import Html from "./html"
-const { a } = Html
+const { a, div, p, h1, h2, h3, h4, h5, h6, button, img } = Html
 // @IMPORT("./html")
 // @IMPORT-END
 
@@ -125,4 +120,15 @@ export default {
   get,
   post,
   fetchGeneral,
+  a,
+  div,
+  button,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  img,
 }

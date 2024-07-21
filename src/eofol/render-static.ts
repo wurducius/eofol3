@@ -2,8 +2,14 @@ import { Defs, Instances, JSONElement } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
-const { errorDefNotFound, generateId } = Util
+const { errorDefNotFound } = Util
 // @IMPORT("./util")
+// @IMPORT-END
+
+// @IMPORT-START
+import Crypto from "./crypto"
+const { generateId } = Crypto
+// @IMPORT("./crypto")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -24,7 +30,9 @@ const { getStateStatic, getSetState } = Stateful
 // @IMPORT("./stateful)
 // @IMPORT-END
 
-const RENDER_DEFAULT_AS_TAGNAME = "div"
+const RENDER_CUSTOM_DEFAULT_AS_TAGNAME = "div"
+const RENDER_FLAT_DEFAULT_AS_TAGNAME = "div"
+const RENDER_STATIC_DEFAULT_AS_TAGNAME = "div"
 
 const initRender = (element: JSONElement, defs: Defs) => {
   const name = getEofolComponentType(element)
@@ -38,6 +46,22 @@ const initRender = (element: JSONElement, defs: Defs) => {
 }
 
 const getAsProp = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
+
+const renderElementWrapper = (rendered: JSONElement | string, as: string, attributes?: Object) => ({
+  type: as,
+  content: [rendered],
+  attributes: attributes ?? undefined,
+})
+
+const reduceRendered = (rendered: JSONElement | JSONElement[] | undefined) => {
+  if (rendered === undefined) {
+    return ""
+  } else if (Array.isArray(rendered)) {
+    return rendered.join(" ")
+  } else {
+    return rendered
+  }
+}
 
 const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
   const { name, def } = initRender(element, defs)
@@ -53,10 +77,17 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     id = generateId()
   }
 
-  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
+  const as = getAsProp(element, RENDER_CUSTOM_DEFAULT_AS_TAGNAME)
   const props = { ...getProps(element), id }
   const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(id)
+
+  let rendered
+  if (def.renderCase) {
+    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
+  } else {
+    rendered = def.render(stateImpl, setStateImpl, props)
+  }
 
   instances[id] = {
     name,
@@ -66,20 +97,11 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     props,
   }
 
-  let rendered
-  if (def.renderCase) {
-    rendered = def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props)
-  } else {
-    rendered = def.render(stateImpl, setStateImpl, props)
+  if (def.shouldComponentUpdate) {
+    instances[id].renderCache = rendered
   }
 
-  return {
-    type: as,
-    content: [rendered],
-    attributes: {
-      id,
-    },
-  }
+  return renderElementWrapper(rendered, as, { id })
 }
 
 const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
@@ -90,13 +112,10 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
     return undefined
   }
 
-  // @TODO
-  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
+  const rendered = reduceRendered(def.render(props))
+  const as = getAsProp(element, RENDER_FLAT_DEFAULT_AS_TAGNAME)
 
-  return {
-    type: as,
-    content: [def.render(props)],
-  }
+  return renderElementWrapper(rendered, as)
 }
 
 const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
@@ -106,15 +125,10 @@ const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
     return undefined
   }
 
-  const rendered = def.render()
-  const reduced = Array.isArray(rendered) ? rendered.join("") : rendered
+  const rendered = reduceRendered(def.render())
+  const as = getAsProp(element, RENDER_STATIC_DEFAULT_AS_TAGNAME)
 
-  const as = getAsProp(element, RENDER_DEFAULT_AS_TAGNAME)
-
-  return {
-    type: as,
-    content: [reduced],
-  }
+  return renderElementWrapper(rendered, as)
 }
 
 export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement }

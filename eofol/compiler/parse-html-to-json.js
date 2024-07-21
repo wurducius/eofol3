@@ -3,15 +3,14 @@ const { HTMLToJSON } = require("html-to-json-parser")
 const { isVerbose } = require("../constants")
 const { die } = require("../util")
 const { msgStepParser } = require("./log")
-const htmlTemplate = require("../api/head/head")
 
-const parseHTMLToJSON = (view) => (res) =>
+const parseHTMLToJSON = (res) =>
   HTMLToJSON(res.toString(), false)
     .then((res) => {
       if (isVerbose) {
         msgStepParser("Parse successful")
       }
-      return htmlTemplate(res, view)
+      return res
     })
     .catch((ex) => {
       die("Parse error", ex)
