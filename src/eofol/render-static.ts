@@ -2,8 +2,14 @@ import { Defs, Instances, JSONElement } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
-const { errorDefNotFound, generateId } = Util
+const { errorDefNotFound } = Util
 // @IMPORT("./util")
+// @IMPORT-END
+
+// @IMPORT-START
+import Crypto from "./crypto"
+const { generateId } = Crypto
+// @IMPORT("./crypto")
 // @IMPORT-END
 
 // @IMPORT-START

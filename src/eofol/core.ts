@@ -30,9 +30,9 @@ const { createElement } = CreateElement
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
-const { generateId } = Util
-// @IMPORT("./util")
+import Crypto from "./crypto"
+const { generateId } = Crypto
+// @IMPORT("./crypto")
 // @IMPORT-END
 
 // @IMPORT-START

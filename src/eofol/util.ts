@@ -2,17 +2,9 @@ import { Func } from "./types"
 
 // @IMPORT-START
 import Constants from "./constants"
-const { LOG_ERROR_MSG_PREFIX, ID_GENERATED_LENGTH } = Constants
+const { LOG_ERROR_MSG_PREFIX } = Constants
 // @IMPORT("./constants")
 // @IMPORT-END
-
-const generateString = (length: number) => () =>
-  Array(length)
-    .fill("")
-    .map(() => Math.random().toString(36).charAt(2))
-    .join("")
-
-const generateId = generateString(ID_GENERATED_LENGTH)
 
 const errorRuntime = (msg: string) => {
   console.log(`${LOG_ERROR_MSG_PREFIX}${msg}`)
@@ -48,7 +40,6 @@ const pipe = (...fns: Func[]) => fns.reduce(_pipe)
 const id = (x: any) => x
 
 export default {
-  generateId,
   errorRuntime,
   pipe,
   id,
