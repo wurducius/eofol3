@@ -103,7 +103,7 @@ export const imgPhi = defineStaticComponent({
 export const dataComponent = defineCustomComponent({
   name: "weather",
   renderCase: (statex: any, setStatex: any, props: any) => {
-    if (statex.data === "ready") {
+    if (statex.data === undefined) {
       return () => div("Ready")
     } else if (statex.data === "LOADING") {
       return () => div("Loading...")
@@ -113,13 +113,13 @@ export const dataComponent = defineCustomComponent({
       return (statey: any) => div(statey.data.latitude)
     }
   },
-  initialState: { data: "ready" },
+  initialState: {},
   effect: (statex: any, setStatex: any) =>
     eval(
       handler({}, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
         // eslint-disable-next-line no-undef
-        if (state.data === "ready") {
+        if (state.data === undefined) {
           // @ts-ignore eslint-disable-next-line no-undef
           // eslint-disable-next-line no-undef
           setState({ data: "LOADING" })

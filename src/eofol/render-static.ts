@@ -47,6 +47,22 @@ const initRender = (element: JSONElement, defs: Defs) => {
 
 const getAsProp = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
 
+const renderElementWrapper = (rendered: JSONElement | string, as: string, attributes?: Object) => ({
+  type: as,
+  content: [rendered],
+  attributes: attributes ?? undefined,
+})
+
+const reduceRendered = (rendered: JSONElement | JSONElement[] | undefined) => {
+  if (rendered === undefined) {
+    return ""
+  } else if (Array.isArray(rendered)) {
+    return rendered.join(" ")
+  } else {
+    return rendered
+  }
+}
+
 const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
   const { name, def } = initRender(element, defs)
 
@@ -81,13 +97,7 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
     rendered = def.render(stateImpl, setStateImpl, props)
   }
 
-  return {
-    type: as,
-    content: [rendered],
-    attributes: {
-      id,
-    },
-  }
+  return renderElementWrapper(rendered, as, { id })
 }
 
 const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
@@ -98,15 +108,10 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
     return undefined
   }
 
-  const rendered = def.render(props)
-  const reduced = Array.isArray(rendered) ? rendered.join(" ") : rendered
-
+  const rendered = reduceRendered(def.render(props))
   const as = getAsProp(element, RENDER_FLAT_DEFAULT_AS_TAGNAME)
 
-  return {
-    type: as,
-    content: [reduced],
-  }
+  return renderElementWrapper(rendered, as)
 }
 
 const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
@@ -116,15 +121,10 @@ const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
     return undefined
   }
 
-  const rendered = def.render()
-  const reduced = Array.isArray(rendered) ? rendered.join(" ") : rendered
-
+  const rendered = reduceRendered(def.render())
   const as = getAsProp(element, RENDER_STATIC_DEFAULT_AS_TAGNAME)
 
-  return {
-    type: as,
-    content: [reduced],
-  }
+  return renderElementWrapper(rendered, as)
 }
 
 export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement }
