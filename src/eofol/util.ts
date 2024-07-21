@@ -39,6 +39,19 @@ const pipe = (...fns: Func[]) => fns.reduce(_pipe)
 
 const id = (x: any) => x
 
+// eslint-disable-next-line no-unused-vars
+function arrayCombinator<T>(handler: (t: T) => any) {
+  return function (value: T | T[] | undefined) {
+    if (value === undefined) {
+      return undefined
+    } else if (Array.isArray(value)) {
+      return value.map(handler)
+    } else {
+      return handler(value)
+    }
+  }
+}
+
 export default {
   errorRuntime,
   pipe,
@@ -48,4 +61,5 @@ export default {
   errorElementNotFound,
   errorTypeUnknown,
   errorCustomCannotHaveChildren,
+  arrayCombinator,
 }
