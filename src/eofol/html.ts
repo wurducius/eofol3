@@ -38,8 +38,16 @@ const tagnames = [
   "textarea",
 ]
 
-const tags = tagnames.reduce((acc, next) => ({ ...acc, [next]: tag(next) }), {})
-
 const a = tag("a")
+const div = tag("dib")
+const p = tag("p")
+const h1 = tag("h1")
+const h2 = tag("h2")
+const h3 = tag("h3")
+const h4 = tag("h4")
+const h5 = tag("h5")
+const h6 = tag("h6")
+const button = tag("button")
+const img = tag("img")
 
-export default { a }
+export default { a, div, p, h1, h2, h3, h4, h5, h6, button, img }

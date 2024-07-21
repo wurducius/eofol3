@@ -13,6 +13,11 @@ const {
   externalLink,
   sx,
   fetchGeneral,
+  div,
+  button,
+  h2,
+  p,
+  img,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -20,25 +25,25 @@ const {
 export const component1 = defineCustomComponent({
   name: "component1",
   render: (statex: any, setStatex: any, props: any) => {
-    const counter = createElement("h2", `You have clicked ${statex.count} times.`)
-    const buttonIncrement = createElement("button", "+", "eofol-button", undefined, {
+    const counter = h2(`You have clicked ${statex.count} times.`)
+    const buttonIncrement = button("+", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: state.count + 1 })
       }),
     })
-    const buttonReset = createElement("button", "Reset", "eofol-button", undefined, {
+    const buttonReset = button("Reset", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: 0 })
       }),
     })
-    const otherButton = createElement("button", "Force rerender", "eofol-button", undefined, {
+    const otherButton = button("Force rerender", "eofol-button", undefined, {
       onclick: handlerSimple(() => {
         forceRerender()
       }),
     })
-    return createElement("div", [counter, buttonIncrement, buttonReset, otherButton])
+    return div([counter, buttonIncrement, buttonReset, otherButton])
   },
   initialState: { count: 0 },
 })
@@ -46,12 +51,11 @@ export const component1 = defineCustomComponent({
 export const component2 = defineCustomComponent({
   name: "component2",
   render: () =>
-    createElement(
-      "div",
+    div(
       [
         `Component 2 = ${generateId()}`,
-        createElement("div", internalLink({ children: "Internal", href: "indexx.html" })),
-        createElement("div", externalLink({ children: "External", href: "https://youtube.com" })),
+        div(internalLink({ children: "Internal", href: "indexx.html" })),
+        div(externalLink({ children: "External", href: "https://youtube.com" })),
       ],
       "col",
     ),
@@ -60,7 +64,7 @@ export const component2 = defineCustomComponent({
 export const component3 = defineCustomComponent({
   name: "component3",
   render: () =>
-    createElement("div", [
+    div([
       createElement("flat", undefined, undefined, undefined, undefined, {
         param: "3",
       }),
@@ -71,9 +75,9 @@ export const component3 = defineCustomComponent({
 export const flatComponent = defineFlatComponent({
   name: "flat",
   render: (props: { param: string }) =>
-    createElement("div", [
-      createElement("button", "FLAT HELLO WORLD!!!", sx({ "background-color": "red" })),
-      createElement("p", "OH YEAH"),
+    div([
+      button("FLAT HELLO WORLD!!!", sx({ "background-color": "red" })),
+      p("OH YEAH"),
       createElement("static"),
       `Flat component VARIANT = ${props.param}`,
     ]),
@@ -81,13 +85,13 @@ export const flatComponent = defineFlatComponent({
 
 export const staticComponent = defineStaticComponent({
   name: "static",
-  render: () => [createElement("p", "STATIC HELLO WORLD!!!"), createElement("p", "OH YEAH"), "Static component"],
+  render: () => [p("STATIC HELLO WORLD!!!"), p("OH YEAH"), "Static component"],
 })
 
 export const imgPhi = defineStaticComponent({
   name: "img-phi",
   render: () => [
-    createElement("img", undefined, "phi", {
+    img(undefined, "phi", {
       src: "./phi.svg",
       alt: "Eofol logo - greek letter Phi",
       height: "128",
@@ -100,17 +104,17 @@ export const dataComponent = defineCustomComponent({
   name: "weather",
   renderCase: (statex: any, setStatex: any, props: any) => {
     if (statex.data === "ready") {
-      return () => createElement("div", "Ready")
+      return () => div("Ready")
     } else if (statex.data === "LOADING") {
-      return () => createElement("div", "Loading...")
+      return () => div("Loading...")
     } else if (statex.data === "ERROR") {
-      return () => createElement("div", "Error")
+      return () => div("Error")
     } else {
-      return (statey: any) => createElement("div", statey.data.latitude)
+      return (statey: any) => div(statey.data.latitude)
     }
   },
   initialState: { data: "ready" },
-  effect: (statex, setStatex) =>
+  effect: (statex: any, setStatex: any) =>
     eval(
       handler({}, statex, setStatex, () => {
         // @ts-ignore eslint-disable-next-line no-undef
