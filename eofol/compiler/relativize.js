@@ -21,7 +21,7 @@ const relativizeFontStyle = (fontStyleContent) =>
               return innerPart
             }
           })
-          .join("/")
+          .reduce((acc, next, k) => (k === 0 || k === 1 ? acc + next : `${acc}/${next}`), "")
       }
     })
     .join("src: url(")

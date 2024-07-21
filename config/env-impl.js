@@ -1,6 +1,6 @@
 const ENV = require("./env")
 
-const { MODE, BROWSER, HTTPS, HOST, PORT, SHOW_PROGRESS, ANALYZE_BUNDLE, GENERATE_SOURCEMAP } = ENV
+const { MODE, BROWSER, HTTPS, HOST, PORT, SHOW_PROGRESS, ANALYZE_BUNDLE, GENERATE_SOURCEMAP, BASE_URL } = ENV
 
 const isDev = MODE === "development"
 
@@ -33,4 +33,5 @@ module.exports = {
   MINIMIZE: !isDev,
   TERSER: !isDev,
   CSS_MINIMIZE: !isDev,
+  BASE_URL: isDev ? "./" : BASE_URL,
 }

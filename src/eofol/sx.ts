@@ -31,7 +31,6 @@ const sx = (styleObj: Object, selector?: string, prefix?: string) => {
     if (isBrowser()) {
       document.styleSheets.item(0)?.insertRule(style)
     } else {
-      console.log(`SX -> ${style}`)
       compileCache = compileCache + style
       /*
       const targetDir = path.resolve("dist", "views")

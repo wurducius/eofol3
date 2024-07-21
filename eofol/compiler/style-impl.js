@@ -6,7 +6,7 @@ const { relativizeStylesheet } = require("./relativize")
 
 const compileLess = (lessPath) =>
   fs.existsSync(lessPath)
-    ? less.render(fs.readFileSync(lessPath).toString(), {})
+    ? less.render(fs.readFileSync(lessPath).toString(), { compress: true, lint: true, paths: ["eofol/styles"] })
     : new Promise((resolve) => resolve(undefined))
 const compileCss = (cssPath) => fs.readFileSync(cssPath).toString()
 
