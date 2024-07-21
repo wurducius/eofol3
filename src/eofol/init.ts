@@ -17,17 +17,28 @@ const { registerServiceworker } = ServiceWorker
 // @IMPORT-END
 
 // @IMPORT-START
-import Prefetch from "./prefetch"
-const { prefetchInit } = Prefetch
+import RenderDynamic from "./render-dynamic"
+const { replayInitialEffects } = RenderDynamic
 // @IMPORT("./prefetch")
 // @IMPORT-END
+
+// @IMPORT-START
+import Prefetch from "./prefetch"
+const { prefetch } = Prefetch
+// @IMPORT("./prefetch")
+// @IMPORT-END
+
+const onLoad = () => {
+  replayInitialEffects()
+  prefetch()
+}
 
 const initEofol = () => {
   // const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
   // const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
 
   if (isBrowser()) {
-    window.onload = prefetchInit
+    window.onload = onLoad
   }
 
   if (SERVICE_WORKER_REGISTER_AT_INIT) {

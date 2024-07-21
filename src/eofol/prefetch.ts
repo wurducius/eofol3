@@ -11,7 +11,7 @@ const assetsPagesExternal: string[] = []
 
 const getInternalPageAssets = (internalUrl: string) => [`${internalUrl}.html`, `assets/js/${internalUrl}.js`]
 
-const prefetchInit = () => {
+const prefetch = () => {
   const assetsToPrefetch = []
   for (let internalPageIndex in assetsPagesInternal) {
     const nextInternalPage = getInternalPageAssets(assetsPagesInternal[internalPageIndex])
@@ -34,4 +34,4 @@ const prefetchInit = () => {
   })
 }
 
-export default { prefetchInit }
+export default { prefetch }
