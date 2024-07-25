@@ -1,4 +1,4 @@
-import { Attributes, JSONNode } from "./types"
+import { EofolProps } from "./types"
 
 // @IMPORT-START
 import Tags from "./html"
@@ -19,11 +19,11 @@ const { isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
-const ax = (base: Attributes, conditional: Record<string, any>) =>
-  Object.keys(conditional).reduce(
-    (acc, next) => (conditional[next] ? { ...acc, [next]: conditional[next] } : acc),
-    base,
-  )
+// @IMPORT-START
+import Util from "./util"
+const { ax } = Util
+// @IMPORT("./common")
+// @IMPORT-END
 
 const link = ({
   children,
@@ -31,9 +31,7 @@ const link = ({
   href,
   external,
   download,
-}: {
-  children?: JSONNode
-  classname?: string
+}: EofolProps & {
   href: string
   external?: boolean
   download?: string
@@ -49,9 +47,7 @@ const internalLink = ({
   classname,
   href,
   download,
-}: {
-  children?: JSONNode
-  classname?: string
+}: EofolProps & {
   href: string
   download?: string
 }) => link({ children, classname, href, download })
@@ -61,9 +57,7 @@ const externalLink = ({
   classname,
   href,
   download,
-}: {
-  children?: JSONNode
-  classname?: string
+}: EofolProps & {
   href: string
   download?: string
 }) => link({ children, classname, href, external: true, download })

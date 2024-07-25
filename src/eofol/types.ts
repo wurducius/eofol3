@@ -65,3 +65,25 @@ export type Func = (x: any) => any
 
 // eslint-disable-next-line no-unused-vars
 export type Handler = (x: any) => void
+
+export type EofolPropsWithoutChildren = {
+  classname?: string
+}
+
+export type EofolProps = EofolPropsWithoutChildren & {
+  children?: JSONNode
+}
+
+// --------
+
+export type ImageParticularProps = {
+  src: string
+  alt: string
+  height?: string | number
+  width?: string | number
+  fallback?: string
+}
+
+export type ImageGenericProps = ImageParticularProps & {
+  dynamic?: boolean
+}

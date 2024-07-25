@@ -77,6 +77,12 @@ const { get, post, fetchGeneral } = Fetch
 // @IMPORT("./fetch")
 // @IMPORT-END
 
+// @IMPORT-START
+import Image from "./image"
+const { imageDynamic, imageStatic } = Image
+// @IMPORT("./image")
+// @IMPORT-END
+
 initEofol()
 
 export default {
@@ -116,4 +122,6 @@ export default {
   h5,
   h6,
   img,
+  imageDynamic,
+  imageStatic,
 }

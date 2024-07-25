@@ -18,6 +18,7 @@ const {
   h2,
   p,
   img,
+  imageStatic,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -92,14 +93,7 @@ export const staticComponent = defineStaticComponent({
 
 export const imgPhi = defineStaticComponent({
   name: "img-phi",
-  render: () => [
-    img(undefined, "phi", {
-      src: "./phi.svg",
-      alt: "Eofol logo - greek letter Phi",
-      height: "128",
-      width: "128",
-    }),
-  ],
+  render: () => [imageStatic({ src: "./phi.svg", alt: "Eofol logo", height: 128, width: 128, classname: "phi" })],
 })
 
 export const dataComponent = defineCustomComponent({
