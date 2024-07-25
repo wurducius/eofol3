@@ -39,15 +39,7 @@ const mutatePath = (path: string) => {
 
 const IMAGE_FALLBACK_DEFAULT = mutatePath("./eofol/fallback.png")
 
-const image = ({
-  classname,
-  src,
-  alt,
-  dynamic,
-  height,
-  width,
-  fallback,
-}: EofolPropsWithoutChildren & ImageGenericProps) => {
+const image = ({ classname, src, alt, dynamic, h, w, fallback }: EofolPropsWithoutChildren & ImageGenericProps) => {
   const mutatedSrc = mutatePath(src)
 
   if (!isBrowser()) {
@@ -63,7 +55,7 @@ const image = ({
         onerror: `this.onerror = null; this.src = "${fallback ?? IMAGE_FALLBACK_DEFAULT}";`,
         onload: `this.className = "${cx(classname)}"`,
       },
-      { height, width },
+      { height: h, width: w },
     ),
   )
 }

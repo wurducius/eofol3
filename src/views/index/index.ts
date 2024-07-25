@@ -93,7 +93,7 @@ export const staticComponent = defineStaticComponent({
 
 export const imgPhi = defineStaticComponent({
   name: "img-phi",
-  render: () => [imageStatic({ src: "./phi.svg", alt: "Eofol logo", height: 128, width: 128, classname: "phi" })],
+  render: () => [imageStatic({ src: "./phi.svg", alt: "Eofol logo", h: 128, w: 128, classname: "phi" })],
 })
 
 export const dataComponent = defineCustomComponent({

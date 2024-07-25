@@ -79,11 +79,20 @@ export type EofolProps = EofolPropsWithoutChildren & {
 export type ImageParticularProps = {
   src: string
   alt: string
-  height?: string | number
-  width?: string | number
+  h?: string | number
+  w?: string | number
   fallback?: string
 }
 
 export type ImageGenericProps = ImageParticularProps & {
   dynamic?: boolean
+}
+
+export type LinkParticularProps = {
+  href: string
+  download?: string
+}
+
+export type LinkGenericProps = LinkParticularProps & {
+  external?: boolean
 }
