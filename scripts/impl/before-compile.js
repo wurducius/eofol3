@@ -8,6 +8,8 @@ const {
   PATH_DIST2,
   DIRNAME_EOFOL_INTERNAL,
   EXT_JS,
+  FILENAME_CORE,
+  FILENAME_COMPILE,
 } = require("../../eofol/constants")
 const { precompile } = require("../../eofol/compiler")
 const { checkExistsCreate } = require("../../eofol/util/fs")
@@ -32,9 +34,14 @@ const beforeCompile = () => {
   checkExistsCreate(path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL))
 
   precompile(
-    path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, `core${EXT_JS}`),
+    path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE),
     "..",
-    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, `core${EXT_JS}`),
+    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE),
+  )
+  precompile(
+    path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE),
+    "..",
+    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE),
   )
 }
 

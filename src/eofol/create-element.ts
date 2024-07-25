@@ -25,7 +25,7 @@ const getContentHTML = (content: JSONNode | undefined): JSONNode => {
   if (!content) {
     return ""
   } else if (Array.isArray(content)) {
-    return content.reduce((acc, next) => `${acc} ${getContentHTML(next).toString()}`, "")
+    return content.reduce((acc, next) => `${acc}${getContentHTML(next).toString()}`, "")
   } else {
     return content
   }

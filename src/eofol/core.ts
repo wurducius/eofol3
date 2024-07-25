@@ -31,17 +31,7 @@ const { generateId } = Crypto
 
 // @IMPORT-START
 import Components from "./components"
-const {
-  defineCustomComponent,
-  defineFlatComponent,
-  defineStaticComponent,
-  isEofolCustomElement,
-  isEofolFlatElement,
-  isEofolStaticElement,
-  validateEofolCustomElement,
-  getEofolComponentType,
-  forceRerender,
-} = Components
+const { defineCustomComponent, defineFlatComponent, defineStaticComponent, forceRerender } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
@@ -100,11 +90,6 @@ export default {
   defineCustomComponent,
   defineFlatComponent,
   defineStaticComponent,
-  getEofolComponentType,
-  validateEofolCustomElement,
-  isEofolCustomElement,
-  isEofolFlatElement,
-  isEofolStaticElement,
   getState,
   getSetState,
   findInstance,

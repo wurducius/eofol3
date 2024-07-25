@@ -4,6 +4,7 @@
   "description": "Create a reactive app from template with zero configuration!",
   "scripts": {
     "start": "node ./scripts/start.js",
+    "start-partes": "npm run clean && npm run compile-ts && npm run compile-before && npm run compile-static && npm run compile-after && npm run serve",
     "build": "node ./scripts/build.js",
     "build-serve": "node ./scripts/build-serve.js",
     "serve": "node ./scripts/serve.js",
