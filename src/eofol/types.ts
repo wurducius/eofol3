@@ -96,3 +96,7 @@ export type LinkParticularProps = {
 export type LinkGenericProps = LinkParticularProps & {
   external?: boolean
 }
+
+// --------------
+
+export type Method = "GET" | "POST" | "PUT" | "HEAD" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH"

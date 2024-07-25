@@ -83,6 +83,12 @@ const { imageDynamic, imageStatic } = Image
 // @IMPORT("./image")
 // @IMPORT-END
 
+// @IMPORT-START
+import DataContainer from "./data-container"
+const { dataContainer } = DataContainer
+// @IMPORT("./data-container")
+// @IMPORT-END
+
 initEofol()
 
 export default {
@@ -124,4 +130,5 @@ export default {
   img,
   imageDynamic,
   imageStatic,
+  dataContainer,
 }
