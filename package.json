@@ -4,6 +4,7 @@
   "description": "Create a reactive app from template with zero configuration!",
   "scripts": {
     "start": "node ./scripts/start.js",
+    "start-partes": "npm run clean && npm run compile-ts && npm run compile-before && npm run compile-static && npm run compile-after && npm run serve",
     "build": "node ./scripts/build.js",
     "build-serve": "node ./scripts/build-serve.js",
     "serve": "node ./scripts/serve.js",
@@ -28,20 +29,18 @@
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@eslint/js": "^9.7.0",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
     "chalk": "2.4.2",
     "cross-spawn": "^7.0.3",
-    "eslint": "8.56.0",
+    "eofol-live-server": "^1.2.3",
+    "eslint": "^9.7.0",
     "gzip-js": "^0.3.2",
     "html-minifier-terser": "^7.2.0",
     "html-to-json-parser": "^2.0.1",
     "less": "^4.2.0",
-    "live-server": "^1.2.2",
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "sharp": "^0.33.4",
-    "typescript": "5.4.5",
-    "uglify-js": "^3.18.0",
+    "typescript": "5.5.4",
+    "uglify-js": "^3.19.0",
     "watchpack": "^2.4.1"
   },
   "files": [
@@ -58,7 +57,7 @@
   ],
   "author": "wurducius@gmail.com",
   "license": "MIT",
-  "bugs": "https://github.com/wurducius/eofol/issues",
+  "bugs": "https://github.com/wurducius/eofol3/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wurducius/eofol3.git"

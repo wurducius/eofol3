@@ -23,13 +23,13 @@ const resolveImports = (sourcePath, content, importedScripts) => {
             return ""
           } else {
             const scriptPathRaw = next.replaceAll('"', "").replaceAll(")", "").trim()
-            if (importedScripts.includes(scriptPathRaw)) {
+            const scriptPath = path.resolve(sourcePath, scriptPathRaw + EXT_JS)
+            if (importedScripts.includes(scriptPath)) {
               return acc
             } else {
-              const scriptPath = path.resolve(sourcePath, scriptPathRaw + EXT_JS)
               const script = fs.readFileSync(scriptPath).toString()
               const hasNext = script.includes("@IMPORT")
-              importedScripts.push(scriptPathRaw)
+              importedScripts.push(scriptPath)
               const resolvedTreeScript = hasNext
                 ? resolveImports(path.resolve(scriptPath, ".."), cleanExport(script), importedScripts)
                 : script

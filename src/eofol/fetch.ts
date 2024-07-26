@@ -1,6 +1,6 @@
-type HeadersType = Record<string, string>
+import { Method } from "./types"
 
-type Method = "GET" | "POST" | "PUT" | "HEAD" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "PATCH"
+type HeadersType = Record<string, string>
 
 type Body = Object | string | undefined
 

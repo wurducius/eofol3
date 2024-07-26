@@ -31,17 +31,7 @@ const { generateId } = Crypto
 
 // @IMPORT-START
 import Components from "./components"
-const {
-  defineCustomComponent,
-  defineFlatComponent,
-  defineStaticComponent,
-  isEofolCustomElement,
-  isEofolFlatElement,
-  isEofolStaticElement,
-  validateEofolCustomElement,
-  getEofolComponentType,
-  forceRerender,
-} = Components
+const { defineCustomComponent, defineFlatComponent, defineStaticComponent, forceRerender } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
@@ -87,6 +77,18 @@ const { get, post, fetchGeneral } = Fetch
 // @IMPORT("./fetch")
 // @IMPORT-END
 
+// @IMPORT-START
+import Image from "./image"
+const { imageDynamic, imageStatic } = Image
+// @IMPORT("./image")
+// @IMPORT-END
+
+// @IMPORT-START
+import DataContainer from "./data-container"
+const { dataContainer } = DataContainer
+// @IMPORT("./data-container")
+// @IMPORT-END
+
 initEofol()
 
 export default {
@@ -100,11 +102,6 @@ export default {
   defineCustomComponent,
   defineFlatComponent,
   defineStaticComponent,
-  getEofolComponentType,
-  validateEofolCustomElement,
-  isEofolCustomElement,
-  isEofolFlatElement,
-  isEofolStaticElement,
   getState,
   getSetState,
   findInstance,
@@ -131,4 +128,7 @@ export default {
   h5,
   h6,
   img,
+  imageDynamic,
+  imageStatic,
+  dataContainer,
 }

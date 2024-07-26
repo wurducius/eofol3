@@ -20,11 +20,7 @@ const build = () => {
 
   // 4. COMPILE
 
-  return compile().then(() => {
-    // 5. AFTER COMPILE
-
-    afterCompile(false)
-  })
+  return compile().then(() => afterCompile(false))
 }
 
 module.exports = build

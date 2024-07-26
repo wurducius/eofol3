@@ -1,4 +1,4 @@
-import { Attributes, JSONNode } from "./types"
+import { EofolProps, LinkGenericProps, LinkParticularProps } from "./types"
 
 // @IMPORT-START
 import Tags from "./html"
@@ -19,53 +19,23 @@ const { isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
-const ax = (base: Attributes, conditional: Record<string, any>) =>
-  Object.keys(conditional).reduce(
-    (acc, next) => (conditional[next] ? { ...acc, [next]: conditional[next] } : acc),
-    base,
-  )
+// @IMPORT-START
+import Util from "./util"
+const { ax } = Util
+// @IMPORT("./common")
+// @IMPORT-END
 
-const link = ({
-  children,
-  classname,
-  href,
-  external,
-  download,
-}: {
-  children?: JSONNode
-  classname?: string
-  href: string
-  external?: boolean
-  download?: string
-}) => {
+const link = ({ children, classname, href, external, download }: EofolProps & LinkGenericProps) => {
   if (!isBrowser()) {
     registerAsset(external ? "externalLink" : "internalLink", href)
   }
   return a(children, classname, ax({ href }, { target: external && "_blank", download }))
 }
 
-const internalLink = ({
-  children,
-  classname,
-  href,
-  download,
-}: {
-  children?: JSONNode
-  classname?: string
-  href: string
-  download?: string
-}) => link({ children, classname, href, download })
+const internalLink = ({ children, classname, href, download }: EofolProps & LinkParticularProps) =>
+  link({ children, classname, href, download })
 
-const externalLink = ({
-  children,
-  classname,
-  href,
-  download,
-}: {
-  children?: JSONNode
-  classname?: string
-  href: string
-  download?: string
-}) => link({ children, classname, href, external: true, download })
+const externalLink = ({ children, classname, href, download }: EofolProps & LinkParticularProps) =>
+  link({ children, classname, href, external: true, download })
 
 export default { link, internalLink, externalLink }

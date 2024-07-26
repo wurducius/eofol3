@@ -7,9 +7,10 @@ const afterCompile = (isHot) => {
 
   compileScripts(isHot)
 
-  copyStaticDir(isHot)
-  copyPages(isHot)
-  copyInternal(isHot)
+  return copyStaticDir(isHot).then(() => {
+    copyPages(isHot)
+    copyInternal(isHot)
+  })
 }
 
 module.exports = afterCompile
