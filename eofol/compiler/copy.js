@@ -13,12 +13,15 @@ const {
 const gzip = require("./gzip")
 const hotUpdate = require("./hot-update")
 
-const copyStaticDir = (isHot) => {
-  fs.readdirSync(PATH_STATIC, {
-    recursive: true,
-  })
+const copyStaticDir = async (isHot) => {
+  const files = fs
+    .readdirSync(PATH_STATIC, {
+      recursive: true,
+    })
     .flat()
-    .forEach(async (filename) => {
+
+  return await Promise.all(
+    files.map(async (filename) => {
       if (!filename.includes(".") || filename.endsWith(EXT_HTML)) {
         return
       }
@@ -42,7 +45,8 @@ const copyStaticDir = (isHot) => {
       } else {
         hotUpdate(isHot, target, source, staticFileContent)
       }
-    })
+    }),
+  )
 }
 
 const copyPages = (isHot) => {

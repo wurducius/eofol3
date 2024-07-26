@@ -27,10 +27,11 @@ const recompile = async () => {
   const args = []
   compileTs(args)
   beforeCompile()
-  return await compile().then(() => {
-    afterCompile(true)
-    console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
-  })
+  return await compile()
+    .then(() => afterCompile(true))
+    .then(() => {
+      console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
+    })
 }
 
 const handleChange = async () => {
@@ -51,14 +52,18 @@ const listOfNotExistingItems = []
 const dev = () => {
   console.log(primary("Starting the development server..."))
 
-  process.on("SIGINT", () => {
-    console.log(primary("Shutting down development server..."))
+  const wp = new Watchpack(watchpackOptions)
+
+  const handleClose = () => {
+    console.log(primary("\nShutting down development server..."))
     wp.close()
     console.log(primary("Development server shut down."))
     process.exit(0)
-  })
+  }
 
-  const wp = new Watchpack(watchpackOptions)
+  process.on("SIGINT", handleClose)
+  process.on("SIGTERM", handleClose)
+  process.on("SIGQUIT", handleClose)
 
   wp.watch({
     files: listOfFiles,
