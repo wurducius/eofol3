@@ -5,12 +5,6 @@ const { defineCustomComponent } = Components
 // @IMPORT-END
 
 // @IMPORT-START
-import Html from "./html"
-const { div } = Html
-// @IMPORT("./html")
-// @IMPORT-END
-
-// @IMPORT-START
 import HandlerSerialize from "./handler-serialize"
 const { handler } = HandlerSerialize
 // @IMPORT("./handler-serialize")
@@ -23,16 +17,22 @@ const { fetchGeneral } = Fetch
 // @IMPORT("./fetch")
 // @IMPORT-END
 
+// @IMPORT-START
+import StateComponent from "./state-component"
+const { skeleton, spinner, error } = StateComponent
+// @IMPORT("./state-component")
+// @IMPORT-END
+
 const dataContainer = ({ name, render, url, method }: { name: string; render: any; url: string; method?: Method }) =>
   defineCustomComponent({
     name,
     renderCase: (statex: any, setStatex: any, props: any) => {
       if (statex.data === undefined) {
-        return () => div("Ready")
+        return () => skeleton("Ready")
       } else if (statex.data === "LOADING") {
-        return () => div("Loading...")
+        return () => spinner()
       } else if (statex.data === "ERROR") {
-        return () => div("Error")
+        return () => error("Fetch error")
       } else {
         return () => render(statex)
       }
