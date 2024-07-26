@@ -41,9 +41,9 @@ const serve = () => {
       `--entry-file=${serveOptions.file}`,
       `--wait=${serveOptions.wait}`,
       "--quiet",
-      // "--cors",
+      CORS && "--cors",
       serveOptions.root,
-    ],
+    ].filter(Boolean),
     spawnOptions,
   )
 }
