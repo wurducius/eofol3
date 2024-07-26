@@ -1,5 +1,5 @@
-const tsParser = require("@typescript-eslint/parser")
-const tsPlugin = require("@typescript-eslint/eslint-plugin")
+// const tsParser = require("@typescript-eslint/parser")
+// const tsPlugin = require("@typescript-eslint/eslint-plugin")
 const eslintJS = require("@eslint/js")
 
 module.exports = [
@@ -13,7 +13,7 @@ module.exports = [
       "prefer-template": "error",
     },
     languageOptions: {
-      parser: tsParser,
+      //  parser: tsParser,
       sourceType: "commonjs",
       globals: {
         process: true,
@@ -24,6 +24,6 @@ module.exports = [
         fetch: true,
       },
     },
-    plugins: { "@typescript-eslint": tsPlugin },
+    //  plugins: { "@typescript-eslint": tsPlugin },
   },
 ]
