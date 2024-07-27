@@ -15,6 +15,7 @@
     "compile-after": "node ./scripts/after-compile.js",
     "reinstall": "node ./scripts/reinstall.js",
     "reinstall-force": "node ./scripts/reinstall.js -c",
+    "analyze": "node ./scripts/analyze.js 1",
     "prettify": "npx prettier --config .prettierrc --write .",
     "check": "npx eslint -c ./eslint.config.js . && npx eslint -c ./src/eslint.config.js ./src",
     "check-fix": "npx eslint -c ./eslint.config.js --fix . && npx eslint -c ./src/eslint.config.js --fix ./src",

@@ -87,7 +87,7 @@ export const imgPhi = defineStaticComponent({
   name: "img-phi",
   render: () => [
     createElement("img", undefined, "phi", {
-      src: "phi.svg",
+      src: "./assets/media/icons/phi.svg",
       alt: "Eofol logo - greek letter Phi",
       height: "128",
       width: "128",

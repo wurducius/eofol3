@@ -7,7 +7,7 @@ const breakpoints = [
     png: {
       compression: 9,
     },
-    jpg: { compression: 30 },
+    jpg: { compression: 25 },
   },
   {
     name: "md",
@@ -17,7 +17,7 @@ const breakpoints = [
     png: {
       compression: 9,
     },
-    jpg: { compression: 30 },
+    jpg: { compression: 25 },
   },
   {
     name: "lg",
@@ -27,7 +27,7 @@ const breakpoints = [
     png: {
       compression: 9,
     },
-    jpg: { compression: 30 },
+    jpg: { compression: 25 },
   },
 ]
 

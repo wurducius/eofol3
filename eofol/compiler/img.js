@@ -1,15 +1,16 @@
 const sharp = require("sharp")
 
 const { breakpoints } = require("../../eofol-config")
-const { IMG_BASE_LOGO_WIDTH, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
+const { EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
 
 const processImage = (format) => (imagePath, content, handler) =>
   Promise.all(
     breakpoints.map(async (breakpoint) => {
       const imgBin = sharp(content)
       const metadata = await imgBin.metadata()
-      const widthImpl = metadata.width <= IMG_BASE_LOGO_WIDTH ? breakpoint.logoWidth : breakpoint.imgWidth
-      const processedContent = handler(imgBin.resize(widthImpl), breakpoint[format])
+      const widthImpl = Math.min(metadata.width, metadata.width <= 512 ? breakpoint.logoWidth : breakpoint.imgWidth)
+      const heightImpl = Math.round((metadata.height * widthImpl) / metadata.width)
+      const processedContent = handler(imgBin.resize(widthImpl, heightImpl), breakpoint[format])
       return processedContent.toBuffer()
     }),
   )
@@ -24,7 +25,7 @@ const compileImg = (filename, content) => {
     )
   } else if (filename.includes(EXT_PNG)) {
     return processImagePng(filename, content, (img, mutationQuality) =>
-      img.png({ compressionLevel: mutationQuality.compression }),
+      img.png({ compressionLevel: mutationQuality.compression, quality: 60, effort: 10 }),
     )
   }
 }
