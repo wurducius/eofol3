@@ -27,9 +27,11 @@ const transverseTree = (tree, vdom, instances, memoCache, defs) => {
     isEofolCustomElement,
     isEofolFlatElement,
     isEofolStaticElement,
+    isEofolVirtualElement,
     renderEofolCustomElement,
     renderEofolFlatElement,
     renderEofolStaticElement,
+    renderEofolVirtualElement,
   } = require("../../dist2/eofol/compile")
 
   const isContentNode = tree.type === undefined
@@ -72,6 +74,9 @@ const transverseTree = (tree, vdom, instances, memoCache, defs) => {
         pushElementImpl(rendered, index)
       } else if (isEofolStaticElement(child)) {
         const rendered = renderEofolStaticElement(child, memoCache, defs)
+        pushElementImpl(rendered, index)
+      } else if (isEofolVirtualElement(child)) {
+        const rendered = renderEofolVirtualElement(child, instances, memoCache, defs)
         pushElementImpl(rendered, index)
       } else {
         return transverseTree(child, vdom[vdom.length - 1].children, instances, memoCache, defs)

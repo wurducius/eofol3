@@ -1,6 +1,7 @@
 // @IMPORT-START
 import RenderStatic from "./render-static"
-const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement } = RenderStatic
+const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement } =
+  RenderStatic
 // @IMPORT("./render-static")
 // @IMPORT-END
 
@@ -31,7 +32,8 @@ const { generateId } = Crypto
 
 // @IMPORT-START
 import Components from "./components"
-const { defineCustomComponent, defineFlatComponent, defineStaticComponent, forceRerender } = Components
+const { defineCustomComponent, defineFlatComponent, defineStaticComponent, defineVirtualComponent, forceRerender } =
+  Components
 // @IMPORT("./components")
 // @IMPORT-END
 
@@ -99,9 +101,11 @@ export default {
   renderEofolCustomElement,
   renderEofolFlatElement,
   renderEofolStaticElement,
+  renderEofolVirtualElement,
   defineCustomComponent,
   defineFlatComponent,
   defineStaticComponent,
+  defineVirtualComponent,
   getState,
   getSetState,
   findInstance,

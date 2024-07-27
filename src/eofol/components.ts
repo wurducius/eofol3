@@ -2,7 +2,7 @@ import { Def, DefDeclaration, Defs, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getMemoCache } = EofolInternals
+const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getVirtualDefs } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 
@@ -18,10 +18,12 @@ const {
   COMPONENT_TYPE_CUSTOM,
   COMPONENT_TYPE_FLAT,
   COMPONENT_TYPE_STATIC,
+  COMPONENT_TYPE_VIRTUAL,
   COMPONENT_ATTRIBUTE_TYPE,
   CUSTOM_COMPONENT_TAGNAME,
   FLAT_COMPONENT_TAGNAME,
   STATIC_COMPONENT_TAGNAME,
+  VIRTUAL_COMPONENT_TAGNAME,
 } = Contansts
 // @IMPORT("./constants")
 // @IMPORT-END
@@ -53,6 +55,11 @@ const defineStaticComponent = (name: string, componentDef: DefDeclaration) => {
   getStaticDefs().push(def)
   return def
 }
+const defineVirtualComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_VIRTUAL, name }
+  getVirtualDefs().push(def)
+  return def
+}
 
 const getEofolComponentType = (element: JSONElement) => element && element.attributes[COMPONENT_ATTRIBUTE_TYPE]
 
@@ -65,6 +72,8 @@ const isEofolCustomElement = (element: JSONElement) => element && element.type =
 const isEofolFlatElement = (element: JSONElement) => element && element.type === FLAT_COMPONENT_TAGNAME
 
 const isEofolStaticElement = (element: JSONElement) => element && element.type === STATIC_COMPONENT_TAGNAME
+
+const isEofolVirtualElement = (element: JSONElement) => element && element.type === VIRTUAL_COMPONENT_TAGNAME
 
 const validateEofolCustomElement = (element: JSONElement) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
@@ -122,15 +131,19 @@ const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
   const { name, props } = instance
-  const target = isBrowser() ? document.getElementById(id) : null
-  if (target) {
-    const def = findDef(name)
-    if (!def) {
-      return undefined
+  const def = findDef(name)
+  if (!def) {
+    return undefined
+  }
+  if (def.render || def.renderCase) {
+    const target = isBrowser() ? document.getElementById(id) : null
+    if (target) {
+      target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+    } else {
+      errorElementNotFound(id, name)
     }
-    target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
   } else {
-    errorElementNotFound(id, name)
+    renderEofolElement(name, props, id, def)
   }
 }
 
@@ -156,4 +169,6 @@ export default {
   rerenderComponent,
   forceRerender,
   deepEqual,
+  defineVirtualComponent,
+  isEofolVirtualElement,
 }

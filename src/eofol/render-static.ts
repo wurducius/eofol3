@@ -165,4 +165,43 @@ const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: De
   return renderElementWrapper(rendered, as)
 }
 
-export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement }
+const renderEofolVirtualElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
+  const { name, def } = initRender(element, defs)
+
+  if (!def) {
+    return undefined
+  }
+
+  let id
+  if (element.attributes.id) {
+    id = element.attributes.id
+  } else {
+    id = generateId()
+  }
+
+  const props = getProps(element)
+  const stateImpl = getStateStatic(name, defs)
+
+  instances[id] = {
+    name,
+    id,
+    type: "virtual",
+    state: stateImpl,
+    props: { ...props, id },
+  }
+
+  let rendered = ""
+  if (def.render || def.renderCase) {
+    const stateImpl = getStateStatic(name, defs)
+    const setStateImpl = getSetState(ID_PLACEHOLDER)
+    if (def.renderCase) {
+      rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl)(stateImpl, setStateImpl))
+    } else {
+      rendered = reduceRendered(def.render(stateImpl, setStateImpl))
+    }
+  }
+
+  return rendered
+}
+
+export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement }

@@ -6,6 +6,7 @@ let instances: Instances = {}
 const customDefs: Def[] = []
 const flatDefs: Def[] = []
 const staticDefs: Def[] = []
+const virtualDefs: Def[] = []
 
 let memoCache: any = {}
 
@@ -15,6 +16,7 @@ const getInstances = () => instances
 const getCustomDefs = () => customDefs
 const getFlatDefs = () => flatDefs
 const getStaticDefs = () => staticDefs
+const getVirtualDefs = () => virtualDefs
 
 const getMemoCache = () => memoCache
 
@@ -41,4 +43,5 @@ export default {
   registerAsset,
   getMemoCache,
   setMemoCache,
+  getVirtualDefs,
 }

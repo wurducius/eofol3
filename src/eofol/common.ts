@@ -2,7 +2,7 @@ import { Def, Defs, JSONElement } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances } = EofolInternals
+const { getCustomDefs, getFlatDefs, getStaticDefs, getVirtualDefs, getInstances } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 
@@ -19,8 +19,10 @@ const findGeneralDef = (generalDefs: Defs) => (tagname: string) => generalDefs.f
 const findCustomDef = findGeneralDef(getCustomDefs())
 const findFlatDef = findGeneralDef(getFlatDefs())
 const findStaticDef = findGeneralDef(getStaticDefs())
+const findVirtualDef = findGeneralDef(getVirtualDefs())
 
-const findDef = (tagname: string) => findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname)
+const findDef = (tagname: string) =>
+  findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname) || findVirtualDef(tagname)
 
 const findInstance = (id: string) => getInstances()[id]
 
