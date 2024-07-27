@@ -30,6 +30,12 @@ const { getStateStatic, getSetState } = Stateful
 // @IMPORT("./stateful)
 // @IMPORT-END
 
+// @IMPORT-START
+import Constants from "./constants"
+const { ID_PLACEHOLDER } = Constants
+// @IMPORT("./constants")
+// @IMPORT-END
+
 const RENDER_CUSTOM_DEFAULT_AS_TAGNAME = "div"
 const RENDER_FLAT_DEFAULT_AS_TAGNAME = "div"
 const RENDER_STATIC_DEFAULT_AS_TAGNAME = "div"
@@ -78,23 +84,25 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
   }
 
   const as = getAsProp(element, RENDER_CUSTOM_DEFAULT_AS_TAGNAME)
-  const props = { ...getProps(element), id }
+  const props = getProps(element)
+  const propsImpl = { ...props, id: ID_PLACEHOLDER }
   const stateImpl = getStateStatic(name, defs)
-  const setStateImpl = getSetState(id)
-
-  let rendered
-  if (def.renderCase) {
-    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, props)(stateImpl, setStateImpl, props))
-  } else {
-    rendered = reduceRendered(def.render(stateImpl, setStateImpl, props))
-  }
+  const setStateImpl = getSetState(ID_PLACEHOLDER)
 
   instances[id] = {
     name,
     id,
     type: as,
     state: stateImpl,
-    props,
+    props: { ...props, id },
+  }
+
+  let rendered
+
+  if (def.renderCase) {
+    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl))
+  } else {
+    rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl))
   }
 
   if (def.shouldComponentUpdate) {
@@ -102,10 +110,23 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
   }
 
   if (def.memo) {
-    instances[id].memo = { props, state: stateImpl, rendered }
+    if (!memoCache[def.name]) {
+      memoCache[def.name] = {}
+    }
+
+    const propsWithoutId = { ...props }
+    delete propsWithoutId["id"]
+
+    const memoProps = !propsWithoutId ? "undefined" : JSON.stringify(propsWithoutId)
+    if (!memoCache[def.name][memoProps]) {
+      memoCache[def.name][memoProps] = {}
+    }
+    const memoState = !stateImpl ? "undefined" : JSON.stringify(stateImpl)
+    memoCache[def.name][memoProps][memoState] = { rendered }
   }
 
-  return renderElementWrapper(rendered, as, { id })
+  // @ts-ignore
+  return renderElementWrapper(rendered.toString().replaceAll(ID_PLACEHOLDER, id), as, { id })
 }
 
 const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs) => {

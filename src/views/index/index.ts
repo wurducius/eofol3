@@ -64,7 +64,6 @@ export const component2 = defineCustomComponent("component2", {
       ],
       "col",
     ),
-  // shouldComponentUpdate: () => Math.random() > 0.5,
 })
 
 export const component3 = defineCustomComponent("component3", {
