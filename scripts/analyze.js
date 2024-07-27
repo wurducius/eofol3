@@ -33,10 +33,19 @@ const fixed = (msg, length) => {
   return result
 }
 
+const printSize = (size, totalSize) =>
+  `${fixed(absoluteSize(size), ANALYZE_ABSOLUTE_SIZE_FIXED)} ${relativeSize(size, totalSize)}`
+
 const log = (type, path, filename, size, depth, totalSize) => {
   console.log(
-    `${ANALYZE_DEPTH_DELIMITER.repeat(depth)}${ANALYZE_DEPTH_SUFFIX} ${fixed(`[${type}]`, 6)} ${fixed(filename, 14)} -> ${fixed(absoluteSize(size), ANALYZE_ABSOLUTE_SIZE_FIXED)} ${relativeSize(size, totalSize)}`,
+    `${ANALYZE_DEPTH_DELIMITER.repeat(depth)}${ANALYZE_DEPTH_SUFFIX} ${fixed(`[${type}]`, 6)} ${fixed(filename, 14)} -> ${printSize(size, totalSize)}`,
   )
+}
+
+const printCategory = (category, size, totalSize) => {
+  if (size > 0) {
+    console.log(`${fixed(category, 7)} -> ${printSize(size, totalSize)}`)
+  }
 }
 
 const section = (title) => {
@@ -76,41 +85,55 @@ const sumSize = (stats, ext) => {
   }
 }
 
-const sumSizes = (stats, exts) => {
-  const size = exts.reduce((acc, next) => acc + sumSize(stats, next), 0)
-  return `${fixed(absoluteSize(size), ANALYZE_ABSOLUTE_SIZE_FIXED)} ${relativeSize(size, totalSize)}`
-}
+const sumSizes = (stats, exts) => exts.reduce((acc, next) => acc + sumSize(stats, next), 0)
 
 const totalSize = getDirSize(PATH_BUILD)
 
 console.log("*** Eofol3 bundle analyze ***")
 space()
-section(" TREE ")
+section("   TREE   ")
 space()
 traverse(PATH_BUILD, 0, totalSize)
 space()
 
-section("SUMMARY")
+section(" SUMMARY  ")
 space()
 Object.keys(parsed)
   .sort((a, b) => parsed[b] - parsed[a])
   .forEach((ext) => {
-    console.log(
-      `${fixed(ext, 6)} -> ${fixed(absoluteSize(parsed[ext]), ANALYZE_ABSOLUTE_SIZE_FIXED)} ${relativeSize(parsed[ext], totalSize)}`,
-    )
+    console.log(`${fixed(ext, 6)} -> ${printSize(parsed[ext], totalSize)}`)
   })
 space()
-console.log("------------------------------")
+section("CATEGORIES")
 space()
-console.log(`Pages -> ${sumSizes(parsed, [".html", ".htm"])}`)
-console.log(`Scripts -> ${sumSizes(parsed, [".js", ".gz"])}`)
-console.log(`Images -> ${sumSizes(parsed, [".png", ".jpg", ".jpeg", ".svg"])}`)
-console.log(`Fonts -> ${sumSizes(parsed, [".ttf", ".otf", ".woff", ".woff2", ".eot"])}`)
+
+const pagesSize = sumSizes(parsed, [".html", ".htm"])
+const scriptsSize = sumSizes(parsed, [".js", ".gz"])
+const stylesSize = sumSizes(parsed, [".css"])
+const imagesSize = sumSizes(parsed, [
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".svg",
+  ".gif",
+  ".webp",
+  ".apng",
+  ".tiff",
+  ".bmp",
+  ".ico",
+  ".heif",
+])
+const fontsSize = sumSizes(parsed, [".ttf", ".otf", ".woff", ".woff2", ".eot"])
 const otherSize = Object.keys(parsed).reduce((acc, next) => acc + parsed[next], 0)
-console.log(
-  `Other -> ${fixed(absoluteSize(otherSize), ANALYZE_ABSOLUTE_SIZE_FIXED)} ${relativeSize(otherSize, totalSize)}`,
-)
+
+printCategory("Pages", pagesSize, totalSize)
+printCategory("Scripts", scriptsSize, totalSize)
+printCategory("Styles", stylesSize, totalSize)
+printCategory("Images", imagesSize, totalSize)
+printCategory("Fonts", fontsSize, totalSize)
+printCategory("Other", otherSize, totalSize)
+
 space()
-console.log("------------------------------")
+console.log("----------------------------------")
 space()
 console.log(`TOTAL SIZE -> ${absoluteSize(totalSize)}`)
