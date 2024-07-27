@@ -9,19 +9,19 @@
       "purpose": "any maskable"
     },
     {
-      "src": "logo-sm.png",
+      "src": "./assets/media/images/logo-sm.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "logo-md.png",
+      "src": "./assets/media/images/logo-md.png",
       "type": "image/png",
-      "sizes": "400x400",
+      "sizes": "312x312",
       "purpose": "any maskable"
     },
     {
-      "src": "logo-lg.png",
+      "src": "./assets/media/images/logo-lg.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"

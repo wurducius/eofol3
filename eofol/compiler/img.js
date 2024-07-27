@@ -11,7 +11,6 @@ const processImage = (format) => (imagePath, content, handler) =>
       const widthImpl = Math.min(metadata.width, metadata.width <= 512 ? breakpoint.logoWidth : breakpoint.imgWidth)
       const heightImpl = Math.round((metadata.height * widthImpl) / metadata.width)
       const processedContent = handler(imgBin.resize(widthImpl, heightImpl), breakpoint[format])
-      // const processedContent = handler(imgBin, breakpoint[format])
       return processedContent.toBuffer()
     }),
   )

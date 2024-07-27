@@ -21,13 +21,15 @@ const copyStaticDir = async (isHot) => {
     .flat()
 
   return await Promise.all(
-    files.map(async (filename) => {
+    files.map(async (filenameFull) => {
+      const filename = path.basename(filenameFull)
+
       if (!filename.includes(".") || filename.endsWith(EXT_HTML)) {
         return
       }
 
-      const source = path.resolve(PATH_STATIC, filename)
-      const target = path.resolve(PATH_BUILD, filename)
+      const source = path.resolve(PATH_STATIC, filenameFull)
+      const target = path.resolve(PATH_BUILD, filenameFull)
       const staticFileContent = fs.readFileSync(source)
 
       if (filename.includes(FILENAME_FAVICON)) {
@@ -39,9 +41,24 @@ const copyStaticDir = async (isHot) => {
         const processedImgs = await compileImg(filename, staticFileContent)
         processedImgs.forEach((processedImgContent, i) => {
           const filenameSplit = filename.split(".")
-          const resultPath = path.resolve(PATH_BUILD, `${filenameSplit[0]}-${breakpoints[i].name}.${filenameSplit[1]}`)
+          const resultPath = path.resolve(
+            PATH_BUILD,
+            "assets",
+            "media",
+            "images",
+            `${filenameSplit[0]}-${breakpoints[i].name}.${filenameSplit[1]}`,
+          )
           hotUpdate(isHot, resultPath, source, processedImgContent)
         })
+      } else if (filename.includes(".gif")) {
+        const resultPath = path.resolve(PATH_BUILD, "assets", "media", "images", filename)
+        hotUpdate(isHot, resultPath, source, staticFileContent)
+      } else if (filename.includes(".svg")) {
+        const resultPath = path.resolve(PATH_BUILD, "assets", "media", "icons", filename)
+        hotUpdate(isHot, resultPath, source, staticFileContent)
+      } else if (filename.includes(".ttf")) {
+        const resultPath = path.resolve(PATH_BUILD, "assets", "media", "fonts", filename)
+        hotUpdate(isHot, resultPath, source, staticFileContent)
       } else {
         hotUpdate(isHot, target, source, staticFileContent)
       }

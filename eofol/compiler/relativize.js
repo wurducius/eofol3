@@ -1,3 +1,4 @@
+const path = require("path")
 const { env } = require("../../config")
 const { BASE_URL } = env
 
@@ -12,7 +13,7 @@ const relativizeFontStyle = (fontStyleContent) =>
       if (i === 0) {
         return part
       } else {
-        return part
+        return `./assets/media/fonts/${path.basename(part)}`
           .split("/")
           .map((innerPart, j) => {
             if (j === 0) {
