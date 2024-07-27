@@ -8,7 +8,7 @@ const { img } = Tags
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-// eslint-disable-next-line no-unused-vars
+
 const { registerAsset } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END

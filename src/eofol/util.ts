@@ -47,7 +47,6 @@ const ax = (base: Attributes, conditional: Record<string, any>) =>
 
 const cx = (...classnames: (string | boolean | undefined | null)[]) => classnames.filter(Boolean).join(" ")
 
-// eslint-disable-next-line no-unused-vars
 function arrayCombinator<T>(handler: (t: T) => any) {
   return function (value: T | T[] | undefined) {
     if (value === undefined) {

@@ -41,21 +41,21 @@ const dataContainer = (name: string, { render, url, method }: { render: any; url
       eval(
         handler({}, statex, setStatex, () => {
           // @ts-ignore eslint-disable-next-line no-undef
-          // eslint-disable-next-line no-undef
+
           if (state.data === undefined) {
             // @ts-ignore eslint-disable-next-line no-undef
-            // eslint-disable-next-line no-undef
+
             setState({ data: "LOADING" })
             fetchGeneral(url, undefined, method ?? "GET", undefined, true)
               .then((res) => {
                 // @ts-ignore eslint-disable-next-line no-undef
-                // eslint-disable-next-line no-undef
+
                 setState({ data: res })
               })
               .catch((e) => {
                 console.log(e)
                 // @ts-ignore eslint-disable-next-line no-undef
-                // eslint-disable-next-line no-undef
+
                 setState({ data: "ERROR" })
               })
           }
