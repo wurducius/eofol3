@@ -1,6 +1,6 @@
 const fs = require("fs")
 const path = require("path")
-const { EXT_JS, CODE_MODULE_EXPORTS } = require("../constants")
+const { EXT_JS, CODE_MODULE_EXPORTS, PATH_CWD } = require("../constants")
 
 const CODE_EOFOL_IMPORT_OPENING = "// @IMPORT"
 
@@ -27,13 +27,56 @@ const resolveImports = (sourcePath, content, importedScripts) => {
             if (importedScripts.includes(scriptPath)) {
               return acc
             } else {
-              const script = fs.readFileSync(scriptPath).toString()
-              const hasNext = script.includes("@IMPORT")
-              importedScripts.push(scriptPath)
-              const resolvedTreeScript = hasNext
-                ? resolveImports(path.resolve(scriptPath, ".."), cleanExport(script), importedScripts)
-                : script
-              return acc + cleanExport(resolvedTreeScript.toString())
+              if (scriptPathRaw.startsWith(".")) {
+                // local file
+                const script = fs.readFileSync(scriptPath).toString()
+
+                const hasNext = script.includes("@IMPORT")
+                importedScripts.push(scriptPath)
+                const resolvedTreeScript = hasNext
+                  ? resolveImports(path.resolve(scriptPath, ".."), cleanExport(script), importedScripts)
+                  : script
+                return acc + cleanExport(resolvedTreeScript.toString())
+              } else {
+                // external dependency
+                const script = fs
+                  .readFileSync(path.resolve(PATH_CWD, "node_modules", scriptPathRaw, "dist", `index${EXT_JS}`))
+                  .toString()
+
+                const filteredScript = script
+                  .split("\n")
+                  .filter((x) => !x.startsWith("exports."))
+                  .filter((x) => !x.startsWith('Object.defineProperty(exports, "__esModule",'))
+                  .join("\n")
+
+                importedScripts.push(scriptPath)
+
+                const resolved = filteredScript
+                  .split('require("')
+                  .map((part, i) => {
+                    if (i > 0) {
+                      return part
+                        .split('")')
+                        .map((partx, j) => {
+                          if (j === 0) {
+                            return fs
+                              .readFileSync(
+                                path.resolve(PATH_CWD, "node_modules", scriptPathRaw, "dist", `${partx}${EXT_JS}`),
+                              )
+                              .toString()
+                          } else {
+                            return partx
+                          }
+                        })
+                        .join("")
+                    } else {
+                      return part
+                    }
+                  })
+                  .join("")
+
+                return acc + resolved
+              }
             }
           }
         }, "")
