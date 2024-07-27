@@ -1,12 +1,6 @@
 import { EofolPropsWithoutChildren, ImageGenericProps, ImageParticularProps } from "./types"
 
 // @IMPORT-START
-import ComponentUtil from "@eofol-lib/component-util"
-const { ax, cx } = ComponentUtil
-// @IMPORT("@eofol-lib/component-util")
-// @IMPORT-END
-
-// @IMPORT-START
 import Tags from "./html"
 const { img } = Tags
 // @IMPORT("./html")
@@ -22,6 +16,12 @@ const { registerAsset } = EofolInternals
 // @IMPORT-START
 import Common from "./common"
 const { isBrowser } = Common
+// @IMPORT("./common")
+// @IMPORT-END
+
+// @IMPORT-START
+import Util from "./util"
+const { ax, cx } = Util
 // @IMPORT("./common")
 // @IMPORT-END
 

@@ -41,9 +41,7 @@
     "sharp": "^0.33.4",
     "typescript": "5.5.4",
     "uglify-js": "^3.19.0",
-    "watchpack": "^2.4.1",
-    "@eofol-lib/search-params": "file:../eofol-lib/packages/search-params",
-    "@eofol-lib/component-util": "file:../eofol-lib/packages/component-util"
+    "watchpack": "^2.4.1"
   },
   "files": [
     "eofol",

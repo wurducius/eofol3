@@ -39,6 +39,14 @@ const pipe = (...fns: Func[]) => fns.reduce(_pipe)
 
 const id = (x: any) => x
 
+const ax = (base: Attributes, conditional: Record<string, any>) =>
+  Object.keys(conditional).reduce(
+    (acc, next) => (conditional[next] ? { ...acc, [next]: conditional[next] } : acc),
+    base,
+  )
+
+const cx = (...classnames: (string | boolean | undefined | null)[]) => classnames.filter(Boolean).join(" ")
+
 // eslint-disable-next-line no-unused-vars
 function arrayCombinator<T>(handler: (t: T) => any) {
   return function (value: T | T[] | undefined) {
@@ -62,4 +70,6 @@ export default {
   errorTypeUnknown,
   errorCustomCannotHaveChildren,
   arrayCombinator,
+  ax,
+  cx,
 }

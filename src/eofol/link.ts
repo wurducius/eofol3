@@ -20,9 +20,9 @@ const { isBrowser } = Common
 // @IMPORT-END
 
 // @IMPORT-START
-import ComponentUtil from "@eofol-lib/component-util"
-const { ax } = ComponentUtil
-// @IMPORT("@eofol-lib/component-util")
+import Util from "./util"
+const { ax } = Util
+// @IMPORT("./common")
 // @IMPORT-END
 
 const link = ({ children, classname, href, external, download }: EofolProps & LinkGenericProps) => {
