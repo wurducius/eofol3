@@ -20,7 +20,6 @@ const { isBrowser } = Common
 // @IMPORT-END
 
 // @IMPORT-START
-// @ts-ignore
 import ComponentUtil from "@eofol-lib/component-util"
 const { ax } = ComponentUtil
 // @IMPORT("@eofol-lib/component-util")

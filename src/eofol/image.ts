@@ -1,7 +1,6 @@
 import { EofolPropsWithoutChildren, ImageGenericProps, ImageParticularProps } from "./types"
 
 // @IMPORT-START
-// @ts-ignore
 import ComponentUtil from "@eofol-lib/component-util"
 const { ax, cx } = ComponentUtil
 // @IMPORT("@eofol-lib/component-util")
