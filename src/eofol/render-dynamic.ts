@@ -129,8 +129,8 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
       rendered = instance.renderCache
     } else {
       renderMemo()
+      instance.renderCache = rendered
     }
-    instance.renderCache = rendered
   } else {
     renderMemo()
   }
