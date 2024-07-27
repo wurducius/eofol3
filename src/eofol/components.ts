@@ -122,41 +122,13 @@ const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
   const { name, props } = instance
-  const memoCache = getMemoCache()
   const target = isBrowser() ? document.getElementById(id) : null
   if (target) {
     const def = findDef(name)
     if (!def) {
       return undefined
     }
-    if (def.shouldComponentUpdate && def.shouldComponentUpdate(instance.state)) {
-      if (instance.renderCache) {
-        target.innerHTML = instance.renderCache
-      } else {
-        console.log(`Render cache not found for id = ${id}`)
-      }
-    } else {
-      if (def.memo) {
-        if (deepEqual(props, instance.memo.props) && deepEqual(instance.state, instance.memo.state)) {
-          target.innerHTML = instance.memo.rendered ?? ""
-        } else if (
-          // @TODO remove logic for non-custom components
-          memoCache[def.name] &&
-          memoCache[def.name][!props ? "undefined" : JSON.stringify(props)] &&
-          memoCache[def.name][!props ? "undefined" : JSON.stringify(props)].rendered
-        ) {
-          target.innerHTML = memoCache[def.name][!props ? "undefined" : JSON.stringify(props)].rendered
-        } else {
-          target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
-        }
-      } else {
-        if (memoCache[def.name] && memoCache[def.name].rendered && deepEqual(memoCache[def.name].props, props)) {
-          target.innerHTML = memoCache[def.name].rendered ?? ""
-        } else {
-          target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
-        }
-      }
-    }
+    target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
   } else {
     errorElementNotFound(id, name)
   }
