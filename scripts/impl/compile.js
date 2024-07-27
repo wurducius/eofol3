@@ -50,6 +50,7 @@ const compile = () => {
 
     const instances = {}
     const vdom = []
+    const memoCache = {}
 
     const sourcePath = path.resolve(PATH_PAGES, source)
     let sourceHTML
@@ -67,14 +68,14 @@ const compile = () => {
     return minifyPre(sourceHTML.toString())
       .then(parseHTMLToJSON)
       .then(htmlTemplate(view))
-      .then(transverseTree(vdom, instances, defs))
+      .then(transverseTree(vdom, instances, memoCache, defs))
       .then(parseJSONToHTML)
       .then(compileStyle(view, []))
       .then(minifyPost)
       .then(appendDoctype)
       .then(relativizeHtml)
       .then((res) => {
-        writeView(source, res, vdom, instances)
+        writeView(source, res, vdom, instances, memoCache)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
         i += 1
       })

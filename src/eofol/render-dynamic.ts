@@ -26,8 +26,14 @@ const { findInstance, findDef } = Common
 
 // @IMPORT-START
 import Internals from "./eofol-internals"
-const { getInstances } = Internals
+const { getInstances, getMemoCache } = Internals
 // @IMPORT("./eofol-internals")
+// @IMPORT-END
+
+// @IMPORT-START
+import Components from "./components"
+const { deepEqual } = Components
+// @IMPORT("./components")
 // @IMPORT-END
 
 const componentRenderedCustom = (def: Def, id: string, props: Props | undefined) => {
@@ -89,11 +95,34 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
 }
 
 const renderFlatDynamic = (def: Def, props: Props | undefined) => {
-  return def.render(props)
+  if (def.memo) {
+    const memoCache = getMemoCache()
+    const memo = memoCache[def.name]
+    console.log(memo)
+    const memoProps = !props ? "undefined" : JSON.stringify(props)
+    if (memo && memo[memoProps] && memo[memoProps].rendered) {
+      console.log("memo cache!")
+      return memo[memoProps].rendered
+    } else {
+      const rendered = def.render(props)
+      if (!memoCache[def.name]) {
+        memoCache[def.name] = {}
+      }
+      memoCache[def.name][memoProps] = { rendered }
+      return rendered
+    }
+  } else {
+    return def.render(props)
+  }
 }
 
 const renderStaticDynamic = (def: Def) => {
-  return def.render()
+  const memo = getMemoCache()[def.name]
+  if (memo && memo.rendered) {
+    return memo.rendered
+  } else {
+    return def.render()
+  }
 }
 
 const renderDynamic = (type: string, def: Def, id: string | undefined, props: Props | undefined) => {

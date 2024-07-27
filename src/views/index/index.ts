@@ -43,7 +43,13 @@ export const component1 = defineCustomComponent({
         forceRerender()
       }),
     })
-    return div([counter, buttonIncrement, buttonReset, otherButton])
+    return div([
+      counter,
+      buttonIncrement,
+      buttonReset,
+      otherButton,
+      createElement("flat", undefined, undefined, undefined, undefined, { param: "2" }),
+    ])
   },
   initialState: { count: 0 },
   memo: true,
@@ -68,7 +74,7 @@ export const component3 = defineCustomComponent({
   render: () =>
     div([
       createElement("flat", undefined, undefined, undefined, undefined, {
-        param: "3",
+        param: "2",
       }),
       "Component 3",
     ]),
@@ -83,6 +89,7 @@ export const flatComponent = defineFlatComponent({
       createElement("static"),
       `Flat component VARIANT = ${props.param}`,
     ]),
+  memo: true,
 })
 
 export const staticComponent = defineStaticComponent({

@@ -7,6 +7,8 @@ const customDefs: Def[] = []
 const flatDefs: Def[] = []
 const staticDefs: Def[] = []
 
+let memoCache: any = {}
+
 const getVdom = () => vdom
 const getInstances = () => instances
 
@@ -14,11 +16,16 @@ const getCustomDefs = () => customDefs
 const getFlatDefs = () => flatDefs
 const getStaticDefs = () => staticDefs
 
+const getMemoCache = () => memoCache
+
 const setVdom = (nextVdom: VDOM) => {
   vdom = nextVdom
 }
 const setInstances = (nextInstances: Instances) => {
   instances = nextInstances
+}
+const setMemoCache = (nextMemoCache: any) => {
+  memoCache = nextMemoCache
 }
 
 const registerAsset = (type: string, val: string) => {}
@@ -32,4 +39,6 @@ export default {
   setVdom,
   setInstances,
   registerAsset,
+  getMemoCache,
+  setMemoCache,
 }

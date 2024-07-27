@@ -63,7 +63,7 @@ const reduceRendered = (rendered: JSONElement | JSONElement[] | undefined) => {
   }
 }
 
-const renderEofolCustomElement = (element: JSONElement, instances: Instances, defs: Defs) => {
+const renderEofolCustomElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
   const { name, def } = initRender(element, defs)
 
   if (!def) {
@@ -108,7 +108,7 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, de
   return renderElementWrapper(rendered, as, { id })
 }
 
-const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
+const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs) => {
   const { def } = initRender(element, defs)
   const props = getProps(element)
 
@@ -119,10 +119,17 @@ const renderEofolFlatElement = (element: JSONElement, defs: Defs) => {
   const rendered = reduceRendered(def.render(props))
   const as = getAsProp(element, RENDER_FLAT_DEFAULT_AS_TAGNAME)
 
+  if (def.memo) {
+    if (!memoCache[def.name]) {
+      memoCache[def.name] = {}
+    }
+    memoCache[def.name][!props ? "undefined" : JSON.stringify(props)] = { rendered }
+  }
+
   return renderElementWrapper(rendered, as)
 }
 
-const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
+const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: Defs) => {
   const { def } = initRender(element, defs)
 
   if (!def) {
@@ -131,6 +138,8 @@ const renderEofolStaticElement = (element: JSONElement, defs: Defs) => {
 
   const rendered = reduceRendered(def.render())
   const as = getAsProp(element, RENDER_STATIC_DEFAULT_AS_TAGNAME)
+
+  memoCache[def.name] = { rendered }
 
   return renderElementWrapper(rendered, as)
 }
