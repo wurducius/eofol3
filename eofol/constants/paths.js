@@ -15,7 +15,7 @@ const DIRNAME_STYLES = "styles"
 const DIRNAME_EOFOL_INTERNAL = "eofol"
 const DIRNAME_ASSET_JS = "js"
 const DIRNAME_ASSET_CSS = "css"
-const DIRNAME_ASSET_FONT = "fonts"
+// const DIRNAME_ASSET_FONT = "fonts"
 
 const FILENAME_FAVICON = "favicon"
 const FILENAME_CORE = `core${EXT_JS}`

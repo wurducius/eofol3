@@ -1,8 +1,8 @@
-import { Def, Defs, JSONElement, Props } from "./types"
+import { Def, DefDeclaration, Defs, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances } = EofolInternals
+const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getMemoCache } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 
@@ -38,17 +38,20 @@ const { findDef, isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
-const defineCustomComponent = (componentDef: Def) => {
-  getCustomDefs().push({ ...componentDef, type: COMPONENT_TYPE_CUSTOM })
-  return componentDef
+const defineCustomComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_CUSTOM, name }
+  getCustomDefs().push(def)
+  return def
 }
-const defineFlatComponent = (componentDef: Def) => {
-  getFlatDefs().push({ ...componentDef, type: COMPONENT_TYPE_FLAT })
-  return componentDef
+const defineFlatComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_FLAT, name }
+  getFlatDefs().push(def)
+  return def
 }
-const defineStaticComponent = (componentDef: Def) => {
-  getStaticDefs().push({ ...componentDef, type: COMPONENT_TYPE_STATIC })
-  return componentDef
+const defineStaticComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_STATIC, name }
+  getStaticDefs().push(def)
+  return def
 }
 
 const getEofolComponentType = (element: JSONElement) => element && element.attributes[COMPONENT_ATTRIBUTE_TYPE]
@@ -105,12 +108,21 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
   }
 }
 
-const deepEqual = (x: any, y: any) => JSON.stringify(x) === JSON.stringify(y)
+const deepEqual = (x: any, y: any) => {
+  if ((x && !y) || (!x && y)) {
+    return false
+  } else if (!x && !y) {
+    return x === y
+  } else {
+    return JSON.stringify(x) === JSON.stringify(y)
+  }
+}
 
 const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
   const { name, props } = instance
+  const memoCache = getMemoCache()
   const target = isBrowser() ? document.getElementById(id) : null
   if (target) {
     const def = findDef(name)
@@ -127,11 +139,22 @@ const rerenderComponent = (id: string) => {
       if (def.memo) {
         if (deepEqual(props, instance.memo.props) && deepEqual(instance.state, instance.memo.state)) {
           target.innerHTML = instance.memo.rendered ?? ""
+        } else if (
+          // @TODO remove logic for non-custom components
+          memoCache[def.name] &&
+          memoCache[def.name][!props ? "undefined" : JSON.stringify(props)] &&
+          memoCache[def.name][!props ? "undefined" : JSON.stringify(props)].rendered
+        ) {
+          target.innerHTML = memoCache[def.name][!props ? "undefined" : JSON.stringify(props)].rendered
         } else {
           target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
         }
       } else {
-        target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+        if (memoCache[def.name] && memoCache[def.name].rendered && deepEqual(memoCache[def.name].props, props)) {
+          target.innerHTML = memoCache[def.name].rendered ?? ""
+        } else {
+          target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
+        }
       }
     }
   } else {
@@ -160,4 +183,5 @@ export default {
   switchComponentTypeDynamic,
   rerenderComponent,
   forceRerender,
+  deepEqual,
 }

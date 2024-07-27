@@ -6,8 +6,7 @@ const { isBrowser, defineCustomComponent, createElement, forceRerender, internal
 
 let initialized = false
 
-export const component404content = defineCustomComponent({
-  name: "404-content",
+export const component404content = defineCustomComponent("404-content", {
   render: () => {
     const page = isBrowser() ? window.location.pathname.replace("/", "") : "unknown"
     return createElement(

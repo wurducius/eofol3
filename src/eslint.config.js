@@ -1,11 +1,9 @@
-// eslint-disable-next-line no-undef
-const tsParser = require("@typescript-eslint/parser")
-// eslint-disable-next-line no-undef
-const tsPlugin = require("@typescript-eslint/eslint-plugin")
-// eslint-disable-next-line no-undef
+// const tsParser = require("@typescript-eslint/parser")
+
+// const tsPlugin = require("@typescript-eslint/eslint-plugin")
+
 const eslintJS = require("@eslint/js")
 
-// eslint-disable-next-line no-undef
 module.exports = [
   {
     files: ["**/*.js", "**/*.ts"],
@@ -17,7 +15,7 @@ module.exports = [
       "prefer-template": "error",
     },
     languageOptions: {
-      parser: tsParser,
+      //  parser: tsParser,
       sourceType: "module",
       globals: {
         process: true,
@@ -30,6 +28,6 @@ module.exports = [
         Headers: true,
       },
     },
-    plugins: { "@typescript-eslint": tsPlugin },
+    //  plugins: { "@typescript-eslint": tsPlugin },
   },
 ]

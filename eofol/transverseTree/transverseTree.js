@@ -18,7 +18,7 @@ const invalidateRequireCache = () => {
   }
 }
 
-const transverseTree = (tree, vdom, instances, defs) => {
+const transverseTree = (tree, vdom, instances, memoCache, defs) => {
   invalidateRequireCache()
 
   const {
@@ -64,17 +64,17 @@ const transverseTree = (tree, vdom, instances, defs) => {
     tree.content.forEach((child, index) => {
       if (isEofolCustomElement(child)) {
         validateEofolCustomElement(child)
-        const rendered = renderEofolCustomElement(child, instances, defs)
+        const rendered = renderEofolCustomElement(child, instances, memoCache, defs)
         pushElementImpl(rendered, index)
         vdom[vdom.length - 1].id = rendered.attributes.id
       } else if (isEofolFlatElement(child)) {
-        const rendered = renderEofolFlatElement(child, defs)
+        const rendered = renderEofolFlatElement(child, memoCache, defs)
         pushElementImpl(rendered, index)
       } else if (isEofolStaticElement(child)) {
-        const rendered = renderEofolStaticElement(child, defs)
+        const rendered = renderEofolStaticElement(child, memoCache, defs)
         pushElementImpl(rendered, index)
       } else {
-        return transverseTree(child, vdom[vdom.length - 1].children, instances, defs)
+        return transverseTree(child, vdom[vdom.length - 1].children, instances, memoCache, defs)
       }
     })
     delta.forEach((deltaElement) => {
@@ -86,8 +86,8 @@ const transverseTree = (tree, vdom, instances, defs) => {
   return tree
 }
 
-const traverseTreeAsync = (vdom, eofolInstances, eofolDefs) => (res) => {
-  transverseTree(res, vdom, eofolInstances, eofolDefs)
+const traverseTreeAsync = (vdom, eofolInstances, memoCache, eofolDefs) => (res) => {
+  transverseTree(res, vdom, eofolInstances, memoCache, eofolDefs)
   return res
 }
 

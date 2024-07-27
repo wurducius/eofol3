@@ -16,8 +16,7 @@ const {
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
-export const component1 = defineCustomComponent({
-  name: "component1",
+export const component1 = defineCustomComponent("component1", {
   render: (statex: any, setStatex: any, props: any) => {
     const counter = createElement("h2", `You have clicked ${statex.count} times.`)
     const buttonIncrement = createElement("button", "+", "eofol-button", undefined, {
@@ -42,8 +41,7 @@ export const component1 = defineCustomComponent({
   initialState: { count: 0 },
 })
 
-export const component2 = defineCustomComponent({
-  name: "component2",
+export const component2 = defineCustomComponent("component2", {
   render: () =>
     createElement(
       "div",
@@ -56,8 +54,7 @@ export const component2 = defineCustomComponent({
     ),
 })
 
-export const component3 = defineCustomComponent({
-  name: "component3",
+export const component3 = defineCustomComponent("component3", {
   render: () =>
     createElement("div", [
       createElement("flat", undefined, undefined, undefined, undefined, {
@@ -67,8 +64,7 @@ export const component3 = defineCustomComponent({
     ]),
 })
 
-export const flatComponent = defineFlatComponent({
-  name: "flat",
+export const flatComponent = defineFlatComponent("flat", {
   render: (props: { param: string }) =>
     createElement("div", [
       createElement("button", "FLAT HELLO WORLD!!!", sx({ "background-color": "red" })),
@@ -78,13 +74,11 @@ export const flatComponent = defineFlatComponent({
     ]),
 })
 
-export const staticComponent = defineStaticComponent({
-  name: "static",
+export const staticComponent = defineStaticComponent("static", {
   render: () => [createElement("p", "STATIC HELLO WORLD!!!"), createElement("p", "OH YEAH"), "Static component"],
 })
 
-export const imgPhi = defineStaticComponent({
-  name: "img-phi",
+export const imgPhi = defineStaticComponent("img-phi", {
   render: () => [
     createElement("img", undefined, "phi", {
       src: "./assets/media/icons/phi.svg",

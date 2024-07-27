@@ -17,7 +17,7 @@
     {
       "src": "./assets/media/images/logo-md.png",
       "type": "image/png",
-      "sizes": "312x312",
+      "sizes": "320x320",
       "purpose": "any maskable"
     },
     {
