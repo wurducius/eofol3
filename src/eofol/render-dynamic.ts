@@ -135,10 +135,7 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
     renderMemo()
   }
 
-  if (def.effect) {
-    // @ts-ignore
-    def.effect(stateImpl, setStateImpl.replaceAll(ID_PLACEHOLDER, id), propsImpl)
-  }
+  componentRenderedCustom(def, id, props)
 
   // @ts-ignore
   return rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
