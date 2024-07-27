@@ -5,6 +5,7 @@ const {
   defineCustomComponent,
   defineFlatComponent,
   defineStaticComponent,
+  defineVirtualComponent,
   generateId,
   createElement,
   handler,
@@ -102,6 +103,22 @@ export const dataComponent = dataContainer("weather", {
   url: "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m",
 })
 
+export const hookComponent = defineVirtualComponent("hook", {
+  initialState: { initialized: false },
+  // render: (statex: any, setStatex: any) => "tada " + statex.initialized,
+  effect: (statex: any, setStatex: any) =>
+    eval(
+      handler({}, statex, setStatex, () => {
+        console.log("hook")
+        // @ts-ignore
+        if (!state.initialized) {
+          // @ts-ignore
+          setState({ initialized: true })
+        }
+      }),
+    ),
+})
+
 export default {
   component1,
   component2,
@@ -110,4 +127,5 @@ export default {
   staticComponent,
   imgPhi,
   dataComponent,
+  hookComponent,
 }

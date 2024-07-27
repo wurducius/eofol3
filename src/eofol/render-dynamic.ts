@@ -8,7 +8,8 @@ const { errorTypeUnknown, errorInstanceNotFound, errorDefNotFound } = Util
 
 // @IMPORT-START
 import Constants from "./constants"
-const { ID_PLACEHOLDER, COMPONENT_TYPE_CUSTOM, COMPONENT_TYPE_FLAT, COMPONENT_TYPE_STATIC } = Constants
+const { ID_PLACEHOLDER, COMPONENT_TYPE_CUSTOM, COMPONENT_TYPE_FLAT, COMPONENT_TYPE_STATIC, COMPONENT_TYPE_VIRTUAL } =
+  Constants
 // @IMPORT("./constants")
 // @IMPORT-END
 
@@ -172,6 +173,30 @@ const renderStaticDynamic = (def: Def) => {
   }
 }
 
+const renderVirtualDynamic = (def: Def, id: string) => {
+  const instance = findInstance(id)
+  if (!instance) {
+    errorInstanceNotFound(id)
+    return ""
+  }
+
+  let rendered = ""
+
+  if (def.render || def.renderCase) {
+    const stateImpl = getState(id)
+    const setStateImpl = getSetState(ID_PLACEHOLDER)
+    if (def.renderCase) {
+      rendered = def.renderCase(stateImpl, setStateImpl)(stateImpl, setStateImpl)
+    } else {
+      rendered = def.render(stateImpl, setStateImpl)
+    }
+  }
+
+  componentRenderedCustom(def, id, {})
+
+  return rendered
+}
+
 const renderDynamic = (type: string, def: Def, id: string | undefined, props: Props | undefined) => {
   switch (type) {
     case COMPONENT_TYPE_CUSTOM: {
@@ -185,6 +210,12 @@ const renderDynamic = (type: string, def: Def, id: string | undefined, props: Pr
     }
     case COMPONENT_TYPE_STATIC: {
       return renderStaticDynamic(def)
+    }
+    case COMPONENT_TYPE_VIRTUAL: {
+      if (!id) {
+        return undefined
+      }
+      return renderVirtualDynamic(def, id)
     }
     default: {
       errorTypeUnknown(type)
