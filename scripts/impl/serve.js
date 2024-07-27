@@ -1,4 +1,4 @@
-const { success, spawn } = require("../../eofol/dev-util")
+const { success } = require("../../eofol/dev-util")
 const { env, paths } = require("../../config")
 const { PROTOCOL, PAGE_FALLBACK, PORT, HOST } = env
 const { BUILD_PATH } = paths
@@ -8,10 +8,6 @@ const SERVE_RELOAD_WAIT_TIME_MS = 100
 const CORS = true
 
 const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
-
-const spawnOptions = {
-  stdio: "inherit",
-}
 
 const serveOptions = {
   port: PORT,
@@ -32,20 +28,11 @@ const serveOptions = {
 }
 
 const serve = () => {
-  console.log(success(`Serving Eofol3 app now at ${SERVE_URL}.`))
-  spawn.sync(
-    "node ./node_modules/eofol-live-server/live-server.js",
-    [
-      `--port=${serveOptions.port}`,
-      `--host=${serveOptions.host}`,
-      `--entry-file=${serveOptions.file}`,
-      `--wait=${serveOptions.wait}`,
-      "--quiet",
-      CORS && "--cors",
-      serveOptions.root,
-    ].filter(Boolean),
-    spawnOptions,
-  )
+  ;(async () => {
+    const LiveServer = await import("eofol-live-server").then((f) => f.default)
+    console.log(success(`Serving Eofol3 app now at ${SERVE_URL}.`))
+    LiveServer.start(serveOptions)
+  })().catch(console.error)
 }
 
 module.exports = serve
