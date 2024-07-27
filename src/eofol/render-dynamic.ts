@@ -98,10 +98,8 @@ const renderFlatDynamic = (def: Def, props: Props | undefined) => {
   if (def.memo) {
     const memoCache = getMemoCache()
     const memo = memoCache[def.name]
-    console.log(memo)
     const memoProps = !props ? "undefined" : JSON.stringify(props)
     if (memo && memo[memoProps] && memo[memoProps].rendered) {
-      console.log("memo cache!")
       return memo[memoProps].rendered
     } else {
       const rendered = def.render(props)
