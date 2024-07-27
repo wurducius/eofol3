@@ -1,7 +1,7 @@
 const path = require("path")
 const { checkExistsCreate } = require("../util")
 
-const { PATH_BUILD, PATH_ASSETS, PATH_ASSETS_JS, PATH_ASSETS_CSS, PATH_BUILD_INTERNAL } = require("../constants")
+const { PATH_BUILD, PATH_ASSETS, PATH_ASSETS_JS, PATH_ASSETS_CSS } = require("../constants")
 
 const touchBuildDirs = () => {
   checkExistsCreate(PATH_BUILD)
@@ -12,7 +12,6 @@ const touchBuildDirs = () => {
   checkExistsCreate(path.resolve(PATH_ASSETS, "media", "images"))
   checkExistsCreate(path.resolve(PATH_ASSETS, "media", "icons"))
   checkExistsCreate(path.resolve(PATH_ASSETS, "media", "fonts"))
-  checkExistsCreate(PATH_BUILD_INTERNAL)
 }
 
 module.exports = touchBuildDirs

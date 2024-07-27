@@ -19,7 +19,9 @@
     "prettify": "npx prettier --config .prettierrc --write .",
     "check": "npx eslint -c ./eslint.config.js . && npx eslint -c ./src/eslint.config.js ./src",
     "check-fix": "npx eslint -c ./eslint.config.js --fix . && npx eslint -c ./src/eslint.config.js --fix ./src",
-    "lint": "npm run check-fix && npm run prettify"
+    "lint": "npm run check-fix && npm run prettify",
+    "test-smoke": "node ./scripts/test-smoke.js",
+    "deploy": "call c:/code/deploy.bat && npm run test-smoke"
   },
   "type": "commonjs",
   "dependencies": {
