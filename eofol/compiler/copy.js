@@ -50,14 +50,19 @@ const copyStaticDir = async (isHot) => {
           )
           hotUpdate(isHot, resultPath, source, processedImgContent)
         })
-      } else if (filename.includes(".gif")) {
+      } else if (
+        [".gif", ".webp", ".apng", ".tiff", ".bmp", ".heif"].filter((ext) => filename.includes(ext)).length > 0
+      ) {
         const resultPath = path.resolve(PATH_BUILD, "assets", "media", "images", filename)
         hotUpdate(isHot, resultPath, source, staticFileContent)
       } else if (filename.includes(".svg")) {
         const resultPath = path.resolve(PATH_BUILD, "assets", "media", "icons", filename)
         hotUpdate(isHot, resultPath, source, staticFileContent)
-      } else if (filename.includes(".ttf")) {
+      } else if ([".ttf", ".otf", ".woff", ".woff2", ".eot"].filter((ext) => filename.includes(ext)).length > 0) {
         const resultPath = path.resolve(PATH_BUILD, "assets", "media", "fonts", filename)
+        hotUpdate(isHot, resultPath, source, staticFileContent)
+      } else if (filename.includes(".css")) {
+        const resultPath = path.resolve(PATH_BUILD, "assets", "css", filename)
         hotUpdate(isHot, resultPath, source, staticFileContent)
       } else {
         hotUpdate(isHot, target, source, staticFileContent)
