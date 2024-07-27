@@ -89,20 +89,20 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
   const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(ID_PLACEHOLDER)
 
-  let rendered
-
-  if (def.renderCase) {
-    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl))
-  } else {
-    rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl))
-  }
-
   instances[id] = {
     name,
     id,
     type: as,
     state: stateImpl,
     props: { ...props, id },
+  }
+
+  let rendered
+
+  if (def.renderCase) {
+    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl))
+  } else {
+    rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl))
   }
 
   if (def.shouldComponentUpdate) {
