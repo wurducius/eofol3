@@ -23,9 +23,8 @@ const { skeleton, spinner, error } = StateComponent
 // @IMPORT("./state-component")
 // @IMPORT-END
 
-const dataContainer = ({ name, render, url, method }: { name: string; render: any; url: string; method?: Method }) =>
-  defineCustomComponent({
-    name,
+const dataContainer = (name: string, { render, url, method }: { render: any; url: string; method?: Method }) =>
+  defineCustomComponent(name, {
     renderCase: (statex: any, setStatex: any, props: any) => {
       if (statex.data === undefined) {
         return () => skeleton("Ready")

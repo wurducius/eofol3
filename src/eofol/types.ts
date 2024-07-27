@@ -22,9 +22,12 @@ export interface Instance {
 
 export type Instances = Record<string, Instance>
 
-export interface Def {
-  type?: string
+export interface Def extends DefDeclaration {
   name: string
+}
+
+export interface DefDeclaration {
+  type?: string
   // @TODO typing render function
   render?: any
   initialState?: State

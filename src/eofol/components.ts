@@ -1,4 +1,4 @@
-import { Def, Defs, JSONElement, Props } from "./types"
+import { Def, DefDeclaration, Defs, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
@@ -38,17 +38,20 @@ const { findDef, isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
-const defineCustomComponent = (componentDef: Def) => {
-  getCustomDefs().push({ ...componentDef, type: COMPONENT_TYPE_CUSTOM })
-  return componentDef
+const defineCustomComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_CUSTOM, name }
+  getCustomDefs().push(def)
+  return def
 }
-const defineFlatComponent = (componentDef: Def) => {
-  getFlatDefs().push({ ...componentDef, type: COMPONENT_TYPE_FLAT })
-  return componentDef
+const defineFlatComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_FLAT, name }
+  getFlatDefs().push(def)
+  return def
 }
-const defineStaticComponent = (componentDef: Def) => {
-  getStaticDefs().push({ ...componentDef, type: COMPONENT_TYPE_STATIC })
-  return componentDef
+const defineStaticComponent = (name: string, componentDef: DefDeclaration) => {
+  const def = { ...componentDef, type: COMPONENT_TYPE_STATIC, name }
+  getStaticDefs().push(def)
+  return def
 }
 
 const getEofolComponentType = (element: JSONElement) => element && element.attributes[COMPONENT_ATTRIBUTE_TYPE]
