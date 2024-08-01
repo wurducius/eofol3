@@ -21,7 +21,9 @@
     "check-fix": "npx eslint -c eslint.config.mjs --fix .",
     "lint": "npm run check-fix && npm run prettify",
     "test-smoke": "node ./scripts/test-smoke.js",
-    "deploy": "npm run build -- --prod && call c:/code/deploy.bat && npm run test-smoke"
+    "deploy": "npm run build -- --prod && call c:/code/deploy.bat && npm run test-smoke",
+    "docker-build": "docker build -t eofol3-test ./docker-test",
+    "docker-run": "docker run -p 3000:3000 eofol3-test"
   },
   "type": "commonjs",
   "dependencies": {
