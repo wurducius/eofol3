@@ -1,6 +1,6 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
-const { isBrowser, defineCustomComponent, createElement, forceRerender, internalLink } = Core
+const { isBrowser, defineCustomComponent, createElement, forceRerender, internalLink, getConfig } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
@@ -14,7 +14,8 @@ export const component404content = defineCustomComponent("404-content", {
       [
         createElement("h2", `The requested page "${page}" doesn't exist.`),
         internalLink({ children: "Go back", href: "javascript:history.back()", classname: "spacing-l" }),
-        internalLink({ children: "Go to index", href: "/", classname: "spacing-m" }),
+        // @ts-ignore
+        internalLink({ children: "Go to index", href: getConfig().BASE_URL ?? "/", classname: "spacing-m" }),
       ],
       "col",
     )
