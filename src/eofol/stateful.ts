@@ -1,4 +1,4 @@
-import { Defs } from "./types"
+import { DefInstanced, Defs } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
@@ -29,7 +29,7 @@ const getState = (id: string) => {
 }
 
 const getStateStatic = (name: string, defs: Defs) => {
-  const def = findEofolComponentDef(defs)(name)
+  const def = findEofolComponentDef(defs)(name) as DefInstanced | undefined
   if (def) {
     return def.initialState ? { ...def.initialState } : undefined
   } else {

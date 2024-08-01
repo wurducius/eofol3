@@ -1,4 +1,4 @@
-import { Defs, Instances, JSONElement } from "./types"
+import { DefCustom, DefFlat, Defs, DefSaved, DefStatic, DefVirtual, Instances, JSONElement } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
@@ -70,7 +70,8 @@ const reduceRendered = (rendered: JSONElement | JSONElement[] | undefined) => {
 }
 
 const renderEofolCustomElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
-  const { name, def } = initRender(element, defs)
+  const { name, def: defx } = initRender(element, defs)
+  const def = defx as (DefCustom & DefSaved) | undefined
 
   if (!def) {
     return undefined
@@ -130,7 +131,9 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
 }
 
 const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs) => {
-  const { def } = initRender(element, defs)
+  const { def: defx } = initRender(element, defs)
+  const def = defx as (DefFlat & DefSaved) | undefined
+
   const props = getProps(element)
 
   if (!def) {
@@ -151,7 +154,8 @@ const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs
 }
 
 const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: Defs) => {
-  const { def } = initRender(element, defs)
+  const { def: defx } = initRender(element, defs)
+  const def = defx as (DefStatic & DefSaved) | undefined
 
   if (!def) {
     return undefined
@@ -166,7 +170,8 @@ const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: De
 }
 
 const renderEofolVirtualElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
-  const { name, def } = initRender(element, defs)
+  const { name, def: defx } = initRender(element, defs)
+  const def = defx as (DefVirtual | DefSaved) | undefined
 
   if (!def) {
     return undefined
@@ -190,6 +195,7 @@ const renderEofolVirtualElement = (element: JSONElement, instances: Instances, m
     props: { ...props, id },
   }
 
+  /*
   let rendered = ""
   if (def.render || def.renderCase) {
     const stateImpl = getStateStatic(name, defs)
@@ -202,6 +208,9 @@ const renderEofolVirtualElement = (element: JSONElement, instances: Instances, m
   }
 
   return rendered
+  */
+
+  return ""
 }
 
 export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement }

@@ -1,4 +1,4 @@
-import { Def, Props } from "./types"
+import { Def, DefCustom, DefFlat, DefInstanced, DefSaved, DefStatic, DefVirtual, Props } from "./types"
 
 // @IMPORT-START
 import Util from "./util"
@@ -21,7 +21,7 @@ const { getState, getSetState } = Stateful
 
 // @IMPORT-START
 import Common from "./common"
-const { findInstance, findDef } = Common
+const { findInstance, findInstancedDef } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
@@ -37,13 +37,26 @@ const { deepEqual } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
-const componentRenderedCustom = (def: Def, id: string, props: Props | undefined) => {
+const playEffect = (effect: any, id: string, props: Props | undefined) => {
   const stateImpl = getState(id)
   const setStateImpl = getSetState(id)
   const propsImpl = { ...props, id }
 
+  const cleanup = effect(stateImpl, setStateImpl, propsImpl)
+  if (cleanup) {
+    cleanup(stateImpl, setStateImpl, propsImpl)
+  }
+}
+
+const componentRenderedCustom = (def: DefInstanced, id: string, props: Props | undefined) => {
   if (def.effect) {
-    def.effect(stateImpl, setStateImpl, propsImpl)
+    if (Array.isArray(def.effect)) {
+      def.effect.forEach((effect) => {
+        playEffect(effect, id, props)
+      })
+    } else {
+      playEffect(def.effect, id, props)
+    }
   }
 }
 
@@ -54,7 +67,7 @@ const replayInitialEffects = () => {
     if (!instance) {
       errorInstanceNotFound(id)
     }
-    const def = findDef(instance.name)
+    const def = findInstancedDef(instance.name)
     if (def) {
       componentRenderedCustom(def, instance.id, instance.props)
     } else {
@@ -63,7 +76,7 @@ const replayInitialEffects = () => {
   })
 }
 
-const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
+const renderCustomDynamic = (def: DefCustom & DefSaved, id: string, props: Props | undefined) => {
   const stateImpl = getState(id)
   const instance = findInstance(id)
   if (!instance) {
@@ -142,7 +155,7 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
   return rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
 }
 
-const renderFlatDynamic = (def: Def, props: Props | undefined) => {
+const renderFlatDynamic = (def: DefFlat & DefSaved, props: Props | undefined) => {
   const render = () => def.render(props)
 
   if (def.memo) {
@@ -164,7 +177,7 @@ const renderFlatDynamic = (def: Def, props: Props | undefined) => {
   }
 }
 
-const renderStaticDynamic = (def: Def) => {
+const renderStaticDynamic = (def: DefStatic & DefSaved) => {
   const memo = getMemoCache()[def.name]
   if (memo && memo.rendered) {
     return memo.rendered
@@ -173,13 +186,14 @@ const renderStaticDynamic = (def: Def) => {
   }
 }
 
-const renderVirtualDynamic = (def: Def, id: string) => {
+const renderVirtualDynamic = (def: DefVirtual & DefSaved, id: string) => {
   const instance = findInstance(id)
   if (!instance) {
     errorInstanceNotFound(id)
     return ""
   }
 
+  /*
   let rendered = ""
 
   if (def.render || def.renderCase) {
@@ -195,6 +209,7 @@ const renderVirtualDynamic = (def: Def, id: string) => {
   componentRenderedCustom(def, id, {})
 
   return rendered
+  */
 }
 
 const renderDynamic = (type: string, def: Def, id: string | undefined, props: Props | undefined) => {
@@ -224,7 +239,7 @@ const renderDynamic = (type: string, def: Def, id: string | undefined, props: Pr
   }
 }
 
-const renderEofolElement = (name: string, props: Props | undefined, id: string | undefined, def: Def) => {
+const renderEofolElement = (name: string, props: Props | undefined, id: string | undefined, def: Def & DefSaved) => {
   if (def) {
     const type = def.type
     if (!type) {

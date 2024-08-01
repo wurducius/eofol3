@@ -1,4 +1,4 @@
-import { Def, DefDeclaration, Defs, JSONElement, Props } from "./types"
+import { Def, DefCustom, DefDeclaration, DefFlat, Defs, DefStatic, DefVirtual, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
@@ -36,26 +36,26 @@ const { renderEofolElement } = RenderDynamic
 
 // @IMPORT-START
 import Common from "./common"
-const { findDef, isBrowser } = Common
+const { findInstancedDef, isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
-const defineCustomComponent = (name: string, componentDef: DefDeclaration) => {
+const defineCustomComponent = (name: string, componentDef: DefCustom) => {
   const def = { ...componentDef, type: COMPONENT_TYPE_CUSTOM, name }
   getCustomDefs().push(def)
   return def
 }
-const defineFlatComponent = (name: string, componentDef: DefDeclaration) => {
+const defineFlatComponent = (name: string, componentDef: DefFlat) => {
   const def = { ...componentDef, type: COMPONENT_TYPE_FLAT, name }
   getFlatDefs().push(def)
   return def
 }
-const defineStaticComponent = (name: string, componentDef: DefDeclaration) => {
+const defineStaticComponent = (name: string, componentDef: DefStatic) => {
   const def = { ...componentDef, type: COMPONENT_TYPE_STATIC, name }
   getStaticDefs().push(def)
   return def
 }
-const defineVirtualComponent = (name: string, componentDef: DefDeclaration) => {
+const defineVirtualComponent = (name: string, componentDef: DefVirtual) => {
   const def = { ...componentDef, type: COMPONENT_TYPE_VIRTUAL, name }
   getVirtualDefs().push(def)
   return def
@@ -131,11 +131,11 @@ const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
   const { name, props } = instance
-  const def = findDef(name)
+  const def = findInstancedDef(name)
   if (!def) {
     return undefined
   }
-  if (def.render || def.renderCase) {
+  if (("render" in def && def.render) || ("renderCase" in def && def.renderCase)) {
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
       target.innerHTML = renderEofolElement(name, props, id, def) ?? ""

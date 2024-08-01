@@ -22,20 +22,41 @@ export interface Instance {
 
 export type Instances = Record<string, Instance>
 
-export interface Def extends DefDeclaration {
-  name: string
-}
+export type DefSaved = { name: string }
 
-export interface DefDeclaration {
-  type?: string
-  // @TODO typing render function
-  render?: any
+export type Def = DefSaved & (DefCustom | DefVirtual | DefFlat | DefStatic)
+
+export interface DefInstanced {
   initialState?: State
   effect?: any //| Handler[]
   subscribe?: string | string[]
+  constructor?: any
+  getDerivedStateFromProps?: any
+  componentMounted?: any
+  beforeUpdate?: any
+  componentUpdated?: any
+  componentUnmounted?: any
+}
+
+export interface DefConcerete {
+  // @TODO typing render function
+  render?: any
+  memo?: boolean
+}
+
+export interface DefCustom extends DefDeclaration, DefConcerete, DefInstanced {
   renderCase?: any
   shouldComponentUpdate?: any
-  memo?: boolean
+}
+
+export interface DefFlat extends DefDeclaration, DefConcerete {}
+
+export interface DefStatic extends DefDeclaration, DefConcerete {}
+
+export interface DefVirtual extends DefDeclaration, DefInstanced {}
+
+export interface DefDeclaration {
+  type?: string
 }
 
 export type Defs = Def[]
