@@ -17,9 +17,11 @@
     "reinstall-force": "node ./scripts/reinstall.js -c",
     "analyze": "node ./scripts/analyze.js 1",
     "prettify": "npx prettier --config .prettierrc --write .",
-    "check": "npx eslint -c ./eslint.config.js . && npx eslint -c ./src/eslint.config.js ./src",
-    "check-fix": "npx eslint -c ./eslint.config.js --fix . && npx eslint -c ./src/eslint.config.js --fix ./src",
-    "lint": "npm run check-fix && npm run prettify"
+    "check": "npx eslint -c eslint.config.mjs .",
+    "check-fix": "npx eslint -c eslint.config.mjs --fix .",
+    "lint": "npm run check-fix && npm run prettify",
+    "test-smoke": "node ./scripts/test-smoke.js",
+    "deploy": "call c:/code/deploy.bat && npm run test-smoke"
   },
   "type": "commonjs",
   "dependencies": {
@@ -31,11 +33,13 @@
     "@babel/plugin-transform-object-rest-spread": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
-    "@eslint/js": "^9.7.0",
+    "@eslint/js": "^9.8.0",
+    "@types/eslint__js": "^8.42.3",
     "chalk": "2.4.2",
     "cross-spawn": "^7.0.3",
     "eofol-live-server": "^1.2.4",
-    "eslint": "^9.7.0",
+    "eslint": "^9.8.0",
+    "globals": "^15.8.0",
     "gzip-js": "^0.3.2",
     "html-minifier-terser": "^7.2.0",
     "html-to-json-parser": "^2.0.1",
@@ -43,6 +47,7 @@
     "prettier": "3.3.3",
     "sharp": "^0.33.4",
     "typescript": "5.5.4",
+    "typescript-eslint": "^7.17.0",
     "uglify-js": "^3.19.0",
     "watchpack": "^2.4.1"
   },
@@ -64,5 +69,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wurducius/eofol3.git"
+  },
+  "overrides": {
+    "eslint": "^9.8.0"
   }
 }

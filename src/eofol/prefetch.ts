@@ -13,13 +13,13 @@ const getInternalPageAssets = (internalUrl: string) => [`${internalUrl}.html`, `
 
 const prefetch = () => {
   const assetsToPrefetch = []
-  for (let internalPageIndex in assetsPagesInternal) {
+  for (const internalPageIndex in assetsPagesInternal) {
     const nextInternalPage = getInternalPageAssets(assetsPagesInternal[internalPageIndex])
-    for (let internalPageInnerIndex in nextInternalPage) {
+    for (const internalPageInnerIndex in nextInternalPage) {
       assetsToPrefetch.push(nextInternalPage[internalPageInnerIndex])
     }
   }
-  for (let externalPageIndex in assetsPagesExternal) {
+  for (const externalPageIndex in assetsPagesExternal) {
     assetsToPrefetch.push(assetsPagesExternal[externalPageIndex])
   }
 
