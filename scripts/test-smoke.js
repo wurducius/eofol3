@@ -1,4 +1,5 @@
 const https = require("https")
+const { primary, success, error, prettyTime } = require("../eofol/dev-util")
 
 const baseUrl = "https://eofol.com/eofol3/"
 
@@ -7,51 +8,88 @@ const items = [
   { url: `${baseUrl}indexx.html`, check: "<title>Eofol3 app - Second page</title>" },
   { url: `${baseUrl}license.html`, check: "The MIT License (MIT)" },
   { url: `${baseUrl}asfaasd`, check: "Page not found" },
-  { url: `${baseUrl}assets/js/index.js` },
-  { url: `${baseUrl}assets/media/fonts/Roboto-Regular.ttf` },
-  { url: `${baseUrl}assets/media/images/logo-lg.png` },
+  { url: `${baseUrl}assets/js/index.js`, check: "instances" },
+  { url: `${baseUrl}assets/media/fonts/Roboto-Regular.ttf`, size: 166512 },
+  { url: `${baseUrl}assets/media/images/logo-lg.png`, size: 3810 },
 ]
+
+const WAIT_INTERVAL_MS = 2000
+
+const log = console.log
+const logNewline = () => log("")
+const logInfo = (msg) => log(primary(msg))
+const logError = (msg) => log(error(msg))
+const logSuccess = (msg) => log(success(msg))
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const results = items.map(() => undefined)
 
-const finish = (i, result) => {
+const errors = {}
+
+const finish = (i, result, start, errorMsg) => {
   results[i] = result
+  errors[i] = errorMsg
   if (results.filter((x) => x !== undefined).length === items.length) {
-    console.log("")
+    logNewline()
+    logInfo(`Test took ${prettyTime(new Date() - start)}.`)
+    logNewline()
     if (results.filter(Boolean).length === items.length) {
-      console.log("SMOKE TEST PASSED")
+      logSuccess(`SMOKE TEST PASSED: ${baseUrl}`)
     } else {
-      console.log("SMOKE TEST FAILED")
+      logError("SMOKE TEST FAILED")
       results.forEach((failedResult, j) => {
         if (!failedResult) {
-          console.log(`FAILED -> ${items[j].url}`)
+          logError(`FAILED ${items[j].url} -> ${errors[j]}`)
         }
       })
     }
   }
 }
 
-const get = (item, index, length) => {
+const data = {}
+
+const get = (item, index, length, start) => {
   https
     .get(item.url, (resp) => {
-      let data = ""
+      data[index] = ""
 
       resp.on("data", (chunk) => {
-        data += chunk
+        data[index] += chunk
       })
 
       resp.on("end", () => {
-        const passed = data.length > 0 && (!item.check || data.includes(item.check))
-        console.log(`[${index + 1}/${length}] ${item.url} -> ${passed ? "OK" : "FAIL"}`)
-        finish(index, passed)
+        const itemData = data[index]
+        const exists = itemData.length > 0
+        const isChecked = !item.check || itemData.includes(item.check)
+        const isSize = !item.size || itemData.length === item.size
+        const passed = exists && isChecked && isSize
+        const msg = `[${index + 1}/${length}] ${item.url} -> ${passed ? "OK" : "FAIL"}`
+        let errorMsg = undefined
+        if (passed) {
+          logInfo(msg)
+        } else {
+          logError(msg)
+          errorMsg = [
+            !exists && "File does not exist.",
+            !isChecked && `Invalid file content check, does not contain substring: "${item.check}".`,
+            !isSize && `Invalid file size: expected = ${item.size} but actual = ${itemData.length}.`,
+          ]
+            .filter(Boolean)
+            .join(" ")
+        }
+        finish(index, passed, start, errorMsg)
       })
     })
 
     .on("error", (err) => {
-      console.log(`Error: ${err.message}`)
+      logError(`Error: ${err.message}`)
     })
 }
 
-items.forEach((item, i) => {
-  get(item, i, items.length)
+delay(WAIT_INTERVAL_MS).then(() => {
+  const start = new Date()
+  items.forEach((item, i) => {
+    get(item, i, items.length, start)
+  })
 })
