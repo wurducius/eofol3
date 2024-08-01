@@ -9,4 +9,6 @@ const checkExistsCreate = (pathToCheck) => {
 
 const removeFilePart = (dirname) => path.parse(dirname).dir
 
-module.exports = { checkExistsCreate, removeFilePart }
+const isDirectory = (path) => fs.lstatSync(path).isDirectory()
+
+module.exports = { checkExistsCreate, removeFilePart, isDirectory }

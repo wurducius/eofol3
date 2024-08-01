@@ -1,0 +1,38 @@
+.phi {
+  background-color: #278da6;
+  border-radius: 8px;
+  margin: 32px 0 0 0;
+}
+
+.eofol-button {
+  height: 40px;
+  padding: 0 16px;
+  background-color: rgb(144, 205, 244);
+  font-size: 16px;
+  color: rgb(26, 32, 44);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.eofol-button:hover {
+  background-color: rgb(100, 161, 199);
+}
+
+.m-md {
+  margin-top: 32px;
+}
+
+.m-sm {
+  margin-top: 16px;
+}
+
+.footer {
+  height: 64px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}

@@ -2,6 +2,12 @@ require("dotenv").config()
 
 const defaultEnv = require("./default-env")
 
+const params = {}
+
+if (process.argv.length >= 3 && process.argv[2] && process.argv[2] === "--prod") {
+  params.MODE = "production"
+}
+
 function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -24,5 +30,6 @@ function getPort() {
 module.exports = {
   ...defaultEnv,
   ...process.env,
+  ...params,
   PORT: getPort(),
 }

@@ -12,6 +12,7 @@ const {
 } = require("../constants")
 const gzip = require("./gzip")
 const hotUpdate = require("./hot-update")
+const { checkExistsCreate, removeFilePart } = require("../util/fs")
 
 const copyStaticDir = async (isHot) => {
   const files = fs
@@ -72,11 +73,12 @@ const copyStaticDir = async (isHot) => {
 }
 
 const copyPages = (isHot) => {
-  fs.readdirSync(PATH_DERIVED)
-    .filter((filename) => filename.endsWith(EXT_HTML))
+  fs.readdirSync(PATH_DERIVED, { recursive: true })
+    .filter((filename) => path.basename(filename).endsWith(EXT_HTML))
     .forEach((htmlFile) => {
       const source = path.resolve(PATH_DERIVED, htmlFile)
       const target = path.resolve(PATH_BUILD, htmlFile)
+      checkExistsCreate(path.resolve(PATH_BUILD, removeFilePart(htmlFile)))
       const content = fs.readFileSync(source).toString()
       hotUpdate(isHot, target, source, content, () => {
         if (COMPRESS_GZIP_BUILD_FILES) {

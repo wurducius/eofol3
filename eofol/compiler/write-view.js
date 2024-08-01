@@ -12,7 +12,7 @@ const writeView = (filename, content, vdom, instances, memoCache) => {
   fs.writeFileSync(targetPath, content)
   const internalDir = path.resolve(targetDir, DIRNAME_EOFOL_INTERNAL)
   checkExistsCreate(internalDir)
-  writeInternal(vdom, instances, memoCache, internalDir, path.parse(filename).name)
+  writeInternal(vdom, instances, memoCache, internalDir, filename)
 }
 
 module.exports = writeView

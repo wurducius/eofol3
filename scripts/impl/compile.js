@@ -2,7 +2,16 @@ const fs = require("fs")
 const path = require("path")
 
 const { prettyTime } = require("../../eofol/dev-util")
-const { config, isVerbose, PATH_DERIVED, PATH_VIEWS_DIST2, EXT_HTML, PATH_PAGES } = require("../../eofol/constants")
+const {
+  config,
+  isVerbose,
+  PATH_DERIVED,
+  PATH_VIEWS_DIST2,
+  EXT_HTML,
+  PATH_PAGES,
+  EXT_JS,
+  DIRNAME_EOFOL_INTERNAL,
+} = require("../../eofol/constants")
 const { checkExistsCreate, die } = require("../../eofol/util")
 const {
   compileStyle,
@@ -19,6 +28,7 @@ const {
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
+const { isDirectory } = require("../../eofol/util/fs")
 
 /*
 const Sx = require("../../dist2/eofol/core")
@@ -35,8 +45,13 @@ const compile = () => {
   const timeStart = new Date()
 
   checkExistsCreate(PATH_DERIVED)
+  checkExistsCreate(path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL))
 
-  const views = fs.readdirSync(PATH_VIEWS_DIST2)
+  const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
+    const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
+    const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}${EXT_JS}`)
+    return fs.existsSync(viewScriptPath) && isDirectory(viewPath)
+  })
 
   let i = 0
 

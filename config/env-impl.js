@@ -34,5 +34,5 @@ module.exports = {
   MINIMIZE: !isDev,
   TERSER: !isDev,
   CSS_MINIMIZE: !isDev,
-  BASE_URL: isDev ? "./" : BASE_URL,
+  BASE_URL: isDev ? "/" : BASE_URL,
 }

@@ -12,8 +12,8 @@ const injectStyles = (htmlPage) => (styles) =>
 
 const compileStyle = (view, stylesSxList) => (htmlPage) =>
   compileAllStyles(
-    path.resolve(PATH_VIEWS_SRC, view, `${view}${EXT_CSS}`),
-    path.resolve(PATH_VIEWS_SRC, view, `${view}${EXT_LESS}`),
+    path.resolve(PATH_VIEWS_SRC, view, `${path.basename(view)}${EXT_CSS}`),
+    path.resolve(PATH_VIEWS_SRC, view, `${path.basename(view)}${EXT_LESS}`),
     stylesSxList.join(" "),
   ).then(injectStyles(htmlPage))
 
