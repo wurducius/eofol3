@@ -1,3 +1,3 @@
 const { afterCompile } = require("./impl")
 
-afterCompile(false)
+await afterCompile(false)

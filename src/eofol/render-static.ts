@@ -167,7 +167,7 @@ const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: De
 
 const renderEofolVirtualElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
   const { name, def: defx } = initRender(element, defs)
-  const def = defx as (DefVirtual | DefSaved) | undefined
+  const def = defx as (DefVirtual & DefSaved) | undefined
 
   if (!def) {
     return undefined

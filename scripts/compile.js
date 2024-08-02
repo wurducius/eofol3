@@ -1,3 +1,3 @@
 const compile = require("./impl/compile")
 
-compile()
+await compile()

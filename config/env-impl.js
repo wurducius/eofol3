@@ -4,7 +4,7 @@ const { MODE, BROWSER, HTTPS, HOST, PORT, SHOW_PROGRESS, ANALYZE_BUNDLE, GENERAT
 
 const isDev = MODE === "development"
 
-const isHttps = HTTPS === "true" || HTTPS === true
+const isHttps = HTTPS === true
 const protocol = isHttps ? "https" : "http"
 
 const getBrowser = (property) => {
@@ -27,9 +27,9 @@ module.exports = {
   BROWSER: getBrowser(BROWSER),
   HTTPS: protocol,
   PROTOCOL: protocol,
-  SHOW_PROGRESS: SHOW_PROGRESS === "true" || SHOW_PROGRESS === true,
-  ANALYZE_BUNDLE: ANALYZE_BUNDLE === "true" || ANALYZE_BUNDLE === true,
-  GENERATE_SOURCEMAP: GENERATE_SOURCEMAP === "true" || GENERATE_SOURCEMAP === true,
+  SHOW_PROGRESS: SHOW_PROGRESS === true,
+  ANALYZE_BUNDLE: ANALYZE_BUNDLE === true,
+  GENERATE_SOURCEMAP: GENERATE_SOURCEMAP === true,
   SERVE_URL: `${protocol}://${HOST}:${PORT}`,
   MINIMIZE: !isDev,
   TERSER: !isDev,

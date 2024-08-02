@@ -13,7 +13,7 @@ const relativizeFontStyle = (fontStyleContent) =>
       if (i === 0) {
         return part
       } else {
-        return `./assets/media/fonts/${path.basename(part)}`
+        return `./assets/media/fonts/${path.basename(part.toString())}`
           .split("/")
           .map((innerPart, j) => {
             if (j === 0) {
