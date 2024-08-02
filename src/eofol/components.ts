@@ -1,4 +1,4 @@
-import { Def, DefCustom, DefDeclaration, DefFlat, Defs, DefStatic, DefVirtual, JSONElement, Props } from "./types"
+import { Def, DefCustom, DefFlat, Defs, DefStatic, DefVirtual, JSONElement, Props } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"

@@ -71,7 +71,7 @@ const compile = () => {
     let sourceHTML
     try {
       if (!fs.existsSync(sourcePath)) {
-        die(`Source file doesn't exist: ${sourcePath}`)
+        die(`Source file doesn't exist: ${sourcePath}`, undefined)
       }
       sourceHTML = fs.readFileSync(sourcePath)
     } catch (ex) {

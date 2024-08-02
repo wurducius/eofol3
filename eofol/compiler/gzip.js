@@ -16,7 +16,7 @@ const zip = (sourcePath, targetPath, filename) => {
       gzip.zip(fs.readFileSync(sourcePath), {
         ...gzipOptions,
         name: filename,
-        timestamp: parseInt(Date.now() / 1000, 10),
+        timestamp: parseInt((Date.now() / 1000).toString(), 10),
       }),
     ),
   )

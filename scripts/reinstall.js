@@ -28,7 +28,7 @@ if (fs.existsSync(PATH_NODE_MODULES)) {
 }
 
 if (isCacheClean) {
-  execSync("npm cache clean --force", spawnOptions)
+  execSync("npm cache clean --force")
 }
 
 const install = spawn("npm", ["i"], spawnOptions)

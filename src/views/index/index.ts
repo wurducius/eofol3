@@ -102,7 +102,7 @@ export const imgPhi = defineStaticComponent("img-phi", {
 })
 
 export const staticNextComponent = defineCustomComponent("next", {
-  render: () => [p("Next!!! " + generateId())],
+  render: () => [p(`Next!!! ${  generateId()}`)],
 })
 
 export const dataComponent = dataContainer("weather", {
