@@ -165,15 +165,10 @@ const pruneInstances = () => {
     }
   }
   Object.keys(instances).forEach((id) => {
-    if (instances[id].type === "virtual") {
-      const virtualDef = findInstancedDef(instances[id].name)
-      if (virtualDef) {
-        if (isVirtualComponentConcrete(virtualDef)) {
-          prune(id)
-        }
-      } else {
-      }
-    } else {
+    const def = findInstancedDef(instances[id].name)
+    // @ts-ignore
+    const isVirtual = def.type === "virtual"
+    if (def && ((isVirtual && isVirtualComponentConcrete(def)) || !isVirtual)) {
       prune(id)
     }
   })
@@ -208,4 +203,5 @@ export default {
   deepEqual,
   defineVirtualComponent,
   isEofolVirtualElement,
+  isVirtualComponentConcrete,
 }

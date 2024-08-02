@@ -40,25 +40,28 @@ const componentUnmounted = (id: string) => {
   }
 }
 
-const playEffect = (effect: any, id: string, props: Props | undefined) => {
+const playEffect = (effect: any, id: string, props: Props | undefined, body: any) => {
   const stateImpl = getState(id)
   const setStateImpl = getSetState(id)
   const propsImpl = { ...props, id }
+  const setBody = (nextBody: any) => {
+    getInstances()[id].body = nextBody
+  }
 
-  const cleanup = effect(stateImpl, setStateImpl, propsImpl)
+  const cleanup = effect(stateImpl, setStateImpl, propsImpl, body, setBody)
   if (cleanup) {
-    cleanup(stateImpl, setStateImpl, propsImpl)
+    cleanup(stateImpl, setStateImpl, propsImpl, body, setBody)
   }
 }
 
-const componentUpdated = (def: DefInstanced, id: string, props: Props | undefined) => {
+const componentUpdated = (def: DefInstanced, id: string, props: Props | undefined, body: any) => {
   if (def.effect) {
     if (Array.isArray(def.effect)) {
       def.effect.forEach((effect) => {
-        playEffect(effect, id, props)
+        playEffect(effect, id, props, body)
       })
     } else {
-      playEffect(def.effect, id, props)
+      playEffect(def.effect, id, props, body)
     }
   }
 }
@@ -72,7 +75,7 @@ const replayInitialEffects = () => {
     }
     const def = findInstancedDef(instance.name)
     if (def) {
-      componentUpdated(def, instance.id, instance.props)
+      componentUpdated(def, instance.id, instance.props, instance.body)
     } else {
       errorDefNotFound(instance.name)
     }
