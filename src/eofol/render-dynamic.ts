@@ -1,4 +1,15 @@
-import { Def, Props } from "./types"
+import {
+  Def,
+  DefCustom,
+  DefFlat,
+  DefInstanced,
+  DefSaved,
+  DefStatic,
+  DefVirtual,
+  JSONElement,
+  Props,
+  State,
+} from "./types"
 
 // @IMPORT-START
 import Util from "./util"
@@ -8,8 +19,14 @@ const { errorTypeUnknown, errorInstanceNotFound, errorDefNotFound } = Util
 
 // @IMPORT-START
 import Constants from "./constants"
-const { ID_PLACEHOLDER, COMPONENT_TYPE_CUSTOM, COMPONENT_TYPE_FLAT, COMPONENT_TYPE_STATIC, COMPONENT_TYPE_VIRTUAL } =
-  Constants
+const {
+  ID_PLACEHOLDER,
+  COMPONENT_TYPE_CUSTOM,
+  COMPONENT_TYPE_FLAT,
+  COMPONENT_TYPE_STATIC,
+  COMPONENT_TYPE_VIRTUAL,
+  CUSTOM_DEFAULT_AS_TAGNAME,
+} = Constants
 // @IMPORT("./constants")
 // @IMPORT-END
 
@@ -21,7 +38,7 @@ const { getState, getSetState } = Stateful
 
 // @IMPORT-START
 import Common from "./common"
-const { findInstance, findDef } = Common
+const { findInstance, findInstancedDef } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
@@ -32,38 +49,91 @@ const { getInstances, getMemoCache } = Internals
 // @IMPORT-END
 
 // @IMPORT-START
-import Components from "./components"
-const { deepEqual } = Components
-// @IMPORT("./components")
+import Crypto from "./crypto"
+const { generateId } = Crypto
+// @IMPORT("./crypto")
 // @IMPORT-END
 
-const componentRenderedCustom = (def: Def, id: string, props: Props | undefined) => {
-  const stateImpl = getState(id)
-  const setStateImpl = getSetState(id)
-  const propsImpl = { ...props, id }
+// @IMPORT-START
+import CreateElement from "./create-element"
+const { createElement } = CreateElement
+// @IMPORT("./create-element")
+// @IMPORT-END
 
-  if (def.effect) {
-    def.effect(stateImpl, setStateImpl, propsImpl)
+// @IMPORT-START
+import Lifecycle from "./lifecycle"
+const { componentUpdated, componentMounted } = Lifecycle
+// @IMPORT("./lifecycle")
+// @IMPORT-END
+
+const getAsProp = (props: Props | undefined, defaultTagname: string) => (props && props.as) ?? defaultTagname
+
+const getStateInitial = (def: DefInstanced) => (def.initialState ? { ...def.initialState } : undefined)
+
+const renderSelector = (
+  def: DefCustom,
+  stateImpl: State | undefined,
+  setStateImpl: any,
+  propsImpl: Props | undefined,
+) => {
+  if (def.renderCase) {
+    return def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl)
+  } else {
+    return def.render(stateImpl, setStateImpl, propsImpl)
   }
 }
 
-const replayInitialEffects = () => {
+const mountComponent = (
+  idOriginal: string | undefined,
+  def: DefInstanced & DefSaved,
+  props: Props | undefined,
+  isNotTop?: boolean,
+) => {
+  let mounted
+  let wrapper
+  let id
+
+  if (!idOriginal) {
+    id = generateId()
+  } else {
+    id = idOriginal
+  }
+
   const instances = getInstances()
-  Object.keys(instances).forEach((id) => {
-    const instance = instances[id]
-    if (!instance) {
-      errorInstanceNotFound(id)
+
+  if (!instances[id]) {
+    const as = getAsProp(props, CUSTOM_DEFAULT_AS_TAGNAME)
+    const nextState = getStateInitial(def)
+
+    instances[id] = {
+      name: def.name,
+      id: id,
+      type: as,
+      state: nextState,
+      props: { ...props, id: id },
     }
-    const def = findDef(instance.name)
-    if (def) {
-      componentRenderedCustom(def, instance.id, instance.props)
-    } else {
-      errorDefNotFound(instance.name)
-    }
-  })
+    wrapper = true
+    mounted = true
+  } else {
+    mounted = false
+    wrapper = false
+  }
+
+  if (isNotTop) {
+    wrapper = true
+  }
+
+  return { id, wrapper, mounted }
 }
 
-const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => {
+const renderCustomDynamic = (
+  def: DefCustom & DefSaved,
+  idOriginal: string | undefined,
+  props: Props | undefined,
+  isNotTop?: boolean,
+) => {
+  const { mounted, wrapper, id } = mountComponent(idOriginal, def, props, isNotTop)
+
   const stateImpl = getState(id)
   const instance = findInstance(id)
   if (!instance) {
@@ -75,13 +145,7 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
   const setStateImpl = getSetState(ID_PLACEHOLDER)
   const propsImpl = { ...props, id: ID_PLACEHOLDER }
 
-  const render = () => {
-    if (def.renderCase) {
-      return def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl)
-    } else {
-      return def.render(stateImpl, setStateImpl, propsImpl)
-    }
-  }
+  const render = () => renderSelector(def, stateImpl, setStateImpl, propsImpl)
 
   const propsWithoutId = { ...props }
   delete propsWithoutId["id"]
@@ -136,13 +200,20 @@ const renderCustomDynamic = (def: Def, id: string, props: Props | undefined) => 
     renderMemo()
   }
 
-  componentRenderedCustom(def, id, props)
+  componentUpdated(def, id, props)
 
   // @ts-ignore
-  return rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
+  const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
+  const result: string = (wrapper ? createElement("div", content, undefined, { id }) : content).toString()
+
+  if (mounted) {
+    componentMounted(id)
+  }
+
+  return result
 }
 
-const renderFlatDynamic = (def: Def, props: Props | undefined) => {
+const renderFlatDynamic = (def: DefFlat & DefSaved, props: Props | undefined) => {
   const render = () => def.render(props)
 
   if (def.memo) {
@@ -164,7 +235,7 @@ const renderFlatDynamic = (def: Def, props: Props | undefined) => {
   }
 }
 
-const renderStaticDynamic = (def: Def) => {
+const renderStaticDynamic = (def: DefStatic & DefSaved) => {
   const memo = getMemoCache()[def.name]
   if (memo && memo.rendered) {
     return memo.rendered
@@ -173,7 +244,9 @@ const renderStaticDynamic = (def: Def) => {
   }
 }
 
-const renderVirtualDynamic = (def: Def, id: string) => {
+const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | undefined, isNotTop?: boolean) => {
+  const { mounted, wrapper, id } = mountComponent(idOriginal, def, {}, isNotTop)
+
   const instance = findInstance(id)
   if (!instance) {
     errorInstanceNotFound(id)
@@ -181,29 +254,40 @@ const renderVirtualDynamic = (def: Def, id: string) => {
   }
 
   let rendered = ""
+  const propsImpl = { id }
 
-  if (def.render || def.renderCase) {
-    const stateImpl = getState(id)
-    const setStateImpl = getSetState(ID_PLACEHOLDER)
-    if (def.renderCase) {
-      rendered = def.renderCase(stateImpl, setStateImpl)(stateImpl, setStateImpl)
-    } else {
-      rendered = def.render(stateImpl, setStateImpl)
-    }
+  const isRender = def.render || def.renderCase
+
+  let result: string
+
+  if (isRender) {
+    rendered = renderSelector(def, getState(id), getSetState(ID_PLACEHOLDER), propsImpl)
+    // @ts-ignore
+    const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
+    result = (wrapper ? createElement("div", content, undefined, { id }) : content).toString()
+  } else {
+    result = ""
   }
 
-  componentRenderedCustom(def, id, {})
+  if (mounted) {
+    componentMounted(id)
+  }
 
-  return rendered
+  componentUpdated(def, id, propsImpl)
+
+  return result
 }
 
-const renderDynamic = (type: string, def: Def, id: string | undefined, props: Props | undefined) => {
+const renderDynamic = (
+  type: string,
+  def: Def,
+  id: string | undefined,
+  props: Props | undefined,
+  isNotTop?: boolean,
+) => {
   switch (type) {
     case COMPONENT_TYPE_CUSTOM: {
-      if (!id) {
-        return undefined
-      }
-      return renderCustomDynamic(def, id, props)
+      return renderCustomDynamic(def, id, props, isNotTop)
     }
     case COMPONENT_TYPE_FLAT: {
       return renderFlatDynamic(def, props)
@@ -212,10 +296,7 @@ const renderDynamic = (type: string, def: Def, id: string | undefined, props: Pr
       return renderStaticDynamic(def)
     }
     case COMPONENT_TYPE_VIRTUAL: {
-      if (!id) {
-        return undefined
-      }
-      return renderVirtualDynamic(def, id)
+      return renderVirtualDynamic(def, id, isNotTop)
     }
     default: {
       errorTypeUnknown(type)
@@ -224,17 +305,23 @@ const renderDynamic = (type: string, def: Def, id: string | undefined, props: Pr
   }
 }
 
-const renderEofolElement = (name: string, props: Props | undefined, id: string | undefined, def: Def) => {
+const renderEofolElement = (
+  name: string,
+  props: Props | undefined,
+  id: string | undefined,
+  def: Def & DefSaved,
+  isNotTop?: boolean,
+) => {
   if (def) {
     const type = def.type
     if (!type) {
       return undefined
     }
-    return renderDynamic(type, def, id, props)
+    return renderDynamic(type, def, id, props, isNotTop)
   } else {
     errorDefNotFound(name)
     return undefined
   }
 }
 
-export default { renderEofolElement, replayInitialEffects }
+export default { renderEofolElement }

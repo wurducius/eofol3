@@ -56,10 +56,17 @@ const createElement = (
   const def = findDef(tagname)
   if (def) {
     const id = attributes && attributes.id ? attributes.id : undefined
-    return renderEofolElement(tagname, props, id, def)
+    return renderEofolElement(tagname, props, id, def, true)
   } else {
     return renderTagElement(tagname, content, classname, attributes, properties)
   }
 }
 
-export default { createElement }
+const e = (tagname: string, id: string, props?: Props) => {
+  const def = findDef(tagname)
+  if (def) {
+    return renderEofolElement(tagname, props, id, def, true)
+  }
+}
+
+export default { createElement, e }

@@ -1,4 +1,4 @@
-import { Def, Defs, JSONElement } from "./types"
+import { Def, DefInstanced, Defs, DefSaved, JSONElement } from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
@@ -23,6 +23,8 @@ const findVirtualDef = findGeneralDef(getVirtualDefs())
 
 const findDef = (tagname: string) =>
   findCustomDef(tagname) || findFlatDef(tagname) || findStaticDef(tagname) || findVirtualDef(tagname)
+const findInstancedDef = (tagname: string): (DefInstanced & DefSaved) | undefined =>
+  findCustomDef(tagname) || findVirtualDef(tagname)
 
 const findInstance = (id: string) => getInstances()[id]
 
@@ -34,4 +36,4 @@ const getProps = (element: JSONElement) => {
   return props
 }
 
-export default { isBrowser, findDef, findInstance, getProps }
+export default { isBrowser, findDef, findInstance, findInstancedDef, getProps }

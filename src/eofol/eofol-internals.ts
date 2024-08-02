@@ -1,13 +1,13 @@
-import { VDOM, Instances, Def } from "./types"
+import { VDOM, Instances, DefVirtual, DefStatic, DefFlat, DefCustom, DefSaved } from "./types"
 
 let vdom: VDOM = { type: "tag", name: "initial" }
 let instances: Instances = {}
 let config: Object = {}
 
-const customDefs: Def[] = []
-const flatDefs: Def[] = []
-const staticDefs: Def[] = []
-const virtualDefs: Def[] = []
+const customDefs: (DefCustom & DefSaved)[] = []
+const flatDefs: (DefFlat & DefSaved)[] = []
+const staticDefs: (DefStatic & DefSaved)[] = []
+const virtualDefs: (DefVirtual & DefSaved)[] = []
 
 let memoCache: any = {}
 
@@ -15,10 +15,10 @@ const getVdom = () => vdom
 const getInstances = () => instances
 const getConfig = () => config
 
-const getCustomDefs = () => customDefs
-const getFlatDefs = () => flatDefs
-const getStaticDefs = () => staticDefs
-const getVirtualDefs = () => virtualDefs
+const getCustomDefs = (): (DefCustom & DefSaved)[] => customDefs
+const getFlatDefs = (): (DefFlat & DefSaved)[] => flatDefs
+const getStaticDefs = (): (DefStatic & DefSaved)[] => staticDefs
+const getVirtualDefs = (): (DefVirtual & DefSaved)[] => virtualDefs
 
 const getMemoCache = () => memoCache
 

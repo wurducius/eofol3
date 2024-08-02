@@ -34,7 +34,7 @@ if (isCacheClean) {
 const install = spawn("npm", ["i"], spawnOptions)
 
 install.on("error", (data) => {
-  console.log("ERROR: " + data)
+  console.log(`ERROR: ${data}`)
 })
 install.on("close", () => {
   process.exit(0)
