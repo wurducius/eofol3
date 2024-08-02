@@ -123,6 +123,9 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
   }
 }
 
+const isVirtualComponentConcrete = (def: DefVirtual) =>
+  ("render" in def && def.render) || ("renderCase" in def && def.renderCase)
+
 const deepEqual = (x: any, y: any) => {
   if ((x && !y) || (!x && y)) {
     return false
@@ -141,7 +144,7 @@ const rerenderComponent = (id: string) => {
   if (!def) {
     return undefined
   }
-  if (("render" in def && def.render) || ("renderCase" in def && def.renderCase)) {
+  if (isVirtualComponentConcrete(def)) {
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
       target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
@@ -153,21 +156,39 @@ const rerenderComponent = (id: string) => {
   }
 }
 
-const forceRerender = () => {
+const pruneInstances = () => {
   const instances = getInstances()
-  Object.keys(instances).forEach((id) => {
-    rerenderComponent(id)
-  })
   const unmounted: string[] = []
-  Object.keys(instances).forEach((id) => {
+  const prune = (id: string) => {
     if (!document.getElementById(id)) {
       unmounted.push(id)
+    }
+  }
+  Object.keys(instances).forEach((id) => {
+    if (instances[id].type === "virtual") {
+      const virtualDef = findInstancedDef(instances[id].name)
+      if (virtualDef) {
+        if (isVirtualComponentConcrete(virtualDef)) {
+          prune(id)
+        }
+      } else {
+      }
+    } else {
+      prune(id)
     }
   })
   unmounted.forEach((id) => {
     delete instances[id]
     componentUnmounted(id)
   })
+}
+
+const forceRerender = () => {
+  const instances = getInstances()
+  Object.keys(instances).forEach((id) => {
+    rerenderComponent(id)
+  })
+  pruneInstances()
 }
 
 export default {
