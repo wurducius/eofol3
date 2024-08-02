@@ -22,7 +22,7 @@ const { isBrowser } = Common
 // @IMPORT-START
 import Util from "./util"
 const { ax } = Util
-// @IMPORT("./common")
+// @IMPORT("./util")
 // @IMPORT-END
 
 const link = ({ children, classname, href, external, download }: EofolProps & LinkGenericProps) => {

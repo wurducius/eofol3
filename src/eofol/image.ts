@@ -22,7 +22,7 @@ const { isBrowser } = Common
 // @IMPORT-START
 import Util from "./util"
 const { ax, cx } = Util
-// @IMPORT("./common")
+// @IMPORT("./util")
 // @IMPORT-END
 
 const mutatePath = (path: string) => {
