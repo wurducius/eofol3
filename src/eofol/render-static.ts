@@ -27,18 +27,14 @@ const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT-START
 import Stateful from "./stateful"
 const { getStateStatic, getSetState } = Stateful
-// @IMPORT("./stateful)
+// @IMPORT("./stateful")
 // @IMPORT-END
 
 // @IMPORT-START
 import Constants from "./constants"
-const { ID_PLACEHOLDER } = Constants
+const { ID_PLACEHOLDER, CUSTOM_DEFAULT_AS_TAGNAME, FLAT_DEFAULT_AS_TAGNAME, STATIC_DEFAULT_AS_TAGNAME } = Constants
 // @IMPORT("./constants")
 // @IMPORT-END
-
-const RENDER_CUSTOM_DEFAULT_AS_TAGNAME = "div"
-const RENDER_FLAT_DEFAULT_AS_TAGNAME = "div"
-const RENDER_STATIC_DEFAULT_AS_TAGNAME = "div"
 
 const initRender = (element: JSONElement, defs: Defs) => {
   const name = getEofolComponentType(element)
@@ -51,7 +47,7 @@ const initRender = (element: JSONElement, defs: Defs) => {
   return { name, def }
 }
 
-const getAsProp = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
+const getAsPropStatic = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
 
 const renderElementWrapper = (rendered: JSONElement | string, as: string, attributes?: Object) => ({
   type: as,
@@ -84,7 +80,7 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
     id = generateId()
   }
 
-  const as = getAsProp(element, RENDER_CUSTOM_DEFAULT_AS_TAGNAME)
+  const as = getAsPropStatic(element, CUSTOM_DEFAULT_AS_TAGNAME)
   const props = getProps(element)
   const propsImpl = { ...props, id: ID_PLACEHOLDER }
   const stateImpl = getStateStatic(name, defs)
@@ -141,7 +137,7 @@ const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs
   }
 
   const rendered = reduceRendered(def.render(props))
-  const as = getAsProp(element, RENDER_FLAT_DEFAULT_AS_TAGNAME)
+  const as = getAsPropStatic(element, FLAT_DEFAULT_AS_TAGNAME)
 
   if (def.memo) {
     if (!memoCache[def.name]) {
@@ -162,7 +158,7 @@ const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: De
   }
 
   const rendered = reduceRendered(def.render())
-  const as = getAsProp(element, RENDER_STATIC_DEFAULT_AS_TAGNAME)
+  const as = getAsPropStatic(element, STATIC_DEFAULT_AS_TAGNAME)
 
   memoCache[def.name] = { rendered }
 

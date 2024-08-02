@@ -19,6 +19,7 @@ const {
   p,
   imageStatic,
   dataContainer,
+  e,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -49,6 +50,8 @@ export const component1 = defineCustomComponent("component1", {
       buttonReset,
       otherButton,
       createElement("flat", undefined, undefined, undefined, undefined, { param: "2" }),
+      // @ts-ignore  eslint-disable-next-line no-undef
+      statex.count % 2 === 0 && e("next", "cksjoisjfio"),
     ])
   },
   initialState: { count: 0 },
@@ -98,8 +101,12 @@ export const imgPhi = defineStaticComponent("img-phi", {
   ],
 })
 
+export const staticNextComponent = defineCustomComponent("next", {
+  render: () => [p("Next!!! " + generateId())],
+})
+
 export const dataComponent = dataContainer("weather", {
-  render: (statey: any) => div(statey.data.latitude),
+  render: (statey: any) => div([statey.data.latitude, e("next", "abcdefghijkl"), e("next", "qwertyuiop")]),
   url: "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m",
 })
 
@@ -128,4 +135,5 @@ export default {
   imgPhi,
   dataComponent,
   hookComponent,
+  staticNextComponent,
 }

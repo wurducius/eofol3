@@ -18,6 +18,7 @@ export interface Instance {
   // as: HTMLTag
   renderCache?: string
   memo?: any
+  body?: any
 }
 
 export type Instances = Record<string, Instance>
@@ -53,7 +54,10 @@ export interface DefFlat extends DefDeclaration, DefConcerete {}
 
 export interface DefStatic extends DefDeclaration, DefConcerete {}
 
-export interface DefVirtual extends DefDeclaration, DefInstanced {}
+export interface DefVirtual extends DefDeclaration, DefInstanced {
+  render?: any
+  renderCase?: any
+}
 
 export interface DefDeclaration {
   type?: string

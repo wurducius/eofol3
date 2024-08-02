@@ -40,6 +40,12 @@ const { findInstancedDef, isBrowser } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
+// @IMPORT-START
+import Lifecycle from "./lifecycle"
+const { componentUnmounted } = Lifecycle
+// @IMPORT("./lifecycle")
+// @IMPORT-END
+
 const defineCustomComponent = (name: string, componentDef: DefCustom) => {
   const def = { ...componentDef, type: COMPONENT_TYPE_CUSTOM, name }
   getCustomDefs().push(def)
@@ -151,6 +157,16 @@ const forceRerender = () => {
   const instances = getInstances()
   Object.keys(instances).forEach((id) => {
     rerenderComponent(id)
+  })
+  const unmounted: string[] = []
+  Object.keys(instances).forEach((id) => {
+    if (!document.getElementById(id)) {
+      unmounted.push(id)
+    }
+  })
+  unmounted.forEach((id) => {
+    delete instances[id]
+    componentUnmounted(id)
   })
 }
 

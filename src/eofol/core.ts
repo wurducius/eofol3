@@ -19,7 +19,7 @@ const { isBrowser, findDef, findInstance } = Common
 
 // @IMPORT-START
 import CreateElement from "./create-element"
-const { createElement } = CreateElement
+const { createElement, e } = CreateElement
 // @IMPORT("./create-element")
 // @IMPORT-END
 
@@ -135,4 +135,5 @@ export default {
   imageStatic,
   dataContainer,
   getConfig,
+  e,
 }

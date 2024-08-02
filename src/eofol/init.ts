@@ -17,15 +17,15 @@ const { registerServiceworker } = ServiceWorker
 // @IMPORT-END
 
 // @IMPORT-START
-import RenderDynamic from "./render-dynamic"
-const { replayInitialEffects } = RenderDynamic
+import Prefetch from "./prefetch"
+const { prefetch } = Prefetch
 // @IMPORT("./prefetch")
 // @IMPORT-END
 
 // @IMPORT-START
-import Prefetch from "./prefetch"
-const { prefetch } = Prefetch
-// @IMPORT("./prefetch")
+import Lifecycle from "./lifecycle"
+const { replayInitialEffects } = Lifecycle
+// @IMPORT("./lifecycle")
 // @IMPORT-END
 
 const onLoad = () => {
