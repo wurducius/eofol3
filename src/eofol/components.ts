@@ -1,4 +1,15 @@
-import { Def, DefCustom, DefFlat, Defs, DefStatic, DefVirtual, JSONElement, Props } from "./types"
+import {
+  Def,
+  DefCustom,
+  DefFlat,
+  DefInstanced,
+  Defs,
+  DefSaved,
+  DefStatic,
+  DefVirtual,
+  JSONElement,
+  Props,
+} from "./types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
@@ -87,6 +98,9 @@ const validateEofolCustomElement = (element: JSONElement) => {
   }
 }
 
+const isConcrete = (def: (DefInstanced & DefSaved) | undefined) =>
+  def && ((def.type === "virtual" && isVirtualComponentConcrete(def)) || def.type === "custom")
+
 // @TODO typing any
 const switchComponentTypeStatic = (handlers: any) => (element: JSONElement) => {
   if (isEofolCustomElement(element)) {
@@ -123,8 +137,7 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
   }
 }
 
-const isVirtualComponentConcrete = (def: DefVirtual) =>
-  ("render" in def && def.render) || ("renderCase" in def && def.renderCase)
+const isVirtualComponentConcrete = (def: DefVirtual) => def.render || def.renderCase
 
 const deepEqual = (x: any, y: any) => {
   if ((x && !y) || (!x && y)) {
@@ -144,7 +157,7 @@ const rerenderComponent = (id: string) => {
   if (!def) {
     return undefined
   }
-  if (isVirtualComponentConcrete(def)) {
+  if (isConcrete(def)) {
     const target = isBrowser() ? document.getElementById(id) : null
     if (target) {
       target.innerHTML = renderEofolElement(name, props, id, def) ?? ""
@@ -166,9 +179,7 @@ const pruneInstances = () => {
   }
   Object.keys(instances).forEach((id) => {
     const def = findInstancedDef(instances[id].name)
-    // @ts-ignore
-    const isVirtual = def.type === "virtual"
-    if (def && ((isVirtual && isVirtualComponentConcrete(def)) || !isVirtual)) {
+    if (isConcrete(def)) {
       prune(id)
     }
   })

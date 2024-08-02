@@ -39,6 +39,6 @@ const getStateStatic = (name: string, defs: Defs) => {
 }
 
 const getSetState = (id: string) =>
-  `(nextState) => { var thisInstance = findInstance('${id}');  if (thisInstance) { thisInstance.state = nextState } else { errorInstanceNotFound('${id}'); } rerenderComponent('${id}'); pruneInstances(); }`
+  `(nextState) => { var id = "${id}"; var thisInstance = findInstance(id);  if (thisInstance) { thisInstance.state = nextState; rerenderComponent(id); pruneInstances(); } else { errorInstanceNotFound(id); }  }`
 
 export default { getState, getSetState, getStateStatic }
