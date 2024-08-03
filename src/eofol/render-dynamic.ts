@@ -27,7 +27,7 @@ const { getState, getSetState } = Stateful
 
 // @IMPORT-START
 import Common from "./common"
-const { findInstance, findInstancedDef } = Common
+const { findInstance } = Common
 // @IMPORT("./common")
 // @IMPORT-END
 
@@ -64,11 +64,12 @@ const renderSelector = (
   stateImpl: State | undefined,
   setStateImpl: any,
   propsImpl: Props | undefined,
+  bodyImpl: any,
 ) => {
   if (def.renderCase) {
-    return def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl)
+    return def.renderCase(stateImpl, setStateImpl, propsImpl, bodyImpl)(stateImpl, setStateImpl, propsImpl, bodyImpl)
   } else {
-    return def.render(stateImpl, setStateImpl, propsImpl)
+    return def.render(stateImpl, setStateImpl, propsImpl, bodyImpl)
   }
 }
 
@@ -94,12 +95,15 @@ const mountComponent = (
     const as = getAsProp(props, CUSTOM_DEFAULT_AS_TAGNAME)
     const nextState = getStateInitial(def)
 
+    const body = def.constructor ? def.constructor(props) : undefined
+
     instances[id] = {
       name: def.name,
       id: id,
       type: as,
       state: nextState,
       props: { ...props, id: id },
+      body,
     }
     wrapper = true
     mounted = true
@@ -133,8 +137,9 @@ const renderCustomDynamic = (
 
   const setStateImpl = getSetState(ID_PLACEHOLDER)
   const propsImpl = { ...props, id: ID_PLACEHOLDER }
+  const bodyImpl = instance.body
 
-  const render = () => renderSelector(def, stateImpl, setStateImpl, propsImpl)
+  const render = () => renderSelector(def, stateImpl, setStateImpl, propsImpl, bodyImpl)
 
   const propsWithoutId = { ...props }
   delete propsWithoutId["id"]
@@ -189,7 +194,7 @@ const renderCustomDynamic = (
     renderMemo()
   }
 
-  componentUpdated(def, id, props)
+  componentUpdated(def, id, props, bodyImpl)
 
   // @ts-ignore
   const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
@@ -250,7 +255,7 @@ const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | u
   let result: string
 
   if (isRender) {
-    rendered = renderSelector(def, getState(id), getSetState(ID_PLACEHOLDER), propsImpl)
+    rendered = renderSelector(def, getState(id), getSetState(ID_PLACEHOLDER), propsImpl, instance.body)
     // @ts-ignore
     const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
     result = (wrapper ? createElement("div", content, undefined, { id }) : content).toString()
@@ -262,7 +267,7 @@ const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | u
     componentMounted(id)
   }
 
-  componentUpdated(def, id, propsImpl)
+  componentUpdated(def, id, propsImpl, instance.body)
 
   return result
 }

@@ -20,7 +20,7 @@ const { getProps } = Common
 
 // @IMPORT-START
 import Components from "./components"
-const { getEofolComponentType, findEofolComponentDef } = Components
+const { getEofolComponentType, findEofolComponentDef, isVirtualComponentConcrete } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
@@ -85,6 +85,7 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
   const propsImpl = { ...props, id: ID_PLACEHOLDER }
   const stateImpl = getStateStatic(name, defs)
   const setStateImpl = getSetState(ID_PLACEHOLDER)
+  const body = def.constructor ? def.constructor(propsImpl) : undefined
 
   instances[id] = {
     name,
@@ -92,14 +93,17 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
     type: as,
     state: stateImpl,
     props: { ...props, id },
+    body,
   }
 
   let rendered
 
   if (def.renderCase) {
-    rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl, propsImpl)(stateImpl, setStateImpl, propsImpl))
+    rendered = reduceRendered(
+      def.renderCase(stateImpl, setStateImpl, propsImpl, body)(stateImpl, setStateImpl, propsImpl, body),
+    )
   } else {
-    rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl))
+    rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl, body))
   }
 
   if (def.shouldComponentUpdate) {
@@ -181,32 +185,35 @@ const renderEofolVirtualElement = (element: JSONElement, instances: Instances, m
   }
 
   const props = getProps(element)
+  const propsImpl = { ...props, id }
   const stateImpl = getStateStatic(name, defs)
+  const body = def.constructor ? def.constructor(propsImpl) : undefined
 
   instances[id] = {
     name,
     id,
-    type: "virtual",
+    type: "div",
     state: stateImpl,
-    props: { ...props, id },
+    props: propsImpl,
+    body,
   }
 
-  /*
-  let rendered = ""
-  if (def.render || def.renderCase) {
+  let result
+  if (isVirtualComponentConcrete(def)) {
     const stateImpl = getStateStatic(name, defs)
     const setStateImpl = getSetState(ID_PLACEHOLDER)
+    let rendered
     if (def.renderCase) {
-      rendered = reduceRendered(def.renderCase(stateImpl, setStateImpl)(stateImpl, setStateImpl))
+      rendered = reduceRendered(
+        def.renderCase(stateImpl, setStateImpl, propsImpl, body)(stateImpl, setStateImpl, propsImpl, body),
+      )
     } else {
-      rendered = reduceRendered(def.render(stateImpl, setStateImpl))
+      rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl, body))
     }
+    result = renderElementWrapper(rendered, "div", { id })
   }
 
-  return rendered
-  */
-
-  return ""
+  return result ?? ""
 }
 
 export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement }

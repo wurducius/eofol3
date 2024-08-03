@@ -23,7 +23,7 @@ export interface Instance {
 
 export type Instances = Record<string, Instance>
 
-export type DefSaved = { name: string }
+export type DefSaved = { name: string; type: string }
 
 export type Def = DefSaved & (DefCustom | DefVirtual | DefFlat | DefStatic)
 
@@ -45,22 +45,18 @@ export interface DefConcerete {
   memo?: boolean
 }
 
-export interface DefCustom extends DefDeclaration, DefConcerete, DefInstanced {
+export interface DefCustom extends DefConcerete, DefInstanced {
   renderCase?: any
   shouldComponentUpdate?: any
 }
 
-export interface DefFlat extends DefDeclaration, DefConcerete {}
+export interface DefFlat extends DefConcerete {}
 
-export interface DefStatic extends DefDeclaration, DefConcerete {}
+export interface DefStatic extends DefConcerete {}
 
-export interface DefVirtual extends DefDeclaration, DefInstanced {
+export interface DefVirtual extends DefInstanced {
   render?: any
   renderCase?: any
-}
-
-export interface DefDeclaration {
-  type?: string
 }
 
 export type Defs = Def[]
