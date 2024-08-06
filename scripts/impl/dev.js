@@ -24,8 +24,7 @@ const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 const recompile = async () => {
   console.log(primary("Recompiling..."))
   cleanHot()
-  const args = []
-  compileTs(args)
+  compileTs()
   beforeCompile()
   return await compile(true)
     .then(() => afterCompile(true))

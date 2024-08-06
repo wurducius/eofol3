@@ -2,17 +2,10 @@ const fs = require("fs")
 const { resolve } = require("path")
 const { execSync, spawn } = require("child_process")
 const { PATH_CWD } = require("../eofol/constants")
+const { spawnOptions } = require("./impl/options")
 
 const PATH_PACKAGE_LOCK = resolve(PATH_CWD, "package-lock.json")
 const PATH_NODE_MODULES = resolve(PATH_CWD, "node_modules")
-
-const spawnOptions = {
-  encoding: "utf8",
-  cwd: PATH_CWD,
-  env: process.env,
-  shell: process.platform === "win32",
-  stdio: "inherit",
-}
 
 let isCacheClean = false
 if (process.argv.length >= 3 && process.argv[2] && process.argv[2] === "-c") {

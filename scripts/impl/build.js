@@ -11,8 +11,7 @@ const build = () => {
 
   // 2. COMPILE TS
 
-  const args = []
-  compileTs(args)
+  compileTs()
 
   // 3. BEFORE COMPILE
 
