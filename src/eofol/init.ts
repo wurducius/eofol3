@@ -34,9 +34,6 @@ const onLoad = () => {
 }
 
 const initEofol = () => {
-  // const htmlPageRaw = isBrowser() ? window.location.pathname.split("/").pop() : ""
-  // const page = (!htmlPageRaw || htmlPageRaw?.length === 0 ? "index" : htmlPageRaw).split(".")[0]
-
   if (isBrowser()) {
     window.onload = onLoad
   }

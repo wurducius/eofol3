@@ -54,7 +54,7 @@ const compile = () => {
     const defs = importViewEofolDefs(view)
 
     const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(view + EXT_JS)))
-    const { clearCompileCache } = Sx
+    const { getAssets } = Sx
 
     const source = fs
       .readdirSync(PATH_PAGES, { recursive: true })
@@ -79,12 +79,15 @@ const compile = () => {
     let sxStyles = []
     let sxx
 
+    let assets = {}
+
     return minifyPre(sourceHTML.toString())
       .then(parseHTMLToJSON)
       .then(htmlTemplate(view))
       .then(transverseTree(vdom, instances, memoCache, defs, sxStyles, view))
       .then((res) => {
         sxx = sxStyles.join(" ")
+        assets = getAssets()
         return res
       })
       .then(parseJSONToHTML)
@@ -95,7 +98,7 @@ const compile = () => {
       .then(appendDoctype)
       .then(relativizeHtml)
       .then((res) => {
-        writeView(source, res, vdom, instances, memoCache)
+        writeView(source, res, vdom, instances, memoCache, assets)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
         i += 1
       })
