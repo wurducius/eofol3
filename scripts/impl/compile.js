@@ -31,6 +31,7 @@ const {
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
+const writeInternal = require("../../eofol/compiler/write-internal")
 
 const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")
@@ -105,7 +106,7 @@ const compile = (isHot) => {
       .then(relativizeHtml)
       .then((res) => {
         writeView(source, res, vdom, instances, memoCache, assets)
-        compileViewScript(view)(isHot)
+        compileViewScript(view, vdom, instances, memoCache, assets)(isHot)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
         i += 1
       })
