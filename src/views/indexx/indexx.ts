@@ -12,6 +12,8 @@ const {
   internalLink,
   externalLink,
   sx,
+  clearCompileCache,
+  getCompileCache,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -96,4 +98,7 @@ export default {
   flatComponent,
   staticComponent,
   imgPhi,
+  clearCompileCache,
+  getCompileCache,
+  sx,
 }

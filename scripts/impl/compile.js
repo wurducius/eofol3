@@ -30,11 +30,6 @@ const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
 
-/*
-const Sx = require("../../dist2/eofol/core")
-const { clearCompileCache, getCompileCache } = Sx
-*/
-
 const compile = () => {
   msgStepEofol("Starting Eofol3 static compilation...")
 
@@ -58,6 +53,9 @@ const compile = () => {
   const resultPromise = views.map((view) => {
     const defs = importViewEofolDefs(view)
 
+    const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(view + EXT_JS)))
+    const { clearCompileCache } = Sx
+
     const source = fs
       .readdirSync(PATH_PAGES, { recursive: true })
       .filter((sourceFilename) => sourceFilename.endsWith(EXT_HTML))
@@ -78,14 +76,21 @@ const compile = () => {
       die(`Cannot open source file: ${sourcePath}`, ex)
     }
 
-    // clearCompileCache()
+    let sxStyles = []
+    let sxx
 
     return minifyPre(sourceHTML.toString())
       .then(parseHTMLToJSON)
       .then(htmlTemplate(view))
-      .then(transverseTree(vdom, instances, memoCache, defs))
+      .then(transverseTree(vdom, instances, memoCache, defs, sxStyles, view))
+      .then((res) => {
+        sxx = sxStyles.join(" ")
+        return res
+      })
       .then(parseJSONToHTML)
-      .then(compileStyle(view, []))
+      .then((res) => {
+        return compileStyle(view, sxx)(res)
+      })
       .then(minifyPost)
       .then(appendDoctype)
       .then(relativizeHtml)

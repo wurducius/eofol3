@@ -20,6 +20,8 @@ const {
   imageStatic,
   dataContainer,
   e,
+  clearCompileCache,
+  getCompileCache,
 } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
@@ -102,7 +104,7 @@ export const imgPhi = defineStaticComponent("img-phi", {
 })
 
 export const staticNextComponent = defineCustomComponent("next", {
-  render: () => [p(`Next!!! ${  generateId()}`)],
+  render: () => [p(`Next!!! ${generateId()}`)],
 })
 
 export const dataComponent = dataContainer("weather", {
@@ -136,4 +138,7 @@ export default {
   dataComponent,
   hookComponent,
   staticNextComponent,
+  clearCompileCache,
+  getCompileCache,
+  sx,
 }
