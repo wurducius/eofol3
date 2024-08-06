@@ -27,11 +27,13 @@ const {
   relativizeHtml,
   touchBuildDirs,
   compileViewScript,
+  copyStaticDir,
+  copyPages,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
-const writeInternal = require("../../eofol/compiler/write-internal")
+const { PATH_BUILD } = require("../../eofol/constants/paths")
 
 const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")
@@ -112,11 +114,14 @@ const compile = (isHot) => {
       })
   })
 
-  return Promise.all(resultPromise).then(() => {
-    if (isVerbose) {
-      msgStepEofolSuccess(`Compiled successfully at ${PATH_DERIVED} in ${prettyTime(new Date() - timeStart)}.`)
-    }
-  })
+  return Promise.all(resultPromise)
+    .then(() => copyStaticDir(isHot))
+    .then(() => copyPages(isHot))
+    .then(() => {
+      if (isVerbose) {
+        msgStepEofolSuccess(`Compiled successfully at ${PATH_BUILD} in ${prettyTime(new Date() - timeStart)}.`)
+      }
+    })
 }
 
 module.exports = compile
