@@ -1,8 +1,5 @@
 const { spawn } = require("../../eofol/dev-util")
-
-const spawnOptions = {
-  stdio: "inherit",
-}
+const { spawnOptions } = require("./options")
 
 const compileTs = () => {
   spawn.sync("tsc", ["--project", "./tsconfig.json"], spawnOptions)

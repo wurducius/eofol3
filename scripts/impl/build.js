@@ -11,8 +11,7 @@ const build = () => {
 
   // 2. COMPILE TS
 
-  const args = []
-  compileTs(args)
+  compileTs()
 
   // 3. BEFORE COMPILE
 
@@ -20,7 +19,7 @@ const build = () => {
 
   // 4. COMPILE
 
-  return compile().then(() => afterCompile(false))
+  return compile(false).then(() => afterCompile(false))
 }
 
 module.exports = build

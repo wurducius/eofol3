@@ -15,6 +15,7 @@ const gzip = require("./gzip")
 const uglify = require("./uglify")
 const hotUpdate = require("./hot-update")
 const { checkExistsCreate } = require("../util/fs")
+const writeInternal = require("./write-internal")
 
 const CODE_EXPORT_SUFFIX = "};"
 
@@ -58,28 +59,29 @@ const compileScript = (scriptContent) => {
   return rest.toString()
 }
 
-const compileScripts = (isHot) => {
-  fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true })
-    .filter((view) => fs.existsSync(path.resolve(PATH_VIEWS_DIST2, view, `${path.basename(view)}${EXT_JS}`)))
-    .forEach((view) => {
-      const viewName = path.basename(view)
-      const source = path.resolve(PATH_VIEWS_DIST2, view, `${viewName}${EXT_JS}`)
-      const target = path.resolve(PATH_ASSETS_JS, view, "..", `${viewName}${EXT_JS}`)
+const compileViewScript = (view, vdom, instances, memoCache, assets) => (isHot) => {
+  const viewName = path.basename(view)
+  const source = path.resolve(PATH_VIEWS_DIST2, view, `${viewName}${EXT_JS}`)
+  const target = path.resolve(PATH_ASSETS_JS, view, "..", `${viewName}${EXT_JS}`)
 
-      checkExistsCreate(path.resolve(PATH_ASSETS_JS, view, ".."))
+  checkExistsCreate(path.resolve(PATH_ASSETS_JS, view, ".."))
 
-      hotUpdate(
-        isHot,
-        target,
-        source,
-        pipe(compileScript, babelize, uglify)(fs.readFileSync(source).toString()),
-        () => {
-          if (COMPRESS_GZIP_BUILD_FILES) {
-            gzip(target, `${target}${EXT_GZIP}`, view)
-          }
-        },
-      )
-    })
+  hotUpdate(
+    isHot,
+    target,
+    source,
+    pipe(
+      (res) => writeInternal(vdom, instances, memoCache, assets)(res),
+      compileScript,
+      babelize,
+      uglify,
+    )(fs.readFileSync(source).toString()),
+    () => {
+      if (COMPRESS_GZIP_BUILD_FILES) {
+        gzip(target, `${target}${EXT_GZIP}`, view)
+      }
+    },
+  )
 }
 
-module.exports = compileScripts
+module.exports = compileViewScript

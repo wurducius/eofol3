@@ -24,10 +24,9 @@ const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 const recompile = async () => {
   console.log(primary("Recompiling..."))
   cleanHot()
-  const args = []
-  compileTs(args)
+  compileTs()
   beforeCompile()
-  return await compile()
+  return await compile(true)
     .then(() => afterCompile(true))
     .then(() => {
       console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))

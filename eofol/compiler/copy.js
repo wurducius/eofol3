@@ -88,13 +88,4 @@ const copyPages = (isHot) => {
     })
 }
 
-const copyInternal = (isHot) => {
-  fs.readdirSync(PATH_DERIVED_INTERNAL).forEach((filename) => {
-    const source = path.resolve(PATH_DERIVED_INTERNAL, filename)
-    const target = path.resolve(PATH_BUILD_INTERNAL, filename)
-    const content = fs.readFileSync(source).toString()
-    hotUpdate(isHot, target, source, content)
-  })
-}
-
-module.exports = { copyStaticDir, copyPages, copyInternal }
+module.exports = { copyStaticDir, copyPages }

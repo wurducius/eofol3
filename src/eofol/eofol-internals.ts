@@ -53,7 +53,7 @@ const setAssets = (nextAssets: any) => {
 }
 
 const registerAsset = (type: string, val: string) => {
-  if (!assets[type].find((asset: any) => asset.url === val)) {
+  if (!assets[type].find((asset: any) => asset.url === val) && !val.startsWith("javascript:") && val !== "/") {
     assets[type].push({ url: val, status: undefined })
   }
 }

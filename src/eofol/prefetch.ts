@@ -31,42 +31,41 @@ const getInternalPageAssets = (url: string) => {
     } else if (i + 1 === split.length) {
       return acc
     } else {
-      return acc + "." + next
+      return `${acc}.${next}`
     }
   }, "")
   return [url, `assets/js/${page}.js`]
 }
 
-// @TODO add image prefetching
+const addImpl = (assetsToPrefetch: any, type: string) => (addUrl: string) => {
+  assetsToPrefetch.push({
+    fetchUrl: addUrl,
+    type,
+    status: undefined,
+  })
+}
+
+const addAsset = (assetsToPrefetch: any, assets: any) => (type: string, mapper?: any) => {
+  const add = addImpl(assetsToPrefetch, type)
+  for (const index in assets[type]) {
+    const fetchUrl = mapper ? mapper(assets[type][index].url) : assets[type][index].url
+    if (Array.isArray(fetchUrl)) {
+      fetchUrl.forEach(add)
+    } else {
+      add(fetchUrl)
+    }
+  }
+}
+
 const prefetch = () => {
   const assets = getAssets()
-  const assetsToPrefetch = []
-  for (const internalPageIndex in assets[ASSET_LINK_INTERNAL]) {
-    const nextInternalPage = getInternalPageAssets(assets[ASSET_LINK_INTERNAL][internalPageIndex].url)
-    assetsToPrefetch.push({ fetchUrl: nextInternalPage[0], type: ASSET_LINK_INTERNAL, status: undefined })
-    assetsToPrefetch.push({ fetchUrl: nextInternalPage[1], type: ASSET_LINK_INTERNAL, status: undefined })
-  }
-  for (const externalPageIndex in assets[ASSET_LINK_EXTERNAL]) {
-    assetsToPrefetch.push({
-      fetchUrl: assets[ASSET_LINK_EXTERNAL][externalPageIndex].url,
-      type: ASSET_LINK_EXTERNAL,
-      status: undefined,
-    })
-  }
-  for (const dynamicImageIndex in assets[ASSET_IMAGE_DYNAMIC]) {
-    assetsToPrefetch.push({
-      fetchUrl: assets[ASSET_IMAGE_DYNAMIC][dynamicImageIndex].url,
-      type: ASSET_IMAGE_DYNAMIC,
-      status: undefined,
-    })
-  }
-  for (const staticImageIndex in assets[ASSET_IMAGE_STATIC]) {
-    assetsToPrefetch.push({
-      fetchUrl: assets[ASSET_IMAGE_STATIC][staticImageIndex].url,
-      type: ASSET_IMAGE_STATIC,
-      status: undefined,
-    })
-  }
+  const assetsToPrefetch: { fetchUrl: any; type: any; status: any }[] = []
+  const add = addAsset(assetsToPrefetch, assets)
+
+  add(ASSET_LINK_INTERNAL, getInternalPageAssets)
+  add(ASSET_LINK_EXTERNAL)
+  add(ASSET_IMAGE_DYNAMIC)
+  add(ASSET_IMAGE_STATIC)
 
   Promise.all(
     assetsToPrefetch.map((assetToPrefetch) => {

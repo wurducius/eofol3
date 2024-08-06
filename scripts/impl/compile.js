@@ -25,12 +25,15 @@ const {
   importViewEofolDefs,
   writeView,
   relativizeHtml,
+  touchBuildDirs,
+  compileViewScript,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
+const writeInternal = require("../../eofol/compiler/write-internal")
 
-const compile = () => {
+const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")
 
   if (isVerbose) {
@@ -41,6 +44,10 @@ const compile = () => {
 
   checkExistsCreate(PATH_DERIVED)
   checkExistsCreate(path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL))
+
+  if (!isHot) {
+    touchBuildDirs()
+  }
 
   const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
     const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
@@ -99,6 +106,7 @@ const compile = () => {
       .then(relativizeHtml)
       .then((res) => {
         writeView(source, res, vdom, instances, memoCache, assets)
+        compileViewScript(view, vdom, instances, memoCache, assets)(isHot)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
         i += 1
       })
