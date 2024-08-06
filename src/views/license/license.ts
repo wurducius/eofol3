@@ -1,8 +1,8 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
 
-const { forceRerender } = Core
+const { clearCompileCache, getCompileCache, sx } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
-export default {}
+export default { clearCompileCache, getCompileCache, sx }

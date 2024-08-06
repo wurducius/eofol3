@@ -1,6 +1,12 @@
-const { PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE, DIRNAME_VIEWS } = require("../constants/paths")
+const { PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE } = require("../constants/paths")
+const path = require("path")
+const { PATH_VIEWS_DIST2, EXT_JS } = require("../constants")
 
-const pushElement = (delta) => (rendered, index) => {
+const pushElement = (delta, sxStyles, view) => (rendered, index) => {
+  const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(view + EXT_JS)))
+  const { getCompileCache, clearCompileCache } = Sx
+  sxStyles.push(getCompileCache())
+  clearCompileCache()
   delta.push({
     index,
     element: rendered,
@@ -11,14 +17,15 @@ const invalidateRequireCache = () => {
   for (let cached in require.cache) {
     if (
       cached.includes(PATH_DIST2) &&
-      ((cached.includes(DIRNAME_EOFOL_INTERNAL) && cached.includes(FILENAME_COMPILE)) || cached.includes(DIRNAME_VIEWS))
+      cached.includes(DIRNAME_EOFOL_INTERNAL) &&
+      cached.includes(FILENAME_COMPILE) //|| cached.includes(DIRNAME_VIEWS))
     ) {
       delete require.cache[cached]
     }
   }
 }
 
-const transverseTree = (tree, vdom, instances, memoCache, defs) => {
+const transverseTree = (tree, vdom, instances, memoCache, defs, sxStyles, view) => {
   invalidateRequireCache()
 
   const {
@@ -62,7 +69,7 @@ const transverseTree = (tree, vdom, instances, memoCache, defs) => {
 
   if (hasChildren) {
     let delta = []
-    const pushElementImpl = pushElement(delta)
+    const pushElementImpl = pushElement(delta, sxStyles, view)
     tree.content.forEach((child, index) => {
       if (isEofolCustomElement(child)) {
         validateEofolCustomElement(child)
@@ -79,7 +86,7 @@ const transverseTree = (tree, vdom, instances, memoCache, defs) => {
         const rendered = renderEofolVirtualElement(child, instances, memoCache, defs)
         pushElementImpl(rendered, index)
       } else {
-        return transverseTree(child, vdom[vdom.length - 1].children, instances, memoCache, defs)
+        return transverseTree(child, vdom[vdom.length - 1].children, instances, memoCache, defs, sxStyles, view)
       }
     })
     delta.forEach((deltaElement) => {
@@ -91,8 +98,8 @@ const transverseTree = (tree, vdom, instances, memoCache, defs) => {
   return tree
 }
 
-const traverseTreeAsync = (vdom, eofolInstances, memoCache, eofolDefs) => (res) => {
-  transverseTree(res, vdom, eofolInstances, memoCache, eofolDefs)
+const traverseTreeAsync = (vdom, eofolInstances, memoCache, eofolDefs, sxStyles, view) => (res) => {
+  transverseTree(res, vdom, eofolInstances, memoCache, eofolDefs, sxStyles, view)
   return res
 }
 

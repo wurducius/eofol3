@@ -21,28 +21,17 @@ const clearCompileCache = () => {
 }
 
 const sx = (styleObj: Object, selector?: string, prefix?: string) => {
-  // @ts-ignore
+  // @ts-expect-error tsconfig.lib mismatch
   const styleStr = Object.keys(styleObj).reduce((acc, next) => `${acc} ${next}: ${styleObj[next]};`, "")
   const styleContent = `${selector || ""} { ${styleStr} } `
   const hash = `e${getHash(styleContent).toString()}`
-  // @ts-ignore
+  // @ts-expect-error tsconfig.lib mismatch
   if (!cache.includes(hash)) {
     const style = (prefix || ".") + hash + styleContent
     if (isBrowser()) {
       document.styleSheets.item(0)?.insertRule(style)
     } else {
       compileCache = compileCache + style
-      /*
-      const targetDir = path.resolve("dist", "views")
-      if (!fs.existsSync(targetDir)) {
-        fs.mkdirSync(targetDir)
-      }
-      const target = path.resolve("dist", "views", "index.css")
-      if (!fs.existsSync(target)) {
-        fs.writeFileSync(target, "")
-      }
-      fs.appendFileSync(target, style)
-      */
     }
 
     cache.push(hash)

@@ -19,6 +19,8 @@ const {
   p,
   imageStatic,
   dataContainer,
+  clearCompileCache,
+  getCompileCache,
 } = Core
 // @IMPORT("../../../../eofol/core")
 // @IMPORT-END
@@ -128,4 +130,7 @@ export default {
   imgPhi,
   dataComponent,
   hookComponent,
+  clearCompileCache,
+  getCompileCache,
+  sx,
 }
