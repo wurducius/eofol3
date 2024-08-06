@@ -15,7 +15,7 @@ const fixExportsFinal = (scriptStr) => {
     .replaceAll("default ", "module.exports = ")
     .split("module.exports = {")
   return split
-    .map((part, i) => (i + 1 === split.length ? VIEW_INJECT_EXPORTS + "," + part : part))
+    .map((part, i) => (i + 1 === split.length ? `${VIEW_INJECT_EXPORTS  },${  part}` : part))
     .join("module.exports = {")
 }
 

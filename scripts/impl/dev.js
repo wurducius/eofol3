@@ -4,7 +4,6 @@ const serve = require("./serve")
 const compileTs = require("./compile-ts")
 const beforeCompile = require("./before-compile")
 const compile = require("./compile")
-const afterCompile = require("./after-compile")
 const cleanHot = require("./clean-hot")
 const { env } = require("../../config")
 const { PROTOCOL, PORT } = env
@@ -26,11 +25,9 @@ const recompile = async () => {
   cleanHot()
   compileTs()
   beforeCompile()
-  return await compile(true)
-    .then(() => afterCompile(true))
-    .then(() => {
-      console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
-    })
+  return await compile(true).then(() => {
+    console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
+  })
 }
 
 const handleChange = async () => {

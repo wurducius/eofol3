@@ -2,7 +2,6 @@ const clean = require("./clean")
 const compileTs = require("./compile-ts")
 const beforeCompile = require("./before-compile")
 const compile = require("./compile")
-const afterCompile = require("./after-compile")
 
 const build = () => {
   // 1. CLEAN
@@ -19,7 +18,7 @@ const build = () => {
 
   // 4. COMPILE
 
-  return compile(false).then(() => afterCompile(false))
+  return compile(false)
 }
 
 module.exports = build
