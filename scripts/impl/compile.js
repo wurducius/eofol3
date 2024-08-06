@@ -30,7 +30,7 @@ const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
 
-const compile = () => {
+const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")
 
   if (isVerbose) {

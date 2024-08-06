@@ -1,4 +1,4 @@
-const { copyStaticDir, touchBuildDirs, compileScripts, copyPages, copyInternal } = require("../../eofol/compiler")
+const { copyStaticDir, touchBuildDirs, compileScripts, copyPages } = require("../../eofol/compiler")
 
 const afterCompile = (isHot) => {
   if (!isHot) {
@@ -9,7 +9,6 @@ const afterCompile = (isHot) => {
 
   return copyStaticDir(isHot).then(() => {
     copyPages(isHot)
-    copyInternal(isHot)
   })
 }
 

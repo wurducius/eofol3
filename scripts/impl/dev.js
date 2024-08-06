@@ -27,7 +27,7 @@ const recompile = async () => {
   const args = []
   compileTs(args)
   beforeCompile()
-  return await compile()
+  return await compile(true)
     .then(() => afterCompile(true))
     .then(() => {
       console.log(success(`Recompiled! Serving Eofol3 app now at ${SERVE_URL}.`))
