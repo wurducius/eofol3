@@ -1,16 +1,6 @@
 // @IMPORT-START
 import Core from "../../eofol/core"
-const {
-  isBrowser,
-  defineCustomComponent,
-  createElement,
-  forceRerender,
-  internalLink,
-  getConfig,
-  clearCompileCache,
-  getCompileCache,
-  sx,
-} = Core
+const { isBrowser, defineCustomComponent, createElement, forceRerender, internalLink, getConfig } = Core
 // @IMPORT("../../eofol/core")
 // @IMPORT-END
 
@@ -44,4 +34,4 @@ if (!initialized && isBrowser()) {
   }
 }
 
-export default { component404content, clearCompileCache, getCompileCache, sx }
+export default { component404content }

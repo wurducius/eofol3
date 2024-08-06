@@ -6,6 +6,17 @@ const CODE_EOFOL_IMPORT_OPENING = "// @IMPORT"
 
 const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split(CODE_MODULE_EXPORTS)[0]
 
+const fixExportsFinal = (scriptStr) => {
+  const split = scriptStr
+    .toString()
+    .replaceAll("export ", "")
+    .replaceAll("default ", "module.exports = ")
+    .split("module.exports = {")
+  return split
+    .map((part, i) => (i + 1 === split.length ? "sx, getCompileCache, clearCompileCache," + part : part))
+    .join("module.exports = {")
+}
+
 const fixExports = (scriptStr) =>
   scriptStr.toString().replaceAll("export ", "").replaceAll("default ", "module.exports = ")
 
@@ -44,12 +55,15 @@ const resolveImports = (sourcePath, content, importedScripts) => {
     .join("")
 }
 
-const precompile = (source, suffixPath, target) => {
+const precompile = (source, suffixPath, target, isView) => {
   const content = fs.readFileSync(source)
   const exportsReplaced = fixExports(content)
   const importedScripts = []
   const importsResolved = resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
-  fs.writeFileSync(target, `let _internals = {}\n${fixExports(importsResolved)}`)
+  fs.writeFileSync(
+    target,
+    `let _internals = {}\n${isView ? fixExportsFinal(importsResolved) : fixExports(importsResolved)}`,
+  )
 }
 
 module.exports = precompile
