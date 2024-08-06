@@ -25,6 +25,12 @@ const { ax, cx } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
+// @IMPORT-START
+import Constants from "./constants"
+const { ASSET_IMAGE_STATIC, ASSET_IMAGE_DYNAMIC } = Constants
+// @IMPORT("./constants")
+// @IMPORT-END
+
 const mutatePath = (path: string) => {
   const isMutable = path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")
   if (isMutable) {
@@ -43,7 +49,7 @@ const image = ({ classname, src, alt, dynamic, h, w, fallback }: EofolPropsWitho
   const mutatedSrc = mutatePath(src)
 
   if (!isBrowser()) {
-    registerAsset(dynamic ? "image-dynamic" : "image-static", mutatedSrc)
+    registerAsset(dynamic ? ASSET_IMAGE_DYNAMIC : ASSET_IMAGE_STATIC, mutatedSrc)
   }
   return img(
     undefined,

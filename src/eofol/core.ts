@@ -7,7 +7,7 @@ const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticEleme
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
-const { setVdom, setInstances, setConfig, getConfig } = EofolInternals
+const { setVdom, setInstances, setConfig, getConfig, setAssets } = EofolInternals
 // @IMPORT("./eofol-internals")
 // @IMPORT-END
 

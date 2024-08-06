@@ -25,9 +25,15 @@ const { ax } = Util
 // @IMPORT("./util")
 // @IMPORT-END
 
+// @IMPORT-START
+import Constants from "./constants"
+const { ASSET_LINK_INTERNAL, ASSET_LINK_EXTERNAL } = Constants
+// @IMPORT("./constants")
+// @IMPORT-END
+
 const link = ({ children, classname, href, external, download }: EofolProps & LinkGenericProps) => {
   if (!isBrowser()) {
-    registerAsset(external ? "externalLink" : "internalLink", href)
+    registerAsset(external ? ASSET_LINK_EXTERNAL : ASSET_LINK_INTERNAL, href)
   }
   return a(children, classname, ax({ href }, { target: external && "_blank", download }))
 }

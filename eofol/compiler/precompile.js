@@ -4,6 +4,8 @@ const { EXT_JS, CODE_MODULE_EXPORTS } = require("../constants")
 
 const CODE_EOFOL_IMPORT_OPENING = "// @IMPORT"
 
+const VIEW_INJECT_EXPORTS = ["sx", "getCompileCache", "clearCompileCache", "getAssets"].join(", ")
+
 const cleanExport = (scriptStr) => scriptStr.split("export default {")[0].split(CODE_MODULE_EXPORTS)[0]
 
 const fixExportsFinal = (scriptStr) => {
@@ -13,7 +15,7 @@ const fixExportsFinal = (scriptStr) => {
     .replaceAll("default ", "module.exports = ")
     .split("module.exports = {")
   return split
-    .map((part, i) => (i + 1 === split.length ? "sx, getCompileCache, clearCompileCache," + part : part))
+    .map((part, i) => (i + 1 === split.length ? VIEW_INJECT_EXPORTS + "," + part : part))
     .join("module.exports = {")
 }
 
