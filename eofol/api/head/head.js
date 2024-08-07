@@ -10,6 +10,7 @@ const {
 } = require("../../constants")
 const { relativizePath, relativizeFontStyle } = require("../../compiler/relativize")
 const compileAllStyles = require("../../compiler/style-impl")
+const { FILENAME_CORE } = require("../../constants/paths")
 
 const requireIfExists = (path) => {
   try {
@@ -69,6 +70,11 @@ const htmlTemplate = (view) => (body) =>
           [
             body,
             htmlElement("noscript", ["You need to enable JavaScript to run this app."], {}),
+            htmlElement("script", [], {
+              src: relativizePath(`${DIRNAME_ASSETS}/${DIRNAME_ASSET_JS}/${FILENAME_CORE}`),
+              async: true,
+              defer: true,
+            }),
             htmlElement("script", [], {
               src: relativizePath(`${DIRNAME_ASSETS}/${DIRNAME_ASSET_JS}/${view}.js`),
               async: true,

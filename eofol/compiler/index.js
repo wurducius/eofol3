@@ -3,6 +3,7 @@ const babelize = require("./babelize")
 const checksum = require("./checksum")
 const compileImg = require("./img")
 const compileAllStyles = require("./style-impl")
+const compileCore = require("./compile-core")
 const compileViewScript = require("./script")
 const compileStyle = require("./style")
 const hotUpdate = require("./hot-update")
@@ -27,6 +28,7 @@ module.exports = {
   checksum,
   compileImg,
   compileAllStyles,
+  compileCore,
   compileViewScript,
   compileStyle,
   gzip,
