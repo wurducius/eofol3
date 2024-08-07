@@ -29,6 +29,7 @@ const {
   compileViewScript,
   copyStaticDir,
   copyPages,
+  compileCore,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
@@ -53,7 +54,7 @@ const compile = (isHot) => {
 
   const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
     const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
-    const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}${EXT_JS}`)
+    const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}-static${EXT_JS}`)
     return fs.existsSync(viewScriptPath) && isDirectory(viewPath)
   })
 
@@ -62,7 +63,7 @@ const compile = (isHot) => {
   const resultPromise = views.map((view) => {
     const defs = importViewEofolDefs(view)
 
-    const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(view + EXT_JS)))
+    const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(`${view}-static${EXT_JS}`)))
     const { getAssets } = Sx
 
     const source = fs
@@ -117,6 +118,7 @@ const compile = (isHot) => {
   return Promise.all(resultPromise)
     .then(() => copyStaticDir(isHot))
     .then(() => copyPages(isHot))
+    .then(() => compileCore())
     .then(() => {
       if (isVerbose) {
         msgStepEofolSuccess(`Compiled successfully at ${PATH_BUILD} in ${prettyTime(new Date() - timeStart)}.`)

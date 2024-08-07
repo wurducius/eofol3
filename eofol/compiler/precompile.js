@@ -15,7 +15,7 @@ const fixExportsFinal = (scriptStr) => {
     .replaceAll("default ", "module.exports = ")
     .split("module.exports = {")
   return split
-    .map((part, i) => (i + 1 === split.length ? `${VIEW_INJECT_EXPORTS  },${  part}` : part))
+    .map((part, i) => (i + 1 === split.length ? `${VIEW_INJECT_EXPORTS},${part}` : part))
     .join("module.exports = {")
 }
 
@@ -57,14 +57,22 @@ const resolveImports = (sourcePath, content, importedScripts) => {
     .join("")
 }
 
-const precompile = (source, suffixPath, target, isView) => {
+const removeImports = (sourcePath, content, importedScripts) => {
+  const split = content.split("// @IMPORT-END")
+  const scriptContent = split[split.length - 1]
+  return scriptContent + importedScripts
+}
+
+const precompile = (source, suffixPath, target, isView, injectSxExports, doNotAddInternals) => {
   const content = fs.readFileSync(source)
   const exportsReplaced = fixExports(content)
   const importedScripts = []
-  const importsResolved = resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
+  const importsResolved = isView
+    ? removeImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
+    : resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
   fs.writeFileSync(
     target,
-    `let _internals = {}\n${isView ? fixExportsFinal(importsResolved) : fixExports(importsResolved)}`,
+    `${doNotAddInternals ? "" : "let _internals = {}\n"}${injectSxExports ? fixExportsFinal(importsResolved) : fixExports(importsResolved)}`,
   )
 }
 

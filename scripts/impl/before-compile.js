@@ -27,7 +27,15 @@ const beforeCompile = () => {
     const viewScriptPath = path.resolve(PATH_VIEWS_DIST, view, `${lastViewPathname}${EXT_JS}`)
     if (isDirectory(path.resolve(PATH_VIEWS_DIST, view)) && fs.existsSync(viewScriptPath)) {
       checkExistsCreate(path.resolve(PATH_VIEWS_DIST2, view))
-      precompile(viewScriptPath, "..", path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}${EXT_JS}`), true)
+      precompile(viewScriptPath, "..", path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}${EXT_JS}`), true, true)
+      precompile(
+        viewScriptPath,
+        "..",
+        path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}-static${EXT_JS}`),
+        false,
+        true,
+        false,
+      )
     }
   })
 
@@ -38,11 +46,23 @@ const beforeCompile = () => {
     "..",
     path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE),
     false,
+    false,
+    false,
+  )
+  precompile(
+    path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE),
+    "..",
+    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, "core-bundle.js"),
+    false,
+    false,
+    true,
   )
   precompile(
     path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE),
     "..",
     path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE),
+    false,
+    false,
     false,
   )
 }
