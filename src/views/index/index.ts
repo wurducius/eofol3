@@ -127,9 +127,10 @@ export const hookComponent = defineVirtualComponent("hook", {
     ),
 })
 
-export const inputComponent = defineInputComponent("input1", {})
+export const inputComponent = defineInputComponent("input1", { name: "input1" })
 
 export const selectCompoennt = defineSelectComponent("select1", {
+  name: "select1",
   options: [
     { id: "1", title: "First" },
     { id: "2", title: "Second" },

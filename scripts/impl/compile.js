@@ -30,6 +30,7 @@ const {
   copyStaticDir,
   copyPages,
   compileCore,
+  compileTheme,
 } = require("../../eofol/compiler")
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
@@ -51,6 +52,8 @@ const compile = (isHot) => {
   if (!isHot) {
     touchBuildDirs()
   }
+
+  compileTheme()
 
   const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
     const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
