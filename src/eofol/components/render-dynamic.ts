@@ -198,7 +198,7 @@ const renderCustomDynamic = (
 
   // @ts-ignore
   const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
-  const result: string = (wrapper ? createElement("div", content, undefined, { id }) : content).toString()
+  const result: string = (wrapper ? createElement("div", content, def.classname, { id }) : content).toString()
 
   if (mounted) {
     componentMounted(id)
@@ -258,7 +258,7 @@ const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | u
     rendered = renderSelector(def, getState(id), getSetState(ID_PLACEHOLDER), propsImpl, instance.body)
     // @ts-ignore
     const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
-    result = (wrapper ? createElement("div", content, undefined, { id }) : content).toString()
+    result = (wrapper ? createElement("div", content, def.classname, { id }) : content).toString()
   } else {
     result = ""
   }

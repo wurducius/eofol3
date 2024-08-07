@@ -2,7 +2,7 @@ import { DefCustom, DefFlat, Defs, DefSaved, DefStatic, DefVirtual, Instances, J
 
 // @IMPORT-START
 import Util from "../util/util"
-const { errorDefNotFound } = Util
+const { errorDefNotFound, ax } = Util
 // @IMPORT("../util/util")
 // @IMPORT-END
 
@@ -49,7 +49,7 @@ const initRender = (element: JSONElement, defs: Defs) => {
 
 const getAsPropStatic = (element: JSONElement, defaultTagname: string) => element?.attributes?.as ?? defaultTagname
 
-const renderElementWrapper = (rendered: JSONElement | string, as: string, attributes?: Object) => ({
+const renderElementWrapper = (rendered: JSONElement | string, as: string, attributes?: any) => ({
   type: as,
   content: [rendered],
   attributes: attributes ?? undefined,
@@ -125,9 +125,12 @@ const renderEofolCustomElement = (element: JSONElement, instances: Instances, me
     const memoState = !stateImpl ? "undefined" : JSON.stringify(stateImpl)
     memoCache[def.name][memoProps][memoState] = { rendered }
   }
-
-  // @ts-ignore
-  return renderElementWrapper(rendered.toString().replaceAll(ID_PLACEHOLDER, id), as, { id })
+  return renderElementWrapper(
+    // @ts-ignore
+    rendered.toString().replaceAll(ID_PLACEHOLDER, id),
+    as,
+    ax({ id }, { class: def.classname }),
+  )
 }
 
 const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs) => {
@@ -150,7 +153,7 @@ const renderEofolFlatElement = (element: JSONElement, memoCache: any, defs: Defs
     memoCache[def.name][!props ? "undefined" : JSON.stringify(props)] = { rendered }
   }
 
-  return renderElementWrapper(rendered, as)
+  return renderElementWrapper(rendered, as, ax({}, { class: def.classname }))
 }
 
 const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: Defs) => {
@@ -166,7 +169,7 @@ const renderEofolStaticElement = (element: JSONElement, memoCache: any, defs: De
 
   memoCache[def.name] = { rendered }
 
-  return renderElementWrapper(rendered, as)
+  return renderElementWrapper(rendered, as, ax({}, { class: def.classname }))
 }
 
 const renderEofolVirtualElement = (element: JSONElement, instances: Instances, memoCache: any, defs: Defs) => {
@@ -210,7 +213,7 @@ const renderEofolVirtualElement = (element: JSONElement, instances: Instances, m
     } else {
       rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl, body))
     }
-    result = renderElementWrapper(rendered, "div", { id })
+    result = renderElementWrapper(rendered, "div", ax({ id }, { class: def.classname }))
   }
 
   return result ?? ""
