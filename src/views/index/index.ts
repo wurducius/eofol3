@@ -114,7 +114,6 @@ export const dataComponent = dataContainer("weather", {
 
 export const hookComponent = defineVirtualComponent("hook", {
   initialState: { initialized: false },
-  // render: (statex: any, setStatex: any) => "tada " + statex.initialized,
   effect: (statex: any, setStatex: any) =>
     eval(
       handler({}, statex, setStatex, () => {

@@ -28,6 +28,12 @@ const { replayInitialEffects } = Lifecycle
 // @IMPORT("../components/lifecycle")
 // @IMPORT-END
 
+// @IMPORT-START
+import Store from "../api/store"
+const { startStoreWorker } = Store
+// @IMPORT("../api/store")
+// @IMPORT-END
+
 const onLoad = () => {
   replayInitialEffects()
   prefetch()
@@ -36,6 +42,7 @@ const onLoad = () => {
 const initEofol = () => {
   if (isBrowser()) {
     window.onload = onLoad
+    startStoreWorker()
   }
 
   if (SERVICE_WORKER_REGISTER_AT_INIT) {

@@ -239,7 +239,7 @@ const renderStaticDynamic = (def: DefStatic & DefSaved) => {
 }
 
 const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | undefined, isNotTop?: boolean) => {
-  const { mounted, wrapper, id } = mountComponent(idOriginal, def, {}, isNotTop)
+  const { mounted, id } = mountComponent(idOriginal, def, {}, isNotTop)
 
   const instance = findInstance(id)
   if (!instance) {
@@ -247,21 +247,7 @@ const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | u
     return ""
   }
 
-  let rendered = ""
   const propsImpl = { id }
-
-  const isRender = def.render || def.renderCase
-
-  let result: string
-
-  if (isRender) {
-    rendered = renderSelector(def, getState(id), getSetState(ID_PLACEHOLDER), propsImpl, instance.body)
-    // @ts-ignore
-    const content = rendered ? rendered.toString().replaceAll(ID_PLACEHOLDER, id) : ""
-    result = (wrapper ? createElement("div", content, def.classname, { id }) : content).toString()
-  } else {
-    result = ""
-  }
 
   if (mounted) {
     componentMounted(id)
@@ -269,7 +255,7 @@ const renderVirtualDynamic = (def: DefVirtual & DefSaved, idOriginal: string | u
 
   componentUpdated(def, id, propsImpl, instance.body)
 
-  return result
+  return ""
 }
 
 const renderDynamic = (

@@ -19,7 +19,7 @@ const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getVirtualDefs 
 
 // @IMPORT-START
 import Util from "../util/util"
-const { errorTypeUnknown, errorCustomCannotHaveChildren, errorElementNotFound } = Util
+const { errorTypeUnknown, errorCustomCannotHaveChildren, errorElementNotFound, deepEqual } = Util
 // @IMPORT("../util/util")
 // @IMPORT-END
 
@@ -31,10 +31,6 @@ const {
   COMPONENT_TYPE_STATIC,
   COMPONENT_TYPE_VIRTUAL,
   COMPONENT_ATTRIBUTE_TYPE,
-  CUSTOM_COMPONENT_TAGNAME,
-  FLAT_COMPONENT_TAGNAME,
-  STATIC_COMPONENT_TAGNAME,
-  VIRTUAL_COMPONENT_TAGNAME,
 } = Contansts
 // @IMPORT("../constants")
 // @IMPORT-END
@@ -84,13 +80,13 @@ const findEofolComponentDef = (defs: Defs) => (name: string) =>
   // @ts-ignore
   defs.find((componentDef: Def) => componentDef[COMPONENT_ATTRIBUTE_TYPE] === name)
 
-const isEofolCustomElement = (element: JSONElement) => element && element.type === CUSTOM_COMPONENT_TAGNAME
+const isEofolCustomElement = (element: JSONElement) => element && element.type === COMPONENT_TYPE_CUSTOM
 
-const isEofolFlatElement = (element: JSONElement) => element && element.type === FLAT_COMPONENT_TAGNAME
+const isEofolFlatElement = (element: JSONElement) => element && element.type === COMPONENT_TYPE_FLAT
 
-const isEofolStaticElement = (element: JSONElement) => element && element.type === STATIC_COMPONENT_TAGNAME
+const isEofolStaticElement = (element: JSONElement) => element && element.type === COMPONENT_TYPE_STATIC
 
-const isEofolVirtualElement = (element: JSONElement) => element && element.type === VIRTUAL_COMPONENT_TAGNAME
+const isEofolVirtualElement = (element: JSONElement) => element && element.type === COMPONENT_TYPE_VIRTUAL
 
 const validateEofolCustomElement = (element: JSONElement) => {
   if (Array.isArray(element.content) && element.content.length > 0) {
@@ -98,17 +94,16 @@ const validateEofolCustomElement = (element: JSONElement) => {
   }
 }
 
-const isConcrete = (def: (DefInstanced & DefSaved) | undefined) =>
-  def && ((def.type === "virtual" && isVirtualComponentConcrete(def)) || def.type === "custom")
+const isConcrete = (def: (DefInstanced & DefSaved) | undefined) => def && def.type === "custom"
 
 // @TODO typing any
 const switchComponentTypeStatic = (handlers: any) => (element: JSONElement) => {
   if (isEofolCustomElement(element)) {
-    return handlers[CUSTOM_COMPONENT_TAGNAME](element)
+    return handlers[COMPONENT_TYPE_CUSTOM](element)
   } else if (isEofolFlatElement(element)) {
-    return handlers[FLAT_COMPONENT_TAGNAME](element)
+    return handlers[COMPONENT_TYPE_FLAT](element)
   } else if (isEofolStaticElement(element)) {
-    return handlers[STATIC_COMPONENT_TAGNAME](element)
+    return handlers[COMPONENT_TYPE_STATIC](element)
   } else {
     errorTypeUnknown(element.type)
     return undefined
@@ -134,18 +129,6 @@ const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, i
       errorTypeUnknown(type)
       return undefined
     }
-  }
-}
-
-const isVirtualComponentConcrete = (def: DefVirtual) => def.render || def.renderCase
-
-const deepEqual = (x: any, y: any) => {
-  if ((x && !y) || (!x && y)) {
-    return false
-  } else if (!x && !y) {
-    return x === y
-  } else {
-    return JSON.stringify(x) === JSON.stringify(y)
   }
 }
 
@@ -214,5 +197,4 @@ export default {
   deepEqual,
   defineVirtualComponent,
   isEofolVirtualElement,
-  isVirtualComponentConcrete,
 }
