@@ -17,6 +17,8 @@ const {
   button,
   h2,
   p,
+  defineInputComponent,
+  defineSelectComponent,
   imageStatic,
   dataContainer,
   e,
@@ -126,6 +128,16 @@ export const hookComponent = defineVirtualComponent("hook", {
     ),
 })
 
+export const inputComponent = defineInputComponent("input1", {})
+
+export const selectCompoennt = defineSelectComponent("select1", {
+  options: [
+    { id: "1", title: "First" },
+    { id: "2", title: "Second" },
+    { id: "3", title: "Third" },
+  ],
+})
+
 export default {
   component1,
   component2,
@@ -136,4 +148,6 @@ export default {
   dataComponent,
   hookComponent,
   staticNextComponent,
+  inputComponent,
+  selectCompoennt,
 }

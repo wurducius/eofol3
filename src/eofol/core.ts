@@ -30,6 +30,12 @@ const { generateId } = Crypto
 // @IMPORT-END
 
 // @IMPORT-START
+import Util from "./util/util"
+const { ax, cx } = Util
+// @IMPORT("./util/util")
+// @IMPORT-END
+
+// @IMPORT-START
 import Components from "./components/components"
 const { defineCustomComponent, defineFlatComponent, defineStaticComponent, defineVirtualComponent, forceRerender } =
   Components
@@ -50,7 +56,34 @@ const { handler, handlerProps, handlerSimple } = HandlerSerialize
 
 // @IMPORT-START
 import Html from "./ui/html"
-const { a, div, p, h1, h2, h3, h4, h5, h6, button, img } = Html
+const {
+  a,
+  div,
+  span,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  img,
+  code,
+  pre,
+  table,
+  thead,
+  tbody,
+  td,
+  th,
+  tr,
+  ul,
+  li,
+  ol,
+  input,
+  textarea,
+  select,
+} = Html
 // @IMPORT("./ui/html")
 // @IMPORT-END
 
@@ -90,6 +123,12 @@ const { dataContainer } = DataContainer
 // @IMPORT("./ui/data-container")
 // @IMPORT-END
 
+// @IMPORT-START
+import Form from "./ui/form"
+const { defineInputComponent, defineTextareaComponent, defineSelectComponent } = Form
+// @IMPORT("./ui/form")
+// @IMPORT-END
+
 initEofol()
 
 export default {
@@ -122,7 +161,7 @@ export default {
   fetchGeneral,
   a,
   div,
-  button,
+  span,
   p,
   h1,
   h2,
@@ -130,10 +169,30 @@ export default {
   h4,
   h5,
   h6,
+  code,
+  pre,
+  table,
+  thead,
+  tbody,
+  td,
+  th,
+  tr,
+  ul,
+  li,
+  ol,
+  button,
   img,
+  input,
+  textarea,
+  select,
   imageDynamic,
   imageStatic,
   dataContainer,
   getConfig,
   e,
+  ax,
+  cx,
+  defineInputComponent,
+  defineTextareaComponent,
+  defineSelectComponent,
 }
