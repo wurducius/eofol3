@@ -1,12 +1,12 @@
 // @IMPORT-START
-import RenderStatic from "./render-static"
+import RenderStatic from "./components/render-static"
 const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement } =
   RenderStatic
-// @IMPORT("./render-static")
+// @IMPORT("./components/render-static")
 // @IMPORT-END
 
 // @IMPORT-START
-import Components from "./components"
+import Components from "./components/components"
 const {
   isEofolCustomElement,
   isEofolFlatElement,
@@ -15,7 +15,7 @@ const {
   validateEofolCustomElement,
   getEofolComponentType,
 } = Components
-// @IMPORT("./components")
+// @IMPORT("./components/components")
 // @IMPORT-END
 
 export default {

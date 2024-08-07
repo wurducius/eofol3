@@ -7,22 +7,22 @@ const { img } = Tags
 // @IMPORT-END
 
 // @IMPORT-START
-import EofolInternals from "../eofol-internals"
+import EofolInternals from "../eofol/eofol-internals"
 
 const { registerAsset } = EofolInternals
-// @IMPORT("../eofol-internals")
+// @IMPORT("../eofol/eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "../common"
+import Common from "../eofol/common"
 const { isBrowser } = Common
-// @IMPORT("../common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "../util"
+import Util from "../util/util"
 const { ax, cx } = Util
-// @IMPORT("../util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START

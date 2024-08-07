@@ -9,22 +9,22 @@ import {
   DefVirtual,
   JSONElement,
   Props,
-} from "./types"
+} from "../types"
 
 // @IMPORT-START
-import EofolInternals from "./eofol-internals"
+import EofolInternals from "../eofol/eofol-internals"
 const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getVirtualDefs } = EofolInternals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol/eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util/util"
 const { errorTypeUnknown, errorCustomCannotHaveChildren, errorElementNotFound } = Util
-// @IMPORT("./util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Contansts from "./constants"
+import Contansts from "../constants"
 const {
   COMPONENT_TYPE_CUSTOM,
   COMPONENT_TYPE_FLAT,
@@ -36,7 +36,7 @@ const {
   STATIC_COMPONENT_TAGNAME,
   VIRTUAL_COMPONENT_TAGNAME,
 } = Contansts
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -46,9 +46,9 @@ const { renderEofolElement } = RenderDynamic
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { findInstancedDef, isBrowser } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START

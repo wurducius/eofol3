@@ -1,9 +1,9 @@
-import { VDOM, Instances, DefVirtual, DefStatic, DefFlat, DefCustom, DefSaved } from "./types"
+import { VDOM, Instances, DefVirtual, DefStatic, DefFlat, DefCustom, DefSaved } from "../types"
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { ASSET_LINK_INTERNAL, ASSET_LINK_EXTERNAL, ASSET_IMAGE_DYNAMIC, ASSET_IMAGE_STATIC } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 let vdom: VDOM = { type: "tag", name: "initial" }

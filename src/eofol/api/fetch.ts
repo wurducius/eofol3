@@ -1,4 +1,4 @@
-import { Method } from "./types"
+import { Method } from "../types"
 
 type HeadersType = Record<string, string>
 

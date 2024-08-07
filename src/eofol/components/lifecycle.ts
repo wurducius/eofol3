@@ -1,15 +1,15 @@
-import { DefInstanced, Props } from "./types"
+import { DefInstanced, Props } from "../types"
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { findInstancedDef } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util/util"
 const { errorInstanceNotFound, errorDefNotFound } = Util
-// @IMPORT("./util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -19,9 +19,9 @@ const { getState, getSetState } = Stateful
 // @IMPORT-END
 
 // @IMPORT-START
-import Internals from "./eofol-internals"
+import Internals from "../eofol/eofol-internals"
 const { getInstances } = Internals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol/eofol-internals")
 // @IMPORT-END
 
 const componentMounted = (id: string) => {

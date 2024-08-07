@@ -1,4 +1,4 @@
-import { Def, DefInstanced, Defs, DefSaved, JSONElement } from "./types"
+import { Def, DefInstanced, Defs, DefSaved, JSONElement } from "../types"
 
 // @IMPORT-START
 import EofolInternals from "./eofol-internals"
@@ -7,9 +7,9 @@ const { getCustomDefs, getFlatDefs, getStaticDefs, getVirtualDefs, getInstances 
 // @IMPORT-END
 
 // @IMPORT-START
-import Contansts from "./constants"
-const { PROPS_EXCLUDED } = Contansts
-// @IMPORT("./constants")
+import Constants from "../constants"
+const { PROPS_EXCLUDED } = Constants
+// @IMPORT("../constants")
 // @IMPORT-END
 //
 

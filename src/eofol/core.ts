@@ -1,51 +1,51 @@
 // @IMPORT-START
-import RenderStatic from "./render-static"
+import RenderStatic from "./components/render-static"
 const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement } =
   RenderStatic
-// @IMPORT("./render-static")
+// @IMPORT("./components/render-static")
 // @IMPORT-END
 
 // @IMPORT-START
-import EofolInternals from "./eofol-internals"
+import EofolInternals from "./eofol/eofol-internals"
 const { setVdom, setInstances, setConfig, getConfig, setAssets } = EofolInternals
-// @IMPORT("./eofol-internals")
+// @IMPORT("./eofol/eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "./eofol/common"
 const { isBrowser, findDef, findInstance } = Common
-// @IMPORT("./common")
+// @IMPORT("./eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
-import CreateElement from "./create-element"
+import CreateElement from "./components/create-element"
 const { createElement, e } = CreateElement
-// @IMPORT("./create-element")
+// @IMPORT("./components/create-element")
 // @IMPORT-END
 
 // @IMPORT-START
-import Crypto from "./crypto"
+import Crypto from "./util/crypto"
 const { generateId } = Crypto
-// @IMPORT("./crypto")
+// @IMPORT("./util/crypto")
 // @IMPORT-END
 
 // @IMPORT-START
-import Components from "./components"
+import Components from "./components/components"
 const { defineCustomComponent, defineFlatComponent, defineStaticComponent, defineVirtualComponent, forceRerender } =
   Components
-// @IMPORT("./components")
+// @IMPORT("./components/components")
 // @IMPORT-END
 
 // @IMPORT-START
-import Stateful from "./stateful"
+import Stateful from "./components/stateful"
 const { getState, getSetState } = Stateful
-// @IMPORT("./stateful")
+// @IMPORT("./components/stateful")
 // @IMPORT-END
 
 // @IMPORT-START
-import HandlerSerialize from "./handler-serialize"
+import HandlerSerialize from "./api/handler-serialize"
 const { handler, handlerProps, handlerSimple } = HandlerSerialize
-// @IMPORT("./handler-serialize")
+// @IMPORT("./api/handler-serialize")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -55,9 +55,9 @@ const { a, div, p, h1, h2, h3, h4, h5, h6, button, img } = Html
 // @IMPORT-END
 
 // @IMPORT-START
-import Sx from "./sx"
+import Sx from "./api/sx"
 const { sx, getCompileCache, clearCompileCache } = Sx
-// @IMPORT("./sx")
+// @IMPORT("./api/sx")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -67,15 +67,15 @@ const { internalLink, externalLink } = Link
 // @IMPORT-END
 
 // @IMPORT-START
-import Init from "./init"
+import Init from "./eofol/init"
 const { initEofol } = Init
-// @IMPORT("./init")
+// @IMPORT("./eofol/init")
 // @IMPORT-END
 
 // @IMPORT-START
-import Fetch from "./fetch"
+import Fetch from "./api/fetch"
 const { get, post, fetchGeneral } = Fetch
-// @IMPORT("./fetch")
+// @IMPORT("./api/fetch")
 // @IMPORT-END
 
 // @IMPORT-START

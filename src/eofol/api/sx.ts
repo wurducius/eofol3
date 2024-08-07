@@ -1,13 +1,13 @@
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { isBrowser } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Crypto from "./crypto"
+import Crypto from "../util/crypto"
 const { getHash } = Crypto
-// @IMPORT("./crypto")
+// @IMPORT("../util/crypto")
 // @IMPORT-END
 
 const cache: string[] = []

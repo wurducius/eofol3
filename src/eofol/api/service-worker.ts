@@ -1,7 +1,7 @@
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { isBrowser } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 const registerServiceworker = (serviceworkerPath: string) => {

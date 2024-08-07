@@ -1,21 +1,21 @@
-import { DefCustom, DefFlat, Defs, DefSaved, DefStatic, DefVirtual, Instances, JSONElement } from "./types"
+import { DefCustom, DefFlat, Defs, DefSaved, DefStatic, DefVirtual, Instances, JSONElement } from "../types"
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util/util"
 const { errorDefNotFound } = Util
-// @IMPORT("./util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Crypto from "./crypto"
+import Crypto from "../util/crypto"
 const { generateId } = Crypto
-// @IMPORT("./crypto")
+// @IMPORT("../util/crypto")
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { getProps } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -31,9 +31,9 @@ const { getStateStatic, getSetState } = Stateful
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { ID_PLACEHOLDER, CUSTOM_DEFAULT_AS_TAGNAME, FLAT_DEFAULT_AS_TAGNAME, STATIC_DEFAULT_AS_TAGNAME } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const initRender = (element: JSONElement, defs: Defs) => {
