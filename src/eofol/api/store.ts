@@ -1,9 +1,16 @@
+// @IMPORT-START
+import Core from "../core"
+const { getConfig } = Core
+// @IMPORT("../core")
+// @IMPORT-END
+
 let storeWorker: Worker | undefined
 
 const startStoreWorker = () => {
   if (typeof Worker !== "undefined") {
     if (typeof storeWorker == "undefined") {
-      storeWorker = new Worker("store-worker.js")
+      // @ts-ignore
+      storeWorker = new Worker(`${getConfig().BASE_URL}store-worker.js`)
     }
     storeWorker.onmessage = (event: { data: string }) => {
       console.log(`Message received -> ${event.data}`)

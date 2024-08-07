@@ -34,7 +34,7 @@ const {
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
-const { PATH_BUILD } = require("../../eofol/constants/paths")
+const { PATH_BUILD, FILENAME_SUFFIX_STATIC } = require("../../eofol/constants/paths")
 
 const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")
@@ -54,7 +54,7 @@ const compile = (isHot) => {
 
   const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
     const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
-    const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}-static${EXT_JS}`)
+    const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}${FILENAME_SUFFIX_STATIC}${EXT_JS}`)
     return fs.existsSync(viewScriptPath) && isDirectory(viewPath)
   })
 
@@ -63,7 +63,7 @@ const compile = (isHot) => {
   const resultPromise = views.map((view) => {
     const defs = importViewEofolDefs(view)
 
-    const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(`${view}-static${EXT_JS}`)))
+    const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(`${view}${FILENAME_SUFFIX_STATIC}${EXT_JS}`)))
     const { getAssets } = Sx
 
     const source = fs
