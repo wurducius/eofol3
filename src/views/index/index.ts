@@ -85,7 +85,7 @@ export const component3 = defineCustomComponent("component3", {
 export const flatComponent = defineFlatComponent("flat", {
   render: (props: { param: string }) =>
     div([
-      button("FLAT HELLO WORLD!!!", sx({ "background-color": "red" })),
+      button("FLAT HELLO WORLD!!!", sx({ "background-color": "red", border: "1px solid darkred", color: "white" })),
       p("OH YEAH"),
       createElement("static"),
       `Flat component VARIANT = ${props.param}`,

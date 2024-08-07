@@ -1,0 +1,28 @@
+@import "theme.less";
+
+button {
+  height: 40px;
+  padding: 0 16px;
+  background-color: @color-primary;
+  border: 1px solid @color-primary-dark;
+  font-size: @typography-button-font-size;
+  color: black;
+  font-family: inherit;
+  font-weight: @typography-button-font-weight;
+  cursor: pointer;
+  border-radius: @border-radius;
+}
+
+button:hover {
+  background-color: @color-primary-light;
+  border: 1px solid @color-primary;
+  color: black;
+  font-weight: 700;
+}
+
+button:active {
+  background-color: @color-primary-dark;
+  border: 1px solid @color-primary-dark;
+  color: black;
+  font-weight: 700;
+}

@@ -1,0 +1,81 @@
+@import "theme.less";
+
+.form-sm {
+  width: 64px;
+  // @TODO remove centering
+  margin: 0 auto 0 auto;
+}
+
+.form-md {
+  width: 128px;
+  // @TODO remove centering
+  margin: 0 auto 0 auto;
+}
+
+.form-lg {
+  width: 256px;
+  // @TODO remove centering
+  margin: 0 auto 0 auto;
+}
+
+.form-xl {
+  width: 512px;
+  // @TODO remove centering
+  margin: 0 auto 0 auto;
+}
+
+input {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 2px 10px;
+  margin: 8px 0 8px 0;
+  background-color: @color-form;
+  color: @color-secondary;
+  transition: outline 200ms linear;
+  position: relative;
+  width: calc(100% - 22px);
+  cursor:text;
+  border: 1px solid @color-secondary;
+  outline: transparent solid 2px;
+  height: 24px;
+}
+
+input:focus {
+  outline: @color-secondary-light solid 2px;
+}
+
+textarea {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 2px 10px;
+  background-color: @color-form;
+  color: @color-secondary;
+  transition: outline 200ms linear;
+  position: relative;
+  width: calc(100% - 22px);
+  cursor:text;
+  border: 1px solid @color-secondary;
+  outline: transparent solid 2px;
+}
+
+textarea:focus {
+  outline: @color-secondary-light solid 2px;
+}
+
+select {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 2px 10px;
+  background-color: @color-form;
+  color: @color-secondary;
+  transition: outline 200ms linear;
+  position: relative;
+  width: 100%;
+  border: 1px solid @color-secondary;
+  outline: transparent solid 2px;
+  height: 30px;
+}
+
+select:focus {
+  outline: @color-secondary-light solid 2px;
+}
