@@ -1,7 +1,7 @@
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { ID_GENERATED_LENGTH } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const generateString = (length: number) => () =>

@@ -1,7 +1,7 @@
 // @IMPORT-START
-import Html from "./html"
+import Html from "../ui/html"
 const { div } = Html
-// @IMPORT("./html")
+// @IMPORT("../ui/html")
 // @IMPORT-END
 
 const skeleton = (msg?: string) => div(msg)

@@ -11,21 +11,21 @@ const { SERVICE_WORKER_REGISTER_AT_INIT, SERVICE_WORKER_SCRIPT_FILENAME } = Eofo
 // @IMPORT-END
 
 // @IMPORT-START
-import ServiceWorker from "./service-worker"
+import ServiceWorker from "../api/service-worker"
 const { registerServiceworker } = ServiceWorker
-// @IMPORT("./service-worker")
+// @IMPORT("../api/service-worker")
 // @IMPORT-END
 
 // @IMPORT-START
-import Prefetch from "./prefetch"
+import Prefetch from "../api/prefetch"
 const { prefetch } = Prefetch
-// @IMPORT("./prefetch")
+// @IMPORT("../api/prefetch")
 // @IMPORT-END
 
 // @IMPORT-START
-import Lifecycle from "./lifecycle"
+import Lifecycle from "../components/lifecycle"
 const { replayInitialEffects } = Lifecycle
-// @IMPORT("./lifecycle")
+// @IMPORT("../components/lifecycle")
 // @IMPORT-END
 
 const onLoad = () => {

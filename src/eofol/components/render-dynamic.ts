@@ -1,13 +1,13 @@
-import { Def, DefCustom, DefFlat, DefInstanced, DefSaved, DefStatic, DefVirtual, Props, State } from "./types"
+import { Def, DefCustom, DefFlat, DefInstanced, DefSaved, DefStatic, DefVirtual, Props, State } from "../types"
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util/util"
 const { errorTypeUnknown, errorInstanceNotFound, errorDefNotFound } = Util
-// @IMPORT("./util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const {
   ID_PLACEHOLDER,
   COMPONENT_TYPE_CUSTOM,
@@ -16,7 +16,7 @@ const {
   COMPONENT_TYPE_VIRTUAL,
   CUSTOM_DEFAULT_AS_TAGNAME,
 } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -26,21 +26,21 @@ const { getState, getSetState } = Stateful
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { findInstance } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Internals from "./eofol-internals"
+import Internals from "../eofol/eofol-internals"
 const { getInstances, getMemoCache } = Internals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol/eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Crypto from "./crypto"
+import Crypto from "../util/crypto"
 const { generateId } = Crypto
-// @IMPORT("./crypto")
+// @IMPORT("../util/crypto")
 // @IMPORT-END
 
 // @IMPORT-START

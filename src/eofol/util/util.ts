@@ -1,9 +1,9 @@
-import { Attributes, Func } from "./types"
+import { Attributes, Func } from "../types"
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { LOG_ERROR_MSG_PREFIX } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const errorRuntime = (msg: string) => {

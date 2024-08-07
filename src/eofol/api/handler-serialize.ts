@@ -1,15 +1,15 @@
-import { Handler, Props, SetState, State } from "./types"
+import { Handler, Props, SetState, State } from "../types"
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util/util"
 const { pipe } = Util
-// @IMPORT("./util")
+// @IMPORT("../util/util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { HANDLER_SERIALIZED_PROPS, HANDLER_SERIALIZED_STATE, HANDLER_SERIALIZED_SETSTATE } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const serializeJS = (handler: Handler) => `(${handler.toString()})()`

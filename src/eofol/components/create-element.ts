@@ -1,9 +1,9 @@
-import { Attributes, JSONNode, Properties, Props, StringRecord } from "./types"
+import { Attributes, JSONNode, Properties, Props, StringRecord } from "../types"
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../eofol/common"
 const { findDef } = Common
-// @IMPORT("./common")
+// @IMPORT("../eofol/common")
 // @IMPORT-END
 
 // @IMPORT-START

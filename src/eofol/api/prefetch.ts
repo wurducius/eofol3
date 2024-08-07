@@ -5,13 +5,13 @@ const { get } = Fetch
 // @IMPORT-END
 
 // @IMPORT-START
-import Internals from "./eofol-internals"
+import Internals from "../eofol/eofol-internals"
 const { getAssets, setAssets } = Internals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol/eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const {
   ASSET_LINK_INTERNAL,
   ASSET_LINK_EXTERNAL,
@@ -20,7 +20,7 @@ const {
   ASSET_STATUS_FETCHING,
   ASSET_STATUS_FETCHED,
 } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const getInternalPageAssets = (url: string) => {
