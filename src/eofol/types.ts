@@ -37,6 +37,7 @@ export interface DefInstanced {
   beforeUpdate?: any
   componentUpdated?: any
   componentUnmounted?: any
+  classname?: string
 }
 
 export interface DefConcerete {
@@ -50,9 +51,13 @@ export interface DefCustom extends DefConcerete, DefInstanced {
   shouldComponentUpdate?: any
 }
 
-export interface DefFlat extends DefConcerete {}
+export interface DefFlat extends DefConcerete {
+  classname?: string
+}
 
-export interface DefStatic extends DefConcerete {}
+export interface DefStatic extends DefConcerete {
+  classname?: string
+}
 
 export interface DefVirtual extends DefInstanced {
   render?: any
