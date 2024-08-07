@@ -1,4 +1,4 @@
-import { EofolProps, LinkGenericProps, LinkParticularProps } from "./types"
+import { EofolProps, LinkGenericProps, LinkParticularProps } from "../types"
 
 // @IMPORT-START
 import Tags from "./html"
@@ -7,28 +7,28 @@ const { a } = Tags
 // @IMPORT-END
 
 // @IMPORT-START
-import EofolInternals from "./eofol-internals"
+import EofolInternals from "../eofol-internals"
 
 const { registerAsset } = EofolInternals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../common"
 const { isBrowser } = Common
-// @IMPORT("./common")
+// @IMPORT("../common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util"
 const { ax } = Util
-// @IMPORT("./util")
+// @IMPORT("../util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { ASSET_LINK_INTERNAL, ASSET_LINK_EXTERNAL } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const link = ({ children, classname, href, external, download }: EofolProps & LinkGenericProps) => {

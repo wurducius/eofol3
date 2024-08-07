@@ -1,4 +1,4 @@
-import { EofolPropsWithoutChildren, ImageGenericProps, ImageParticularProps } from "./types"
+import { EofolPropsWithoutChildren, ImageGenericProps, ImageParticularProps } from "../types"
 
 // @IMPORT-START
 import Tags from "./html"
@@ -7,28 +7,28 @@ const { img } = Tags
 // @IMPORT-END
 
 // @IMPORT-START
-import EofolInternals from "./eofol-internals"
+import EofolInternals from "../eofol-internals"
 
 const { registerAsset } = EofolInternals
-// @IMPORT("./eofol-internals")
+// @IMPORT("../eofol-internals")
 // @IMPORT-END
 
 // @IMPORT-START
-import Common from "./common"
+import Common from "../common"
 const { isBrowser } = Common
-// @IMPORT("./common")
+// @IMPORT("../common")
 // @IMPORT-END
 
 // @IMPORT-START
-import Util from "./util"
+import Util from "../util"
 const { ax, cx } = Util
-// @IMPORT("./util")
+// @IMPORT("../util")
 // @IMPORT-END
 
 // @IMPORT-START
-import Constants from "./constants"
+import Constants from "../constants"
 const { ASSET_IMAGE_STATIC, ASSET_IMAGE_DYNAMIC } = Constants
-// @IMPORT("./constants")
+// @IMPORT("../constants")
 // @IMPORT-END
 
 const mutatePath = (path: string) => {

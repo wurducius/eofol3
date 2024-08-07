@@ -1,9 +1,9 @@
-import { Attributes, JSONNode, Properties } from "./types"
+import { Attributes, JSONNode, Properties } from "../types"
 
 // @IMPORT-START
-import CreateElement from "./create-element"
+import CreateElement from "../create-element"
 const { createElement } = CreateElement
-// @IMPORT("./create-element")
+// @IMPORT("../create-element")
 // @IMPORT-END
 
 const tag =

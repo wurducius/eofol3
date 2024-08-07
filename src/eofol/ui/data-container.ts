@@ -1,26 +1,26 @@
 // @IMPORT-START
-import Components from "./components"
+import Components from "../components"
 const { defineCustomComponent } = Components
-// @IMPORT("./components")
+// @IMPORT("../components")
 // @IMPORT-END
 
 // @IMPORT-START
-import HandlerSerialize from "./handler-serialize"
+import HandlerSerialize from "../handler-serialize"
 const { handler } = HandlerSerialize
-// @IMPORT("./handler-serialize")
+// @IMPORT("../handler-serialize")
 // @IMPORT-END
 
 // @IMPORT-START
-import Fetch from "./fetch"
-import { Method } from "./types"
+import Fetch from "../fetch"
+import { Method } from "../types"
 const { fetchGeneral } = Fetch
-// @IMPORT("./fetch")
+// @IMPORT("../fetch")
 // @IMPORT-END
 
 // @IMPORT-START
-import StateComponent from "./state-component"
+import StateComponent from "../state-component"
 const { skeleton, spinner, error } = StateComponent
-// @IMPORT("./state-component")
+// @IMPORT("../state-component")
 // @IMPORT-END
 
 const dataContainer = (name: string, { render, url, method }: { render: any; url: string; method?: Method }) =>

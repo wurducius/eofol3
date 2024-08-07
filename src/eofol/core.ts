@@ -49,9 +49,9 @@ const { handler, handlerProps, handlerSimple } = HandlerSerialize
 // @IMPORT-END
 
 // @IMPORT-START
-import Html from "./html"
+import Html from "./ui/html"
 const { a, div, p, h1, h2, h3, h4, h5, h6, button, img } = Html
-// @IMPORT("./html")
+// @IMPORT("./ui/html")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -61,9 +61,9 @@ const { sx, getCompileCache, clearCompileCache } = Sx
 // @IMPORT-END
 
 // @IMPORT-START
-import Link from "./link"
+import Link from "./ui/link"
 const { internalLink, externalLink } = Link
-// @IMPORT("./link")
+// @IMPORT("./ui/link")
 // @IMPORT-END
 
 // @IMPORT-START
@@ -79,15 +79,15 @@ const { get, post, fetchGeneral } = Fetch
 // @IMPORT-END
 
 // @IMPORT-START
-import Image from "./image"
+import Image from "./ui/image"
 const { imageDynamic, imageStatic } = Image
-// @IMPORT("./image")
+// @IMPORT("./ui/image")
 // @IMPORT-END
 
 // @IMPORT-START
-import DataContainer from "./data-container"
+import DataContainer from "./ui/data-container"
 const { dataContainer } = DataContainer
-// @IMPORT("./data-container")
+// @IMPORT("./ui/data-container")
 // @IMPORT-END
 
 initEofol()
