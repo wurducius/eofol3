@@ -129,8 +129,6 @@ const { defineInputComponent, defineTextareaComponent, defineSelectComponent } =
 // @IMPORT("./ui/form")
 // @IMPORT-END
 
-initEofol()
-
 export default {
   isBrowser,
   forceRerender,

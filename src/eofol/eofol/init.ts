@@ -41,8 +41,10 @@ const onLoad = () => {
 
 const initEofol = () => {
   if (isBrowser()) {
-    window.onload = onLoad
-    startStoreWorker()
+    window.onload = () => {
+      startStoreWorker()
+      onLoad()
+    }
   }
 
   if (SERVICE_WORKER_REGISTER_AT_INIT) {

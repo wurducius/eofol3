@@ -10,9 +10,11 @@ const {
   EXT_JS,
   FILENAME_CORE,
   FILENAME_COMPILE,
+  FILENAME_CORE_BUNDLE,
 } = require("../../eofol/constants")
 const { precompile } = require("../../eofol/compiler")
 const { checkExistsCreate, isDirectory } = require("../../eofol/util/fs")
+const { FILENAME_SUFFIX_STATIC } = require("../../eofol/constants/paths")
 
 // ---------------------------------------------
 // 1. Transforms script from ES module into CommonJS
@@ -31,7 +33,7 @@ const beforeCompile = () => {
       precompile(
         viewScriptPath,
         "..",
-        path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}-static${EXT_JS}`),
+        path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}${FILENAME_SUFFIX_STATIC}${EXT_JS}`),
         false,
         true,
         false,
@@ -52,7 +54,7 @@ const beforeCompile = () => {
   precompile(
     path.resolve(PATH_DIST, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE),
     "..",
-    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, "core-bundle.js"),
+    path.resolve(PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_CORE_BUNDLE),
     false,
     false,
     true,
