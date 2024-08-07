@@ -13,7 +13,7 @@ const startStoreWorker = () => {
       storeWorker = new Worker(`${getConfig().BASE_URL}store-worker.js`)
     }
     storeWorker.onmessage = (event: { data: string }) => {
-      console.log(`Message received -> ${event.data}`)
+      console.log(`Store: Message received -> ${event.data}`)
     }
   } else {
     console.log("Store: Web Worker not supported.")
