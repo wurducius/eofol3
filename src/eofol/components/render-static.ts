@@ -20,7 +20,7 @@ const { getProps } = Common
 
 // @IMPORT-START
 import Components from "./components"
-const { getEofolComponentType, findEofolComponentDef, isVirtualComponentConcrete } = Components
+const { getEofolComponentType, findEofolComponentDef } = Components
 // @IMPORT("./components")
 // @IMPORT-END
 
@@ -201,22 +201,7 @@ const renderEofolVirtualElement = (element: JSONElement, instances: Instances, m
     body,
   }
 
-  let result
-  if (isVirtualComponentConcrete(def)) {
-    const stateImpl = getStateStatic(name, defs)
-    const setStateImpl = getSetState(ID_PLACEHOLDER)
-    let rendered
-    if (def.renderCase) {
-      rendered = reduceRendered(
-        def.renderCase(stateImpl, setStateImpl, propsImpl, body)(stateImpl, setStateImpl, propsImpl, body),
-      )
-    } else {
-      rendered = reduceRendered(def.render(stateImpl, setStateImpl, propsImpl, body))
-    }
-    result = renderElementWrapper(rendered, "div", ax({ id }, { class: def.classname }))
-  }
-
-  return result ?? ""
+  return ""
 }
 
 export default { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticElement, renderEofolVirtualElement }
