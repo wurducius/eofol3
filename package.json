@@ -23,7 +23,8 @@
     "deploy": "npm run build -- --prod && call c:/code/deploy.bat && npm run test-smoke",
     "docker-build": "docker build -t eofol3-test ./docker-test",
     "docker-run": "docker run -p 3000:3000 eofol3-test",
-    "docker-stop": "bash ./docker-test/docker-stop.sh"
+    "docker-stop": "bash ./docker-test/docker-stop.sh",
+    "docker-test": "npm run docker-stop && npm run docker-build && npm run docker-run"
   },
   "type": "commonjs",
   "dependencies": {
