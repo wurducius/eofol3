@@ -1,16 +1,3 @@
-.col {
-  display: flex;
-  flex-direction: column;
-}
-
-.spacing-m {
-  margin-top: 16px;
-}
-
-.spacing-l {
-  margin-top: 32px;
-}
-
 .spacing-25 {
   margin-top: 10vh;
 }
