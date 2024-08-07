@@ -6,6 +6,7 @@ const compileAllStyles = require("./style-impl")
 const compileCore = require("./compile-core")
 const compileViewScript = require("./script")
 const compileStyle = require("./style")
+const compileTheme = require("./compile-theme")
 const hotUpdate = require("./hot-update")
 const gzip = require("./gzip")
 const importViewEofolDefs = require("./import-defs")
@@ -29,6 +30,7 @@ module.exports = {
   compileImg,
   compileAllStyles,
   compileCore,
+  compileTheme,
   compileViewScript,
   compileStyle,
   gzip,
