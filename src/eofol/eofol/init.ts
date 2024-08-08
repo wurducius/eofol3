@@ -34,6 +34,12 @@ const { startStoreWorker } = Store
 // @IMPORT("../api/store")
 // @IMPORT-END
 
+// @IMPORT-START
+import Internals from "../eofol/eofol-internals"
+const { getConfig } = Internals
+// @IMPORT("../eofol/eofol-internals")
+// @IMPORT-END
+
 const onLoad = () => {
   replayInitialEffects()
   prefetch()
@@ -44,12 +50,11 @@ const initEofol = () => {
     window.onload = () => {
       startStoreWorker()
       onLoad()
-    }
-  }
 
-  if (SERVICE_WORKER_REGISTER_AT_INIT) {
-    // @TODO allow relative path from view page
-    registerServiceworker(`/${SERVICE_WORKER_SCRIPT_FILENAME}`)
+      if (SERVICE_WORKER_REGISTER_AT_INIT) {
+        registerServiceworker(`${getConfig().BASE_URL}${SERVICE_WORKER_SCRIPT_FILENAME}`)
+      }
+    }
   }
 }
 

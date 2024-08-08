@@ -6,17 +6,18 @@ const { getConfig } = Core
 
 let storeWorker: Worker | undefined
 
+const logStore = (msg: string) => console.log(`Store: ${msg}`)
+
 const startStoreWorker = () => {
   if (typeof Worker !== "undefined") {
     if (typeof storeWorker == "undefined") {
-      // @ts-ignore
       storeWorker = new Worker(`${getConfig().BASE_URL}store-worker.js`)
     }
     storeWorker.onmessage = (event: { data: string }) => {
-      console.log(`Store: Message received -> ${event.data}`)
+      logStore(`Message received -> ${event.data}`)
     }
   } else {
-    console.log("Store: Web Worker not supported.")
+    logStore("Web Worker not supported.")
   }
 }
 

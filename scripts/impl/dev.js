@@ -7,6 +7,7 @@ const compile = require("./compile")
 const cleanHot = require("./clean-hot")
 const { env } = require("../../config")
 const { PROTOCOL, PORT } = env
+const { DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC, DIRNAME_EOFOL_INTERNAL } = require("../../eofol/constants")
 
 const watchpackOptions = {
   aggregateTimeout: 250,
@@ -15,8 +16,8 @@ const watchpackOptions = {
   ignored: "**/.git",
 }
 
-// @TODO extract dirnames from env
-const listOfDirectories = ["src", "pages", "static"]
+// const listOfDirectories = [DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC]
+const listOfDirectories = [DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC, DIRNAME_EOFOL_INTERNAL]
 
 const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 
@@ -31,14 +32,10 @@ const recompile = async () => {
 }
 
 const handleChange = async () => {
-  // (filePath, mtime, explanation)
-  // console.log(`CHANGE -> ${filePath} @ ${mtime} -> explanation: ${explanation}`)
   await recompile()
 }
 
 const handleRemove = async () => {
-  // (filePath, explanation)
-  // console.log(`DELETED -> ${filePath} -> explanation: ${explanation}`)
   await recompile()
 }
 
@@ -72,11 +69,6 @@ const dev = () => {
   wp.on("remove", handleRemove)
 
   serve()
-
-  // console.log(
-  //        primary(`Serving eofol app ${appName} in ${MODE} mode at `) +
-  //          success(SERVE_URL)
-  //      );
 }
 
 module.exports = dev

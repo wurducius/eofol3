@@ -47,18 +47,6 @@ const ax = (base: Attributes, conditional: Record<string, any>) =>
 
 const cx = (...classnames: (string | boolean | undefined | null)[]) => classnames.filter(Boolean).join(" ")
 
-function arrayCombinator<T>(handler: (t: T) => any) {
-  return function (value: T | T[] | undefined) {
-    if (value === undefined) {
-      return undefined
-    } else if (Array.isArray(value)) {
-      return value.map(handler)
-    } else {
-      return handler(value)
-    }
-  }
-}
-
 const deepEqual = (x: any, y: any) => {
   if ((x && !y) || (!x && y)) {
     return false
@@ -78,7 +66,6 @@ export default {
   errorElementNotFound,
   errorTypeUnknown,
   errorCustomCannotHaveChildren,
-  arrayCombinator,
   deepEqual,
   ax,
   cx,

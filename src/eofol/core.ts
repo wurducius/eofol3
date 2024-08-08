@@ -7,6 +7,7 @@ const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticEleme
 
 // @IMPORT-START
 import EofolInternals from "./eofol/eofol-internals"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { setVdom, setInstances, setConfig, getConfig, setAssets } = EofolInternals
 // @IMPORT("./eofol/eofol-internals")
 // @IMPORT-END
