@@ -11,6 +11,8 @@ const {
   PATH_PAGES,
   EXT_JS,
   DIRNAME_EOFOL_INTERNAL,
+  PATH_BUILD,
+  FILENAME_SUFFIX_STATIC,
 } = require("../../eofol/constants")
 const { checkExistsCreate, die } = require("../../eofol/util")
 const {
@@ -35,7 +37,6 @@ const {
 const transverseTree = require("../../eofol/transverseTree/transverseTree")
 const htmlTemplate = require("../../eofol/api/head/head")
 const { isDirectory } = require("../../eofol/util/fs")
-const { PATH_BUILD, FILENAME_SUFFIX_STATIC } = require("../../eofol/constants/paths")
 
 const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")

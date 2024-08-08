@@ -76,6 +76,7 @@ const createProjection = (name, source, projectionMapping) => {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const createSelector = (source, projectionMapping) => {
   const name = getCreateSelectorName(source)
   createProjection(name, source, projectionMapping)
@@ -98,6 +99,7 @@ const setStore = (name, nextState) => {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const mergeStore = (name, nextState) => {
   const store = getStore(name)
 

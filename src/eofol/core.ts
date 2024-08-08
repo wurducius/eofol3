@@ -7,7 +7,7 @@ const { renderEofolCustomElement, renderEofolFlatElement, renderEofolStaticEleme
 
 // @IMPORT-START
 import EofolInternals from "./eofol/eofol-internals"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
 const { setVdom, setInstances, setConfig, getConfig, setAssets } = EofolInternals
 // @IMPORT("./eofol/eofol-internals")
 // @IMPORT-END
@@ -102,6 +102,7 @@ const { internalLink, externalLink } = Link
 
 // @IMPORT-START
 import Init from "./eofol/init"
+// eslint-disable-next-line no-unused-vars
 const { initEofol } = Init
 // @IMPORT("./eofol/init")
 // @IMPORT-END

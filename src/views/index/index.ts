@@ -31,13 +31,13 @@ export const component1 = defineCustomComponent("component1", {
     const counter = h2(`You have clicked ${statex.count} times.`)
     const buttonIncrement = button("+", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
-        // @ts-ignore eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
         setState({ count: state.count + 1 })
       }),
     })
     const buttonReset = button("Reset", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
-        // @ts-ignore eslint-disable-next-line no-undef
+        // eslint-disable-next-line no-undef
         setState({ count: 0 })
       }),
     })
@@ -52,7 +52,6 @@ export const component1 = defineCustomComponent("component1", {
       buttonReset,
       otherButton,
       createElement("flat", undefined, undefined, undefined, undefined, { param: "2" }),
-      // @ts-ignore  eslint-disable-next-line no-undef
       statex.count % 2 === 0 && e("next", "cksjoisjfio"),
     ])
   },
@@ -124,9 +123,9 @@ export const hookComponent = defineVirtualComponent("hook", {
     eval(
       handler({}, statex, setStatex, () => {
         console.log("hook")
-        // @ts-ignore
+        // eslint-disable-next-line no-undef
         if (!state.initialized) {
-          // @ts-ignore
+          // eslint-disable-next-line no-undef
           setState({ initialized: true })
         }
       }),

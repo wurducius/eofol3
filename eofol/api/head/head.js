@@ -15,6 +15,7 @@ const { FILENAME_CORE, DIRNAME_EOFOL_INTERNAL } = require("../../constants/paths
 const requireIfExists = (path) => {
   try {
     return require(path)
+    // eslint-disable-next-line no-unused-vars
   } catch (ex) {
     return undefined
   }
