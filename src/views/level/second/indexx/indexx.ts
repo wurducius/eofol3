@@ -21,13 +21,13 @@ export const component1 = defineCustomComponent("component1", {
     const counter = createElement("h2", `You have clicked ${statex.count} times.`)
     const buttonIncrement = createElement("button", "+", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
-        // eslint-disable-next-line no-undef
+        // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: state.count + 1 })
       }),
     })
     const buttonReset = createElement("button", "Reset", "eofol-button", undefined, {
       onclick: handler(props, statex, setStatex, () => {
-        // eslint-disable-next-line no-undef
+        // @ts-ignore eslint-disable-next-line no-undef
         setState({ count: 0 })
       }),
     })

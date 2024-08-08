@@ -40,18 +40,18 @@ const dataContainer = (name: string, { render, url, method }: { render: any; url
     effect: (statex: any, setStatex: any) =>
       eval(
         handler({}, statex, setStatex, () => {
-          // eslint-disable-next-line no-undef
+          // @ts-ignore eslint-disable-next-line no-undef
           if (state.data === undefined) {
-            // eslint-disable-next-line no-undef
+            // @ts-ignore eslint-disable-next-line no-undef
             setState({ data: "LOADING" })
             fetchGeneral(url, undefined, method ?? "GET", undefined, true)
               .then((res) => {
-                // eslint-disable-next-line no-undef
+                // @ts-ignore eslint-disable-next-line no-undef
                 setState({ data: res })
               })
               .catch((e) => {
                 console.log(e)
-                // eslint-disable-next-line no-undef
+                // @ts-ignore eslint-disable-next-line no-undef
                 setState({ data: "ERROR" })
               })
           }
