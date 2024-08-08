@@ -1,4 +1,16 @@
-import { Def, DefCustom, DefFlat, DefInstanced, DefSaved, DefStatic, DefVirtual, Props, State } from "../types"
+import {
+  Def,
+  DefCustom,
+  DefFlat,
+  DefInstanced,
+  DefSaved,
+  DefStatic,
+  DefVirtual,
+  MemoCacheCustom,
+  MemoCacheFlat,
+  Props,
+  State,
+} from "../types"
 
 // @IMPORT-START
 import Util from "../util/util"
@@ -62,9 +74,9 @@ const getStateInitial = (def: DefInstanced) => (def.initialState ? { ...def.init
 const renderSelector = (
   def: DefCustom,
   stateImpl: State | undefined,
-  setStateImpl: any,
+  setStateImpl: string | ((nextState: unknown) => void),
   propsImpl: Props | undefined,
-  bodyImpl: any,
+  bodyImpl: unknown,
 ) => {
   if (def.renderCase) {
     return def.renderCase(stateImpl, setStateImpl, propsImpl, bodyImpl)(stateImpl, setStateImpl, propsImpl, bodyImpl)
@@ -133,7 +145,7 @@ const renderCustomDynamic = (
     errorInstanceNotFound(id)
     return ""
   }
-  const memoCache = getMemoCache()
+  const memoCache = getMemoCache() as MemoCacheCustom
 
   const setStateImpl = getSetState(ID_PLACEHOLDER)
   const propsImpl = { ...props, id: ID_PLACEHOLDER }
@@ -146,7 +158,7 @@ const renderCustomDynamic = (
 
   let rendered
 
-  const saveMemo = (renderedx: any) => {
+  const saveMemo = (renderedx: string) => {
     if (!memoCache[def.name]) {
       memoCache[def.name] = {}
     }
@@ -211,7 +223,7 @@ const renderFlatDynamic = (def: DefFlat & DefSaved, props: Props | undefined) =>
   const render = () => def.render(props)
 
   if (def.memo) {
-    const memoCache = getMemoCache()
+    const memoCache = getMemoCache() as MemoCacheFlat
     const memo = memoCache[def.name]
     const memoProps = !props ? "undefined" : JSON.stringify(props)
     if (memo && memo[memoProps] && memo[memoProps].rendered) {

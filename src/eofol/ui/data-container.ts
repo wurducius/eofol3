@@ -25,7 +25,7 @@ const { skeleton, spinner, error } = StateComponent
 
 const dataContainer = (name: string, { render, url, method }: { render: any; url: string; method?: Method }) =>
   defineCustomComponent(name, {
-    renderCase: (statex: any, setStatex: any, props: any) => {
+    renderCase: (statex: { data: string | undefined }) => {
       if (statex.data === undefined) {
         return () => skeleton("Ready")
       } else if (statex.data === "LOADING") {
@@ -41,21 +41,17 @@ const dataContainer = (name: string, { render, url, method }: { render: any; url
       eval(
         handler({}, statex, setStatex, () => {
           // @ts-ignore eslint-disable-next-line no-undef
-
           if (state.data === undefined) {
             // @ts-ignore eslint-disable-next-line no-undef
-
             setState({ data: "LOADING" })
             fetchGeneral(url, undefined, method ?? "GET", undefined, true)
               .then((res) => {
                 // @ts-ignore eslint-disable-next-line no-undef
-
                 setState({ data: res })
               })
               .catch((e) => {
                 console.log(e)
                 // @ts-ignore eslint-disable-next-line no-undef
-
                 setState({ data: "ERROR" })
               })
           }

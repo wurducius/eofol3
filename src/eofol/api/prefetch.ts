@@ -69,10 +69,10 @@ const prefetch = () => {
 
   Promise.all(
     assetsToPrefetch.map((assetToPrefetch) => {
-      assets[assetToPrefetch.type].status = ASSET_STATUS_FETCHING
+      assetToPrefetch.status = ASSET_STATUS_FETCHING
       setAssets(assets)
       return get(assetToPrefetch.fetchUrl).then(() => {
-        assets[assetToPrefetch.type].status = ASSET_STATUS_FETCHED
+        assetToPrefetch.status = ASSET_STATUS_FETCHED
         setAssets(assets)
         console.log(`Prefetch API: Prefetched asset -> ${assetToPrefetch.fetchUrl}.`)
       })

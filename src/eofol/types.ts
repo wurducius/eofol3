@@ -1,7 +1,5 @@
 export type VDOMType = "tag" | "custom"
 
-export type HTMLTag = any
-
 export interface VDOM {
   type: VDOMType
   name: string
@@ -17,11 +15,27 @@ export interface Instance {
   props?: Props
   // as: HTMLTag
   renderCache?: string
-  memo?: any
-  body?: any
+  memo?: boolean
+  body?: unknown
 }
 
 export type Instances = Record<string, Instance>
+
+export type MemoCacheItem = { rendered: string }
+
+export type MemoCacheStatic = Record<string, MemoCacheItem>
+
+export type MemoCacheFlat = Record<string, Record<string, MemoCacheItem>>
+
+export type MemoCacheCustom = Record<string, Record<string, Record<string, MemoCacheItem>>>
+
+export type MemoCache = MemoCacheStatic | MemoCacheFlat | MemoCacheCustom
+
+export type Config = { BASE_URL: string }
+
+export type Asset = { url: string; status: string | undefined }
+
+export type Assets = Record<string, Asset[]>
 
 export type DefSaved = { name: string; type: string }
 
@@ -74,7 +88,7 @@ export type Props = StringRecord
 
 export type Properties = StringRecord
 
-export type State = Object
+export type State = unknown
 
 export type SetState = (nextState: State) => void
 

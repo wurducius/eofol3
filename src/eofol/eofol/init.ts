@@ -52,7 +52,6 @@ const initEofol = () => {
       onLoad()
 
       if (SERVICE_WORKER_REGISTER_AT_INIT) {
-        // @ts-ignore
         registerServiceworker(`${getConfig().BASE_URL}${SERVICE_WORKER_SCRIPT_FILENAME}`)
       }
     }

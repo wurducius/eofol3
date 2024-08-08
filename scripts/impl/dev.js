@@ -32,14 +32,10 @@ const recompile = async () => {
 }
 
 const handleChange = async () => {
-  // (filePath, mtime, explanation)
-  // console.log(`CHANGE -> ${filePath} @ ${mtime} -> explanation: ${explanation}`)
   await recompile()
 }
 
 const handleRemove = async () => {
-  // (filePath, explanation)
-  // console.log(`DELETED -> ${filePath} -> explanation: ${explanation}`)
   await recompile()
 }
 
@@ -73,11 +69,6 @@ const dev = () => {
   wp.on("remove", handleRemove)
 
   serve()
-
-  // console.log(
-  //        primary(`Serving eofol app ${appName} in ${MODE} mode at `) +
-  //          success(SERVE_URL)
-  //      );
 }
 
 module.exports = dev

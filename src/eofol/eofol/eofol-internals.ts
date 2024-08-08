@@ -1,4 +1,16 @@
-import { VDOM, Instances, DefVirtual, DefStatic, DefFlat, DefCustom, DefSaved } from "../types"
+import {
+  VDOM,
+  Instances,
+  DefVirtual,
+  DefStatic,
+  DefFlat,
+  DefCustom,
+  DefSaved,
+  MemoCache,
+  Config,
+  Assets,
+  Asset,
+} from "../types"
 
 // @IMPORT-START
 import Constants from "../constants"
@@ -8,16 +20,16 @@ const { ASSET_LINK_INTERNAL, ASSET_LINK_EXTERNAL, ASSET_IMAGE_DYNAMIC, ASSET_IMA
 
 let vdom: VDOM = { type: "tag", name: "initial" }
 let instances: Instances = {}
-let config: Object = {}
+let config: Config = { BASE_URL: "/" }
 
 const customDefs: (DefCustom & DefSaved)[] = []
 const flatDefs: (DefFlat & DefSaved)[] = []
 const staticDefs: (DefStatic & DefSaved)[] = []
 const virtualDefs: (DefVirtual & DefSaved)[] = []
 
-let memoCache: any = {}
+let memoCache: MemoCache = {}
 
-let assets: any = {
+let assets: Assets = {
   [ASSET_LINK_INTERNAL]: [],
   [ASSET_LINK_EXTERNAL]: [],
   [ASSET_IMAGE_STATIC]: [],
@@ -42,18 +54,18 @@ const setVdom = (nextVdom: VDOM) => {
 const setInstances = (nextInstances: Instances) => {
   instances = nextInstances
 }
-const setConfig = (nextConfig: Object) => {
+const setConfig = (nextConfig: Config) => {
   config = nextConfig
 }
-const setMemoCache = (nextMemoCache: any) => {
+const setMemoCache = (nextMemoCache: MemoCache) => {
   memoCache = nextMemoCache
 }
-const setAssets = (nextAssets: any) => {
+const setAssets = (nextAssets: Assets) => {
   assets = nextAssets
 }
 
 const registerAsset = (type: string, val: string) => {
-  if (!assets[type].find((asset: any) => asset.url === val) && !val.startsWith("javascript:") && val !== "/") {
+  if (!assets[type].find((asset: Asset) => asset.url === val) && !val.startsWith("javascript:") && val !== "/") {
     assets[type].push({ url: val, status: undefined })
   }
 }
