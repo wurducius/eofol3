@@ -1,6 +1,6 @@
 const fs = require("fs")
 const { resolve } = require("path")
-const { DIRNAME_EOFOL_INTERNAL, PATH_SRC, PATH_VIEWS_SRC } = require("../constants/paths")
+const { DIRNAME_EOFOL_INTERNAL, PATH_SRC } = require("../constants/paths")
 const { PATH_CWD } = require("../constants")
 
 const append = (name, value) => `\n@${name}: ${value};`
