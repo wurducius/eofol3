@@ -10,7 +10,7 @@ const {
 } = require("../../constants")
 const { relativizePath, relativizeFontStyle } = require("../../compiler/relativize")
 const compileAllStyles = require("../../compiler/style-impl")
-const { FILENAME_CORE } = require("../../constants/paths")
+const { FILENAME_CORE, DIRNAME_EOFOL_INTERNAL } = require("../../constants/paths")
 
 const requireIfExists = (path) => {
   try {
@@ -21,7 +21,7 @@ const requireIfExists = (path) => {
 }
 
 const metadataDefault = requireIfExists(
-  resolve(PATH_CWD, "eofol", "api", "head", `default${FILENAME_SUFFIX_PAGE_METADATA}`),
+  resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "api", "head", `default${FILENAME_SUFFIX_PAGE_METADATA}`),
 )
 const metadataProjectDefault = requireIfExists(resolve(PATH_PAGES, `default${FILENAME_SUFFIX_PAGE_METADATA}`))
 
@@ -33,7 +33,6 @@ const htmlElement = (tagname, content, attributes) => ({
 
 const htmlTemplate = (view) => (body) =>
   compileAllStyles(PATH_BASE_STYLES_CSS, PATH_BASE_STYLES_LESS, "").then((baseStyle) => {
-    // @TODO extract from env
     const metadataPage = requireIfExists(resolve(PATH_PAGES, `${view}${FILENAME_SUFFIX_PAGE_METADATA}`))
     const data = { ...metadataDefault, ...metadataProjectDefault, ...metadataPage }
 

@@ -1,15 +1,4 @@
-import {
-  Def,
-  DefCustom,
-  DefFlat,
-  DefInstanced,
-  Defs,
-  DefSaved,
-  DefStatic,
-  DefVirtual,
-  JSONElement,
-  Props,
-} from "../types"
+import { Def, DefCustom, DefFlat, DefInstanced, Defs, DefSaved, DefStatic, DefVirtual, JSONElement } from "../types"
 
 // @IMPORT-START
 import EofolInternals from "../eofol/eofol-internals"
@@ -19,7 +8,7 @@ const { getCustomDefs, getFlatDefs, getStaticDefs, getInstances, getVirtualDefs 
 
 // @IMPORT-START
 import Util from "../util/util"
-const { errorTypeUnknown, errorCustomCannotHaveChildren, errorElementNotFound, deepEqual } = Util
+const { errorCustomCannotHaveChildren, errorElementNotFound } = Util
 // @IMPORT("../util/util")
 // @IMPORT-END
 
@@ -96,42 +85,6 @@ const validateEofolCustomElement = (element: JSONElement) => {
 
 const isConcrete = (def: (DefInstanced & DefSaved) | undefined) => def && def.type === "custom"
 
-// @TODO typing any
-const switchComponentTypeStatic = (handlers: any) => (element: JSONElement) => {
-  if (isEofolCustomElement(element)) {
-    return handlers[COMPONENT_TYPE_CUSTOM](element)
-  } else if (isEofolFlatElement(element)) {
-    return handlers[COMPONENT_TYPE_FLAT](element)
-  } else if (isEofolStaticElement(element)) {
-    return handlers[COMPONENT_TYPE_STATIC](element)
-  } else {
-    errorTypeUnknown(element.type)
-    return undefined
-  }
-}
-
-// @TODO typing any
-const switchComponentTypeDynamic = (handlers: any) => (type: string, def: Def, id: string, props: Props) => {
-  switch (type) {
-    case COMPONENT_TYPE_CUSTOM: {
-      if (!id) {
-        return undefined
-      }
-      return handlers[COMPONENT_TYPE_CUSTOM](def, id, props)
-    }
-    case COMPONENT_TYPE_FLAT: {
-      return handlers[COMPONENT_TYPE_FLAT](def, id, props)
-    }
-    case COMPONENT_TYPE_STATIC: {
-      return handlers[COMPONENT_TYPE_STATIC](def, id, props)
-    }
-    default: {
-      errorTypeUnknown(type)
-      return undefined
-    }
-  }
-}
-
 const rerenderComponent = (id: string) => {
   const instances = getInstances()
   const instance = instances[id]
@@ -190,11 +143,8 @@ export default {
   isEofolFlatElement,
   isEofolStaticElement,
   validateEofolCustomElement,
-  switchComponentTypeStatic,
-  switchComponentTypeDynamic,
   rerenderComponent,
   forceRerender,
-  deepEqual,
   defineVirtualComponent,
   isEofolVirtualElement,
 }
