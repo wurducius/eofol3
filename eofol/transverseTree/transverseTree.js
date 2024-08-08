@@ -1,6 +1,12 @@
-const { PATH_DIST2, DIRNAME_EOFOL_INTERNAL, FILENAME_COMPILE, FILENAME_SUFFIX_STATIC } = require("../constants/paths")
 const path = require("path")
-const { PATH_VIEWS_DIST2, EXT_JS } = require("../constants")
+const {
+  PATH_VIEWS_DIST2,
+  EXT_JS,
+  PATH_DIST2,
+  DIRNAME_EOFOL_INTERNAL,
+  FILENAME_COMPILE,
+  FILENAME_SUFFIX_STATIC,
+} = require("../constants")
 
 const pushElement = (delta, sxStyles, view) => (rendered, index) => {
   const Sx = require(path.resolve(PATH_VIEWS_DIST2, view, path.basename(`${view}${FILENAME_SUFFIX_STATIC}${EXT_JS}`)))

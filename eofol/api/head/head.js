@@ -7,10 +7,10 @@ const {
   FILENAME_SUFFIX_PAGE_METADATA,
   DIRNAME_ASSETS,
   DIRNAME_ASSET_JS,
+  FILENAME_CORE,
+  DIRNAME_EOFOL_INTERNAL,
 } = require("../../constants")
-const { relativizePath, relativizeFontStyle } = require("../../compiler/relativize")
-const compileAllStyles = require("../../compiler/style-impl")
-const { FILENAME_CORE, DIRNAME_EOFOL_INTERNAL } = require("../../constants/paths")
+const { relativizePath, relativizeFontStyle, compileAllStyles } = require("../../compiler")
 
 const requireIfExists = (path) => {
   try {

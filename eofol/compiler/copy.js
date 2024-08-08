@@ -1,12 +1,22 @@
 const fs = require("fs")
 const path = require("path")
-const { PATH_STATIC, FILENAME_FAVICON, PATH_BUILD, EXT_HTML, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
+const {
+  PATH_DERIVED,
+  EXT_GZIP,
+  COMPRESS_GZIP_BUILD_FILES,
+  PATH_STATIC,
+  FILENAME_FAVICON,
+  PATH_BUILD,
+  EXT_HTML,
+  EXT_JPG,
+  EXT_JPEG,
+  EXT_PNG,
+} = require("../constants")
 const compileImg = require("./img")
 const { breakpoints } = require("../../eofol-config")
-const { PATH_DERIVED, EXT_GZIP, COMPRESS_GZIP_BUILD_FILES } = require("../constants")
 const gzip = require("./gzip")
 const hotUpdate = require("./hot-update")
-const { checkExistsCreate, removeFilePart } = require("../util/fs")
+const { checkExistsCreate, removeFilePart } = require("../util")
 
 const copyStaticDir = async (isHot) => {
   const files = fs

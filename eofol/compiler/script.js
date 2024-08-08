@@ -1,7 +1,5 @@
 const fs = require("fs")
 const path = require("path")
-
-const { pipe } = require("../util")
 const {
   PATH_VIEWS_DIST2,
   EXT_JS,
@@ -14,7 +12,7 @@ const babelize = require("./babelize")
 const gzip = require("./gzip")
 const uglify = require("./uglify")
 const hotUpdate = require("./hot-update")
-const { checkExistsCreate } = require("../util/fs")
+const { checkExistsCreate, pipe } = require("../util")
 const writeInternal = require("./write-internal")
 
 const CODE_EXPORT_SUFFIX = "};"

@@ -1,10 +1,15 @@
 const fs = require("fs")
 const path = require("path")
-const { FILENAME_CORE, PATH_ASSETS_JS, PATH_DIST2, FILENAME_CORE_BUNDLE } = require("../constants/paths")
 const { pipe } = require("../util")
 const babelize = require("./babelize")
 const uglify = require("./uglify")
-const { DIRNAME_EOFOL_INTERNAL } = require("../constants")
+const {
+  DIRNAME_EOFOL_INTERNAL,
+  FILENAME_CORE,
+  PATH_ASSETS_JS,
+  PATH_DIST2,
+  FILENAME_CORE_BUNDLE,
+} = require("../constants")
 
 const compileCore = () => {
   fs.writeFileSync(
