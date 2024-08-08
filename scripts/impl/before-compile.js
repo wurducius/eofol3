@@ -14,7 +14,7 @@ const {
   FILENAME_SUFFIX_STATIC,
 } = require("../../eofol/constants")
 const { precompile } = require("../../eofol/compiler")
-const { checkExistsCreate, isDirectory } = require("../../eofol/util/fs")
+const { checkExistsCreate, isDirectory } = require("../../eofol/util")
 
 // ---------------------------------------------
 // 1. Transforms script from ES module into CommonJS
