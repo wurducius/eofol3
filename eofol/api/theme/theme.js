@@ -1,12 +1,24 @@
-import { resolve } from "path"
-import { DIRNAME_EOFOL_INTERNAL, PATH_SRC } from "../../constants/paths"
-import { PATH_CWD } from "../../constants"
-import mergeDeep from "../../util/merge-deep"
+const { resolve } = require("path")
+const {
+  DIRNAME_EOFOL_INTERNAL,
+  FILENAME_DEFAULT_THEME,
+  FILENAME_THEME,
+  PATH_SRC,
+  PATH_VIEWS_SRC,
+} = require("../../constants/paths")
+const { PATH_CWD } = require("../../constants")
+const mergeDeep = require("../../util/merge-deep")
 
-const getTheme = () => {
-  const Theme = require(resolve(PATH_SRC, "theme.js"))
-  const DefaultTheme = require(resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "styles", "default-theme.js"))
-  return mergeDeep(DefaultTheme, Theme)
+const getTheme = (view) => {
+  const Theme = require(resolve(PATH_SRC, FILENAME_THEME))
+  const DefaultTheme = require(resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "api", "theme", FILENAME_DEFAULT_THEME))
+  const ThemeImpl = mergeDeep(DefaultTheme, Theme)
+  if (view) {
+    const ViewTheme = require(resolve(PATH_VIEWS_SRC, view, FILENAME_THEME))
+    return mergeDeep(ThemeImpl, ViewTheme)
+  } else {
+    return ThemeImpl
+  }
 }
 
 module.exports = getTheme
