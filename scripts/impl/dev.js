@@ -1,4 +1,3 @@
-const { primary, success } = require("../../eofol/dev-util")
 const Watchpack = require("watchpack")
 const serve = require("./serve")
 const compileTs = require("./compile-ts")
@@ -7,7 +6,7 @@ const compile = require("./compile")
 const cleanHot = require("./clean-hot")
 const { env } = require("../../config")
 const { PROTOCOL, PORT } = env
-const { DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC } = require("../../eofol/constants")
+const { DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC, success, primary } = require("../../eofol")
 
 const watchpackOptions = {
   aggregateTimeout: 250,
