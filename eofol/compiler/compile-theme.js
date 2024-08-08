@@ -1,16 +1,13 @@
 const fs = require("fs")
 const { resolve } = require("path")
-const { DIRNAME_EOFOL_INTERNAL, PATH_SRC } = require("../constants/paths")
+const { DIRNAME_EOFOL_INTERNAL } = require("../constants/paths")
 const { PATH_CWD } = require("../constants")
-const mergeDeep = require("../util/merge-deep")
+const getTheme = require("../api/theme/theme")
 
 const append = (name, value) => `\n@${name}: ${value};`
 
 const compileTheme = () => {
-  const Theme = require(resolve(PATH_SRC, "theme.js"))
-  const DefaultTheme = require(resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "styles", "default-theme.js"))
-
-  const ThemeImpl = mergeDeep(DefaultTheme, Theme)
+  const ThemeImpl = getTheme()
 
   const content = [
     append("breakpoint-sm", `${ThemeImpl.breakpoints[0].maxWidth}px`),
