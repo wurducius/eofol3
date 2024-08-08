@@ -31,13 +31,17 @@ const { ASSET_IMAGE_STATIC, ASSET_IMAGE_DYNAMIC } = Constants
 // @IMPORT("../constants")
 // @IMPORT-END
 
+// @IMPORT-START
+import Breakpoint from "../api/breakpoint"
+const { getBreakpoint } = Breakpoint
+// @IMPORT("../api/breakpoint")
+// @IMPORT-END
+
 const mutatePath = (path: string) => {
   const isMutable = path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")
   if (isMutable) {
     const split = path.split(".")
-    // @TODO
-    const breakpoint = "lg"
-    return split.map((part, i) => (i === split.length - 2 ? `${part}-${breakpoint}` : part)).join(".")
+    return split.map((part, i) => (i === split.length - 2 ? `${part}-${getBreakpoint()}` : part)).join(".")
   } else {
     return path
   }
