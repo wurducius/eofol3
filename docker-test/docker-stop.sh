@@ -1,2 +1,8 @@
 #!/bin/bash
-docker rm $(docker stop $(docker ps -a -q --filter ancestor=eofol3-test --format="{{.ID}}"))
+
+RUNNING=$(docker ps -q -f ancestor=eofol3-test)
+COUNT=${#RUNNING}
+
+if [ $((COUNT)) > 0 ]; then
+docker rm $(docker stop $RUNNING) > /dev/null
+fi
