@@ -14,7 +14,7 @@ const uglifyOptions = {
 const babelOptions = {}
 // presets: ["@babel/preset-env"]
 
-const COMPRESS_GZIP_BUILD_FILES = true
+const COMPRESS_GZIP_BUILD_FILES = false
 const COMPRESS_GZIP_LEVEL = 9
 
 module.exports = { IMG_BASE_LOGO_WIDTH, uglifyOptions, babelOptions, COMPRESS_GZIP_BUILD_FILES, COMPRESS_GZIP_LEVEL }
