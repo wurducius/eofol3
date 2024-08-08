@@ -1,7 +1,6 @@
 const fs = require("fs")
 const { resolve, basename, extname } = require("path")
-const { PATH_BUILD } = require("../eofol/constants")
-const { prettySize, getDirSize } = require("../eofol/dev-util")
+const { PATH_BUILD, prettySize, getDirSize } = require("../eofol")
 
 const ANALYZE_DEPTH_DELIMITER = "--"
 const ANALYZE_DEPTH_SUFFIX = ">"

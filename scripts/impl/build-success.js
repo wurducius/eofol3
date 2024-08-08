@@ -1,5 +1,4 @@
-const { success, prettySize, getDirSize, prettyTime } = require("../../eofol/dev-util")
-const { PATH_BUILD } = require("../../eofol/constants")
+const { PATH_BUILD, success, prettySize, getDirSize, prettyTime } = require("../../eofol")
 
 const logBuildSuccess = (timeStart) => {
   console.log(

@@ -1,8 +1,8 @@
 const fs = require("fs")
 const path = require("path")
 
-const { prettyTime } = require("../../eofol/dev-util")
 const {
+  prettyTime,
   config,
   isVerbose,
   PATH_DERIVED,
@@ -13,9 +13,9 @@ const {
   DIRNAME_EOFOL_INTERNAL,
   PATH_BUILD,
   FILENAME_SUFFIX_STATIC,
-} = require("../../eofol/constants")
-const { checkExistsCreate, die, isDirectory } = require("../../eofol/util")
-const {
+  checkExistsCreate,
+  die,
+  isDirectory,
   compileStyle,
   minifyPre,
   minifyPost,
@@ -33,9 +33,9 @@ const {
   copyPages,
   compileCore,
   compileTheme,
-} = require("../../eofol/compiler")
-const transverseTree = require("../../eofol/transverseTree/transverseTree")
-const htmlTemplate = require("../../eofol/api/head/head")
+  transverseTree,
+  htmlTemplate,
+} = require("../../eofol")
 
 const compile = (isHot) => {
   msgStepEofol("Starting Eofol3 static compilation...")

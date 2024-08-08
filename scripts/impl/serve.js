@@ -1,4 +1,4 @@
-const { success } = require("../../eofol/dev-util")
+const { success } = require("../../eofol")
 const { env, paths } = require("../../config")
 const { PROTOCOL, PAGE_FALLBACK, PORT, HOST } = env
 const { BUILD_PATH } = paths

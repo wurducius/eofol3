@@ -1,4 +1,4 @@
-const { PATH_CWD } = require("../../eofol/constants")
+const { PATH_CWD } = require("../../eofol")
 
 const spawnOptions = {
   encoding: "utf8",
