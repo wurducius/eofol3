@@ -1,12 +1,12 @@
 const { resolve } = require("path")
 const {
+  PATH_CWD,
   DIRNAME_EOFOL_INTERNAL,
   FILENAME_DEFAULT_THEME,
   FILENAME_THEME,
   PATH_SRC,
   PATH_VIEWS_SRC,
-} = require("../../constants/paths")
-const { PATH_CWD } = require("../../constants")
+} = require("../../constants")
 const mergeDeep = require("../../util/merge-deep")
 
 const getTheme = (view) => {

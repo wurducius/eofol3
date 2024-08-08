@@ -1,7 +1,6 @@
 const fs = require("fs")
 const { resolve } = require("path")
-const { DIRNAME_EOFOL_INTERNAL } = require("../constants/paths")
-const { PATH_CWD } = require("../constants")
+const { PATH_CWD, DIRNAME_EOFOL_INTERNAL } = require("../constants")
 const getTheme = require("../api/theme/theme")
 
 const append = (name, value) => `\n@${name}: ${value};`

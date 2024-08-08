@@ -1,6 +1,5 @@
 const path = require("path")
-const { EXT_JS, PATH_VIEWS_DIST2 } = require("../constants")
-const { FILENAME_SUFFIX_STATIC } = require("../constants/paths")
+const { EXT_JS, PATH_VIEWS_DIST2, FILENAME_SUFFIX_STATIC } = require("../constants")
 
 const importViewEofolDefs = (view) => {
   const eofolDefsJS = require(
