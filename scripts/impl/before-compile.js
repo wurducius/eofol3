@@ -1,4 +1,3 @@
-const fs = require("fs")
 const path = require("path")
 
 const {
@@ -15,6 +14,8 @@ const {
   precompile,
   checkExistsCreate,
   isDirectory,
+  exists,
+  readDir,
 } = require("../../eofol")
 
 // ---------------------------------------------
@@ -25,10 +26,10 @@ const {
 const beforeCompile = () => {
   checkExistsCreate(PATH_VIEWS_DIST2)
 
-  fs.readdirSync(PATH_VIEWS_DIST, { recursive: true }).forEach((view) => {
+  readDir(PATH_VIEWS_DIST, { recursive: true }).forEach((view) => {
     const lastViewPathname = path.basename(view)
     const viewScriptPath = path.resolve(PATH_VIEWS_DIST, view, `${lastViewPathname}${EXT_JS}`)
-    if (isDirectory(path.resolve(PATH_VIEWS_DIST, view)) && fs.existsSync(viewScriptPath)) {
+    if (isDirectory(path.resolve(PATH_VIEWS_DIST, view)) && exists(viewScriptPath)) {
       checkExistsCreate(path.resolve(PATH_VIEWS_DIST2, view))
       precompile(viewScriptPath, "..", path.resolve(PATH_VIEWS_DIST2, view, `${lastViewPathname}${EXT_JS}`), true, true)
       precompile(

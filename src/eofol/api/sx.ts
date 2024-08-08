@@ -21,11 +21,10 @@ const clearCompileCache = () => {
 }
 
 const sx = (styleObj: Object, selector?: string, prefix?: string) => {
-  // @ts-expect-error tsconfig.lib mismatch
+  // @ts-ignore
   const styleStr = Object.keys(styleObj).reduce((acc, next) => `${acc} ${next}: ${styleObj[next]};`, "")
   const styleContent = `${selector || ""} { ${styleStr} } `
   const hash = `e${getHash(styleContent).toString()}`
-  // @ts-expect-error tsconfig.lib mismatch
   if (!cache.includes(hash)) {
     const style = (prefix || ".") + hash + styleContent
     if (isBrowser()) {

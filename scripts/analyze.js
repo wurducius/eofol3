@@ -1,6 +1,5 @@
-const fs = require("fs")
 const { resolve, basename, extname } = require("path")
-const { PATH_BUILD, prettySize, getDirSize } = require("../eofol")
+const { exists, readDir, stat, PATH_BUILD, prettySize, getDirSize } = require("../eofol")
 
 const ANALYZE_DEPTH_DELIMITER = "--"
 const ANALYZE_DEPTH_SUFFIX = ">"
@@ -54,22 +53,22 @@ const section = (title) => {
 let parsed = {}
 
 const traverse = (path, depth, totalSize) => {
-  if (fs.existsSync(path)) {
-    const stat = fs.lstatSync(path)
-    if (stat.isDirectory()) {
+  if (exists(path)) {
+    const stats = stat(path)
+    if (stats.isDirectory()) {
       const dirSize = getDirSize(path)
       log("DIR", path, basename(path), dirSize, depth, totalSize)
       if (dirSize > 0) {
         space()
-        fs.readdirSync(path).forEach((child) => {
+        readDir(path).forEach((child) => {
           traverse(resolve(path, child), depth + 1, totalSize)
         })
         space()
       }
     } else {
-      log("FILE", path, basename(path), stat.size, depth, totalSize)
+      log("FILE", path, basename(path), stats.size, depth, totalSize)
       const ext = extname(path)
-      parsed[ext] = (parsed[ext] ?? 0) + stat.size
+      parsed[ext] = (parsed[ext] ?? 0) + stats.size
     }
   }
 }

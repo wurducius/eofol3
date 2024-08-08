@@ -35,6 +35,9 @@ const {
   compileTheme,
   transverseTree,
   htmlTemplate,
+  exists,
+  read,
+  readDir,
 } = require("../../eofol")
 
 const compile = (isHot) => {
@@ -55,10 +58,10 @@ const compile = (isHot) => {
 
   compileTheme()
 
-  const views = fs.readdirSync(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
+  const views = readDir(PATH_VIEWS_DIST2, { recursive: true }).filter((view) => {
     const viewPath = path.resolve(PATH_VIEWS_DIST2, view)
     const viewScriptPath = path.resolve(viewPath, `${path.basename(view)}${FILENAME_SUFFIX_STATIC}${EXT_JS}`)
-    return fs.existsSync(viewScriptPath) && isDirectory(viewPath)
+    return exists(viewScriptPath) && isDirectory(viewPath)
   })
 
   let i = 0
@@ -81,10 +84,10 @@ const compile = (isHot) => {
     const sourcePath = path.resolve(PATH_PAGES, source)
     let sourceHTML
     try {
-      if (!fs.existsSync(sourcePath)) {
+      if (!exists(sourcePath)) {
         die(`Source file doesn't exist: ${sourcePath}`, undefined)
       }
-      sourceHTML = fs.readFileSync(sourcePath)
+      sourceHTML = read(sourcePath)
     } catch (ex) {
       die(`Cannot open source file: ${sourcePath}`, ex)
     }

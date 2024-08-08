@@ -1,6 +1,6 @@
-const fs = require("fs")
 const path = require("path")
 const { EXT_JS, CODE_MODULE_EXPORTS } = require("../constants")
+const { read, write } = require("../util")
 
 const CODE_EOFOL_IMPORT_OPENING = "// @IMPORT"
 
@@ -40,7 +40,7 @@ const resolveImports = (sourcePath, content, importedScripts) => {
             if (importedScripts.includes(scriptPath)) {
               return acc
             } else {
-              const script = fs.readFileSync(scriptPath).toString()
+              const script = read(scriptPath).toString()
               const hasNext = script.includes("@IMPORT")
               importedScripts.push(scriptPath)
               const resolvedTreeScript = hasNext
@@ -64,13 +64,13 @@ const removeImports = (sourcePath, content, importedScripts) => {
 }
 
 const precompile = (source, suffixPath, target, isView, injectSxExports, doNotAddInternals) => {
-  const content = fs.readFileSync(source)
+  const content = read(source)
   const exportsReplaced = fixExports(content)
   const importedScripts = []
   const importsResolved = isView
     ? removeImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
     : resolveImports(path.resolve(source, suffixPath), exportsReplaced, importedScripts)
-  fs.writeFileSync(
+  write(
     target,
     `${doNotAddInternals ? "" : "let _internals = {}\n"}${injectSxExports ? fixExportsFinal(importsResolved) : fixExports(importsResolved)}`,
   )

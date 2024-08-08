@@ -1,5 +1,10 @@
-const createPage = () => {}
+const createPage = (pathname, content) => {}
 
-const createComponent = () => {}
+const createTemplate = (pathname, template) => {}
 
-module.exports = { createPage, createComponent }
+const createComponent = (defs, name, componentDef, type) => {
+  const def = { ...componentDef, type, name }
+  defs.push(def)
+}
+
+module.exports = { createPage, createTemplate, createComponent }

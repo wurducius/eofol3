@@ -1,4 +1,3 @@
-const fs = require("fs")
 const path = require("path")
 const {
   PATH_VIEWS_DIST2,
@@ -12,7 +11,7 @@ const babelize = require("./babelize")
 const gzip = require("./gzip")
 const uglify = require("./uglify")
 const hotUpdate = require("./hot-update")
-const { checkExistsCreate, pipe } = require("../util")
+const { checkExistsCreate, pipe, read } = require("../util")
 const writeInternal = require("./write-internal")
 
 const CODE_EXPORT_SUFFIX = "};"
@@ -73,7 +72,7 @@ const compileViewScript = (view, vdom, instances, memoCache, assets) => (isHot) 
       compileScript,
       babelize,
       uglify,
-    )(fs.readFileSync(source).toString()),
+    )(read(source).toString()),
     () => {
       if (COMPRESS_GZIP_BUILD_FILES) {
         gzip(target, `${target}${EXT_GZIP}`, view)

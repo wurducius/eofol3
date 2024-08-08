@@ -1,10 +1,8 @@
-const fs = require("fs")
-
-const { PATH_DERIVED, PATH_DIST, PATH_DIST2 } = require("../../eofol")
+const { exists, rm, PATH_DERIVED, PATH_DIST, PATH_DIST2 } = require("../../eofol")
 
 const cleanDir = (target) => {
-  if (fs.existsSync(target)) {
-    fs.rmSync(target, { recursive: true })
+  if (exists(target)) {
+    rm(target)
   }
 }
 
