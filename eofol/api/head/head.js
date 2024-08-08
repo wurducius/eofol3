@@ -10,8 +10,7 @@ const {
   FILENAME_CORE,
   DIRNAME_EOFOL_INTERNAL,
 } = require("../../constants")
-const { relativizePath, relativizeFontStyle } = require("../../compiler/relativize")
-const compileAllStyles = require("../../compiler/style-impl")
+const { relativizePath, relativizeFontStyle, compileAllStyles } = require("../../compiler")
 
 const requireIfExists = (path) => {
   try {

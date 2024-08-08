@@ -7,7 +7,7 @@ const {
   PATH_SRC,
   PATH_VIEWS_SRC,
 } = require("../../constants")
-const mergeDeep = require("../../util/merge-deep")
+const { mergeDeep } = require("../../util")
 
 const getTheme = (view) => {
   const Theme = require(resolve(PATH_SRC, FILENAME_THEME))
