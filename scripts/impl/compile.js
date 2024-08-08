@@ -5,15 +5,12 @@ const {
   prettyTime,
   config,
   isVerbose,
-  PATH_DERIVED,
   PATH_VIEWS_DIST2,
   EXT_HTML,
   PATH_PAGES,
   EXT_JS,
-  DIRNAME_EOFOL_INTERNAL,
   PATH_BUILD,
   FILENAME_SUFFIX_STATIC,
-  checkExistsCreate,
   die,
   isDirectory,
   compileStyle,
@@ -30,7 +27,6 @@ const {
   touchBuildDirs,
   compileViewScript,
   copyStaticDir,
-  copyPages,
   compileCore,
   compileTheme,
   transverseTree,
@@ -48,9 +44,6 @@ const compile = (isHot) => {
   }
 
   const timeStart = new Date()
-
-  checkExistsCreate(PATH_DERIVED)
-  checkExistsCreate(path.resolve(PATH_DERIVED, DIRNAME_EOFOL_INTERNAL))
 
   if (!isHot) {
     touchBuildDirs()
@@ -114,7 +107,7 @@ const compile = (isHot) => {
       .then(appendDoctype)
       .then(relativizeHtml)
       .then((res) => {
-        writeView(source, res, vdom, instances, memoCache, assets)
+        writeView(source, res)
         compileViewScript(view, vdom, instances, memoCache, assets)(isHot)
         msgStepEofol(`[${i + 1}/${views.length}] Compiled ${source} in ${prettyTime(new Date() - timeStart)}`)
         i += 1
@@ -123,7 +116,6 @@ const compile = (isHot) => {
 
   return Promise.all(resultPromise)
     .then(() => copyStaticDir(isHot))
-    .then(() => copyPages(isHot))
     .then(() => compileCore())
     .then(() => {
       if (isVerbose) {
