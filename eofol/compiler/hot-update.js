@@ -1,22 +1,22 @@
-const fs = require("fs")
 const checksum = require("./checksum")
 const { primary } = require("../dev-util")
+const { exists, read, write } = require("../util/fs")
 
 const cache = {}
 
 const hotUpdate = (isHot, targetPath, sourcePath, nextContent, coldHandler) => {
   const writeFile = () => {
-    fs.writeFileSync(targetPath, nextContent)
+    write(targetPath, nextContent)
   }
 
-  if (isHot && fs.existsSync(targetPath)) {
+  if (isHot && exists(targetPath)) {
     const cached = cache[targetPath]
 
     let prevChecksum
     if (cached) {
       prevChecksum = cached
     } else {
-      prevChecksum = checksum(fs.readFileSync(targetPath).toString())
+      prevChecksum = checksum(read(targetPath).toString())
     }
     const nextChecksum = checksum(nextContent.toString())
 

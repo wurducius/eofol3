@@ -1,13 +1,13 @@
-const fs = require("fs")
 const path = require("path")
+const { readDir, stat } = require("../../util/fs")
 
 const getDirSize = (dirPath) => {
   let size = 0
-  const files = fs.readdirSync(dirPath)
+  const files = readDir(dirPath)
 
   for (let i = 0; i < files.length; i++) {
     const filePath = path.join(dirPath, files[i])
-    const stats = fs.statSync(filePath)
+    const stats = stat(filePath)
 
     if (stats.isFile()) {
       size += stats.size

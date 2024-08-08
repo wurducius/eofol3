@@ -1,7 +1,7 @@
-const fs = require("fs")
 const { resolve } = require("path")
 const { PATH_CWD, DIRNAME_EOFOL_INTERNAL } = require("../constants")
 const getTheme = require("../api/theme/theme")
+const { write } = require("../util/fs")
 
 const append = (name, value) => `\n@${name}: ${value};`
 
@@ -71,7 +71,7 @@ const compileTheme = () => {
     append("border-radius", ThemeImpl.borderRadius.borderRadius),
   ].reduce((acc, next) => acc + next, "")
 
-  fs.writeFileSync(resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "styles", "theme.less"), content)
+  write(resolve(PATH_CWD, DIRNAME_EOFOL_INTERNAL, "styles", "theme.less"), content)
 }
 
 module.exports = compileTheme
