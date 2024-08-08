@@ -2,40 +2,11 @@
 @import "button.less";
 @import "container.less";
 @import "form.less";
+@import "img.less";
 @import "link.less";
 @import "primitive.less";
 @import "scrollbar.less";
 @import "spacing.less";
+@import "spinner.less";
 @import "theme.less";
 @import "typography.less";
-
-@media (max-width: @breakpoint-sm) {
-  body {
-    background-image: url("./assets/media/images/rainbow-mountains-peru-sm.jpg");
-  }
-}
-
-@media (max-width: @breakpoint-md) and (min-width: @breakpoint-md-min) {
-  body {
-    background-image: url("./assets/media/images/rainbow-mountains-peru-md.jpg");
-  }
-}
-
-@media (min-width: @breakpoint-lg-min) {
-  body {
-    background-image: url("./assets/media/images/rainbow-mountains-peru-lg.jpg");
-  }
-}
-
-.img-loading {
-  background-image: url("./assets/media/images/fallback-lg.png");
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}

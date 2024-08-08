@@ -90,6 +90,7 @@ export type Properties = StringRecord
 
 export type State = unknown
 
+// eslint-disable-next-line no-unused-vars
 export type SetState = (nextState: State) => void
 
 export type JSONValue = JSONElement | string
@@ -102,8 +103,10 @@ export interface JSONElement {
   content: JSONNode[]
 }
 
+// eslint-disable-next-line no-unused-vars
 export type Func = (x: any) => any
 
+// eslint-disable-next-line no-unused-vars
 export type Handler = (x: any) => void
 
 export type EofolPropsWithoutChildren = {

@@ -116,9 +116,9 @@ export const hookComponent = defineVirtualComponent("hook", {
     eval(
       handler({}, statex, setStatex, () => {
         console.log("hook")
-        // @ts-ignore
+        // @ts-ignore eslint-disable-next-line no-undef
         if (!state.initialized) {
-          // @ts-ignore
+          // @ts-ignore eslint-disable-next-line no-undef
           setState({ initialized: true })
         }
       }),

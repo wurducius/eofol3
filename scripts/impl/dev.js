@@ -7,7 +7,7 @@ const compile = require("./compile")
 const cleanHot = require("./clean-hot")
 const { env } = require("../../config")
 const { PROTOCOL, PORT } = env
-const { DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC, DIRNAME_EOFOL_INTERNAL } = require("../../eofol/constants")
+const { DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC } = require("../../eofol/constants")
 
 const watchpackOptions = {
   aggregateTimeout: 250,
@@ -16,8 +16,7 @@ const watchpackOptions = {
   ignored: "**/.git",
 }
 
-// const listOfDirectories = [DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC]
-const listOfDirectories = [DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC, DIRNAME_EOFOL_INTERNAL]
+const listOfDirectories = [DIRNAME_SRC, DIRNAME_PAGES, DIRNAME_STATIC]
 
 const SERVE_URL = `${PROTOCOL}://localhost:${PORT}`
 

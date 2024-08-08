@@ -15,5 +15,5 @@ export default [
   { files: ["**/*.js"], languageOptions: { sourceType: "script" } },
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+  tseslint.configs.base,
 ]

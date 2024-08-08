@@ -74,6 +74,7 @@ const getStateInitial = (def: DefInstanced) => (def.initialState ? { ...def.init
 const renderSelector = (
   def: DefCustom,
   stateImpl: State | undefined,
+  // eslint-disable-next-line no-unused-vars
   setStateImpl: string | ((nextState: unknown) => void),
   propsImpl: Props | undefined,
   bodyImpl: unknown,
