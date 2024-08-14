@@ -1,23 +1,10 @@
 const fs = require("fs")
 const path = require("path")
-const {
-  PATH_DERIVED,
-  EXT_GZIP,
-  COMPRESS_GZIP_BUILD_FILES,
-  PATH_STATIC,
-  FILENAME_FAVICON,
-  PATH_BUILD,
-  EXT_HTML,
-  EXT_JPG,
-  EXT_JPEG,
-  EXT_PNG,
-} = require("../constants")
+const { PATH_STATIC, FILENAME_FAVICON, PATH_BUILD, EXT_HTML, EXT_JPG, EXT_JPEG, EXT_PNG } = require("../constants")
 const compileImg = require("./img")
 const { breakpoints } = require("../../eofol-config")
-const gzip = require("./gzip")
 const hotUpdate = require("./hot-update")
-const { checkExistsCreate, removeFilePart, read, write } = require("../util")
-const { readDir } = require("../util/fs")
+const { read, write } = require("../util")
 
 const copyStaticDir = async (isHot) => {
   const files = fs
@@ -77,20 +64,4 @@ const copyStaticDir = async (isHot) => {
   )
 }
 
-const copyPages = (isHot) => {
-  readDir(PATH_DERIVED, { recursive: true })
-    .filter((filename) => path.basename(filename).endsWith(EXT_HTML))
-    .forEach((htmlFile) => {
-      const source = path.resolve(PATH_DERIVED, htmlFile)
-      const target = path.resolve(PATH_BUILD, htmlFile)
-      checkExistsCreate(path.resolve(PATH_BUILD, removeFilePart(htmlFile)))
-      const content = read(source).toString()
-      hotUpdate(isHot, target, source, content, () => {
-        if (COMPRESS_GZIP_BUILD_FILES) {
-          gzip(target, `${target}${EXT_GZIP}`, htmlFile)
-        }
-      })
-    })
-}
-
-module.exports = { copyStaticDir, copyPages }
+module.exports = { copyStaticDir }

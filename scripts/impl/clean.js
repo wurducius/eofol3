@@ -1,4 +1,4 @@
-const { exists, rm, PATH_DERIVED, PATH_BUILD, PATH_DIST, PATH_DIST2 } = require("../../eofol")
+const { exists, rm, PATH_BUILD, PATH_DIST, PATH_DIST2 } = require("../../eofol")
 
 const cleanDir = (target) => {
   if (exists(target)) {
@@ -6,7 +6,7 @@ const cleanDir = (target) => {
   }
 }
 
-const pathsToClean = [PATH_DIST, PATH_DIST2, PATH_DERIVED, PATH_BUILD]
+const pathsToClean = [PATH_DIST, PATH_DIST2, PATH_BUILD]
 
 const clean = () => {
   pathsToClean.forEach((pathToClean) => {
